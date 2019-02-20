@@ -1,0 +1,123 @@
+/* charset=utf-8 */
+
+body, p, h1{
+    margin: 0px;
+}
+
+#container{
+    width: 990px;
+    margin: 0 auto;   /* 居中 */
+}
+#container h2{
+    font-weight: normal;
+    color: #999;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+#container>p{
+    float: left;
+
+}
+
+#login{
+    float: right;
+    width: 490px;
+}
+#login div.form-line{
+    margin-top: 20px;
+}
+#login div.form-line>p{
+    float: left;
+    font-size: 12px;
+    color: #999;
+    width: 4em;
+    text-align: right;
+    /* 右外边距, 行高 */
+    margin-right: 30px;
+    line-height: 40px;
+    height: 40px;
+}
+#login .form-control{
+    /* 宽高, 边框, 取消轮廓, 左右内边距, box-sizing */
+    width: 300px;
+    height: 40px;
+    border: 1px solid #ccc;
+    outline: none;
+    padding: 0 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    /* 文字大小, 文本颜色 */
+    color: #555;
+}
+#login .forget{
+    display: flex;
+    float:right;
+}
+#login .forget a:link{
+    color: #999;
+    text-decoration: none;
+}
+
+#isSaved{
+    width: 18px;
+    height: 18px;
+    vertical-align: 40px;
+}
+
+#login .goReg{
+    /* 145x38 */
+    /* 右浮动, 高宽, 边框, 背景色, box-sizing, 边框倒角, 
+       文字大小, 文字颜色, 取消下划线, 水平居中对齐, 行高 */
+    float:right;
+    width:145px;
+    height:38px;
+    border:1px solid #64a131;
+    background-color: #f5ffed;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #7bae55;
+    text-decoration: none;
+    text-align: center;
+    line-height: 38px;
+}
+
+#login .btnLogin{
+    /* 高宽, bg, 边框倒角, 取消边框, 文字大小, 文字颜色 */
+    float: left;
+    width: 145px;
+    height: 38px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #f5ffed;
+    text-align: center;
+    line-height: 38px;
+    text-decoration: none;
+    background-color: #64a131
+}
+
+
+/* 定位解决图片上注册超链接 */
+#container>p{
+    /* 相对定位配合超链接的绝对定位 */
+    position: relative;
+}
+
+#container>p>a{
+    /* 绝对定位, 边框, 颜色, 高宽, 边框倒角 */
+    position: absolute;
+    left: 173px;
+    bottom: 20px;
+    width: 153px;
+    height: 48px;
+    box-sizing: border-box;
+    border: solid 1px #64a131;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #64a131;
+    text-align: center;
+    text-decoration: none;
+    line-height: 48px;
+}

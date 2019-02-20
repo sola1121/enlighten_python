@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <form id="fm" action="/login/" method="post">
+        <p>用户名: <input type="text" name="uname"><span id="uname_hint"></span></p>
+        <p>密码: <input type="password" name="upwd"><span id="upwd_hint"></span></p>
+        <input type="submit" value="确认登录">
+    </form>
+</body>
+    <script>
+        function $useId(id_code){
+            return document.getElementById(id_code)
+        }
+        function $useName(name){
+            return document.getElementsByName(name)
+        }
+
+        window.onload = function(){
+            $useName("uname").onfocus = hint_uname
+            $useName("uname").onblur = verify_value
+
+            $useId("fm").onsubmit = sub_fun
+        }
+        
+        function hint_uname(){
+            $useId("uname_hint").innerText = "输入6-20位字符"
+        }
+
+        function verify_value() {
+            console.info($useName("uname"))
+            if ($useName("uname").value.length <= 20 && $useName("uname").value.length >= 6){
+                $useId("uname_hint").style.color = "green"
+                $useId("uname_hint").innerText = "通过"
+            } else {
+                $useId("uname_hint").style.color = "red"
+                $useId("uname_hint").innerText = "输入不合法"
+            }
+        }
+
+        function sub_fun(){
+            console.info($useName("uname"))            
+            if ($useName("uname").length <= 20 && $useName("uname").length >= 6 &&
+                $useName("upwd").length <= 20 && $useName("upwd").length >= 6){
+                return true
+            } else {
+                window.alert("输入有不合法.")
+                return false
+            }
+        }
+
+    </script>
+</html>

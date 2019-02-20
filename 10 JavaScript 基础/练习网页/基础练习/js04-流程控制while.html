@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var i = 1
+        while (i <= 100){
+            console.info(i)
+            i++
+        }
+
+        var x = 1
+        var sum = 0
+        while (x <= 100){
+            sum += x 
+            x++
+        }
+        console.info("和为:",sum)
+
+        var y = 1
+        while (y <= 100){
+            if (y % 3 ==0){
+                console.info(y)
+            }
+            y++
+        }
+
+        do{
+            var input = window.prompt("输入内容:")
+            console.info(input)
+        } while (input != "e" || input !="exit");
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #link{
+            margin: 0 auto;
+            border: 1px solid black;
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="link">
+        <a id="a_link" target="_blank" href="http://www.baidu.com">连接到百度</a><br>
+        <button onclick="link_change()">修改连接</button>
+    </div>
+</body>
+    <script>
+        function link_change(){
+            $useId("a_link").innerText = "连接到tmooc"
+            $useId("a_link").href = "http://www.tmooc.cn"
+        }
+
+        function $useId(id_code){
+            return document.getElementById(id_code)
+        }
+    </script>
+</html>

@@ -1,0 +1,79 @@
+汉字编码
+10个汉字占多少个字节
+GB系列占20个字节, Unicode占30个字节, UTF-8占30个字节, 等等
+
+ASCII (1~127)
+
+汉字编码(两种举例)
+国标系列:
+    GB18030(GBK(GB2312))   括号表示包含
+      四字节   二字节 
+国际标准:
+    UNICODE32(UNICODE16) <---> UTF-8   两者可以相互转换, 括号表示包含
+      四字节     二字节        1~6字节
+    注: 机器内存中主要是以UNICODE来运行的
+台湾标准
+    Big5
+
+GB2312-80   1980年制定
+    用两个字节表示 编码范围(A1A1-FEFE)
+    包含汉字6763个, 和682个字符
+
+b'\xcc\xf0'.decode('gb2312')
+
+GBK   1995年制定
+    用两个字节表示 编码范围
+        第一个字节: 81-FE
+        第二个字节: 40-7E, 80-FE
+    共21003个汉字
+
+GB18030-2005
+    用两个字节或四个字节表示
+    共27533个汉字
+
+UNICODE
+    UNICODE16
+        16位统一编码(两个字节0~65535)   2**16
+    UNICODE32
+        32位编码(四字节0~4294967295)   2**32
+所有字符用两字节编码
+    'A' AscII b'\x41'
+    'A' Unicode16 b'\x00\x41'
+    'A' Unicode32 b'\x00\x00\x00\x41'
+
+UTF-8(8-bit Unicode Transformation Format)
+    Unicode <<-->> UTF-8 互转
+        0000~007F   一字节(兼容ASCII)
+            00000000 0xxxxxxx --> 0xxxxxxx
+        0080~07FF   二字节
+            00001xxx xxyyyyyy --> 110xxxxx 10yyyyyy
+        0800~FFFF   三字节(汉字落在此区)
+            xxxxyyyy yyzzzzzz --> 1110xxxx 10yyyyyy 10zzzzzz            
+
+
+python3内部存储字符是使用Unicode的
+decode 解码     encode 编码
+如果要将字符转换为默认的Unicode, 使用decode("这里是原字符串的编码")
+如果要将字符转换为其他形式的编码, 使用encode("这里是要转换到的编码"), 前提是原字符编码要是Unicode
+
+Python编码(encode)字符串:
+    'gb2312'
+    'gbk'
+    'gb18030'
+    'big5'
+    'utf-8'
+    'ascii'
+     ...
+
+编码注释
+    在源文件的第一行或第二行写入内容如下:
+    # -*- coding: gbk -*-
+    # 设置源文件编码为: GBK
+    # -*- coding: utf-8 -*-
+    # 设置源文件编码为: utf-8
+
+
+
+
+
+

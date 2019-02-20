@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+        ID为container的元素
+    </div>
+    <button id="btnCreate">创建新元素</button>
+</body>
+<script src="jQuery_3.3.1.js"></script>
+<script>
+    window.onload = register_function
+
+    function register_function(){
+        $("#btnCreate")[0].onclick = createNewElem
+    }
+
+    function createNewElem(){
+        // 1. 创建一个img标记
+        var $new_img1 = $("<img>")
+        var $new_img2 = $("<img>")
+        // 2. 指定其src
+        $new_img1.attr("src", "logo1.jpg")
+        $new_img2.attr("src", "logo2.jpg")
+        // console.info($new_img)
+        // 插入到网页中
+        $("#container").append($new_img1)
+        $("#container").prepend($new_img2)
+    }
+</script>
+</html>

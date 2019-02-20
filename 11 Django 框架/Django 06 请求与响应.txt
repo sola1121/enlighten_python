@@ -1,0 +1,59 @@
+django.http.HttpRequest
+    1. http 协议
+        1) 请求(request)
+            (1) 请求起始行
+            (2) 请求消息头
+            (3) 请求主体
+        2) 响应(response)
+            (1) 响应起始行
+                协议名称/版本号 响应状态码 原因短句
+            (2) 响应消息头
+            (3) 响应主体
+    2. HttpRequest介绍
+        (1) 什么是HttpRequest
+            HttpRequest, 在Django中是对请求对象的封装体现. 他封装了请求过程中所有的信息. 
+            在Django中, HttpRequest被化身成了request封装到视图处理函数中作为参数, 在调用视图时自动传入.
+        (2) HttpRequest中的主要内容
+            参数request
+            [
+                'COOKIES', 'FILES', 'GET', 'META', 'POST', 
+
+                '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', 
+                '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__iter__', '__le__', 
+                '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', 
+                '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 
+
+                '_encoding', '_get_post', '_get_raw_host', '_get_scheme', '_initialize_handlers', '_load_post_and_files', 
+                '_mark_post_parse_error', '_messages', '_post_parse_error', '_read_started', '_set_post', '_stream', '_upload_handlers', 
+
+                'body', 'build_absolute_uri', 'close', 'content_params', 'content_type', 'csrf_processing_done', 
+                'encoding', 'environ', 'get_full_path', 'get_host', 'get_port', 'get_raw_uri', 'get_signed_cookie', 
+                'is_ajax', 'is_secure', 'method', 'parse_file_upload', 'path', 'path_info', 'read', 'readline', 'readlines', 
+                'resolver_match', 'scheme', 'session', 'upload_handlers', 'user', 'xreadlines'
+            ]
+
+            1. request.scheme : 请求协议, str
+            2. request.body : 请求主体(不是所有都会有, get方法就没有), bytes
+            3. request.path : 请求的路径是什么, str
+            4. request.get_host() : 请求主机/域名, str
+            5. request.method : 请求方法, str
+            6. request.GET : get请求方式提交的数据, django.http.request.QueryDict
+            6. request.POST : post请求方式提交的数据, django.http.request.QueryDict
+            8. request.COOKIES : cookie中的数据, dict
+
+    3. 地址栏拼参数
+        手动拼写参数(Query String)到提交地址的后面
+		http://地址/?名称1=值1&名称2=值2
+
+
+CSRF (Cross-site request forgery) 跨站请求伪造
+    解决方案
+        1) 在settings.py中
+            删除MIDDLEWARE中间件中的'django.middleware.csrf.CsrfViewMiddleware'中间件
+        2) 在视图的处理函数上使用装饰器 @csrf_protect 
+        3) 在模板中<form>下的第一行增加(推荐)
+            {% csrf_token %}
+    
+
+
+    

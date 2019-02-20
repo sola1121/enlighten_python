@@ -1,0 +1,113 @@
+1. 创建一个数据库 名为 grade
+    use sunClass
+
+2. 数据库中创建一个集合名字
+    db.createCollection("class")
+
+3. 集合中插入若干数据格式如下
+{name: "zhao", age: 9, gender: "m", hobby: ["a", "b", "c"]}
+hobby: draw, sing, dance, basketball, football, pingpong, computer, tennis, kongfu
+
+db.class.insert([
+{name: "zhao", age: 5, gender: "F", hobby: ["dance", "pingpong", "computer"]},
+{name: "qian", age: 6, gender: "M", hobby: ["pingpong", "basketball"]},
+{name: "sun", age: 14, gender: "F", hobby: ["draw", "computer", "tennis"]},
+{name: "li", age: 5, gender: "F", hobby: ["draw", "sing", "dance"]},
+{name: "zhou", age: 9, gender: "M", hobby: ["football", "pingpong", "kongfu"]},
+{name: "wu", age: 12, gender: "M", hobby: ["draw", "basketball", "kongfu"]},
+{name: "wu", age: 13, gender: "F", hobby: ["sing", "dance"]},
+{name: "zheng", age: 7, gender: "M", hobby: ["pingpong", "kongfu"]},
+{name: "wang", age: 7, gender: "F", hobby: ["sing", "draw"]},
+{name: "liu", age: 10, gender: "M", hobby: ["tennis", "basketball"]},
+])
+
+查看年龄在4~8岁之间的学生信息
+    db.class.find({age: {$gte: 4, $lte: 8}}, {_id: 0})
+
+找到年龄为6岁且为男生的学生
+    db.class.find({age: 6, gender: "M"}, {_id: 0})
+    db.class.find({$and: [{age: {$eq: 6}}, {gender: "M"}]}, {_id: 0})
+
+找到年龄小于7岁或者大于10岁的学生
+    db.class.find({$or: [{age: {$lt: 7}}, {age: {$gt: 10}}]}, {_id: 0})
+
+找到年龄是8岁或者11岁的学生
+    db.class.find({age :{$in: [8, 11]}}, {_id: 0})
+    db.class.find({$or: [{age: 8}, {age: 11}]}, {_id: 0})
+
+找到兴趣爱好有两项的学生
+    db.class.find({hobby: {$size: 2}}, {_id: 0})
+
+找到兴趣爱好有draw的学生
+    db.class.find({hobby: "draw"}, {_id: 0})
+
+找到即喜欢画画又喜欢跳舞的学生
+    db.class.find({hobby: {$all: ["draw", "dance"]}}, {_id: 0})
+
+统计爱好有三项的学生人数
+    db.class.find({hobby: {$size: 3}}).count()
+
+找出本班年龄第二大的学生
+    db.class.find({}, {_id: 0}).sort({age: -1}).skip(1).limit(1)
+
+查看学生的兴趣范围
+    db.class.distinct("hobby")
+
+将升学按年龄排序找到年龄做大的三个
+    db.class.find({}, {_id: 0}).sort({age: -1}).limit(3)
+
+删除所有年龄大于12或者小于4岁的学生
+    db.class.find({$or: [{age: {$gt: 12}}, {age: {$lt: 4}}]}, {_id: 0})
+
+---------------------------------------
+
+将某人的年龄变为8岁, 兴趣爱好为 dance,draw
+    db.class.update({name: "zheng"}, {$set: {age: 8, hobby: ["dance", "draw"]}})
+
+追加某人的兴趣爱好 sing
+    db.class.update({name: "zheng"}, {$push: {hobby: "sing"}})
+
+追加某人兴趣爱好 basketball, dance
+    db.class.update({name: "zheng"}, {$pushAll: {hobby: ["basketball", "dance"]}})
+
+增加某人兴趣爱好, dance, sing, 但是不要和以前重复
+    db.class.update({name: "zheng"}, {$addToSet: {hobby: {$each: ["dance", "sing"]}}})
+
+该班所有同学年龄加1
+    db.class.update({}, {$inc: {age: 1}}, false, true)
+
+删除某人gender属性
+    db.class.update({name: "zheng"}, {$unset: {gender: 1}})
+
+删除某人兴趣中的第一项
+    db.class.update({name: "zheng"}, {$pop: {hobby: 0}})
+
+将某人兴趣中的画画爱好删除
+    db.class.update({name: "zheng"}, {$pull: {hobby: "draw"}})
+
+---------------------------------------
+
+增加分数域, 如 score: {"Chinese": 88, "English": 78, "Japanese": 80}
+    db.class.update({name: "zhao", age: 5, gender: "F", hobby: ["dance", "pingpong", "computer"]}, {$set: score: {"Chinese": 95, "English": 64, "Japanese": 89}})
+    db.class.update({name: "qian", age: 6, gender: "M", hobby: ["pingpong", "basketball"]}, {$set: score: {"Chinese": 65, "English": 75, "Japanese": 99}})
+    db.class.update({name: "sun", age: 14, gender: "F", hobby: ["draw", "computer", "tennis"]}, {$set: score: {"Chinese": 90, "English": 88, "Japanese": 81}})
+    db.class.update({name: "li", age: 5, gender: "F", hobby: ["draw", "sing", "dance"]}, {$set: score: {"Chinese": 69, "English": 78, "Japanese": 67}})
+    db.class.update({name: "zhou", age: 9, gender: "M", hobby: ["football", "pingpong", "kongfu"]}, {$set: score: {"Chinese": 70, "English": 87, "Japanese": 76}})
+    db.class.update({name: "wu", age: 12, gender: "M", hobby: ["draw", "basketball", "kongfu"]}, {$set: score: {"Chinese": 76, "English": 98, "Japanese": 50}})
+    db.class.update({name: "wu", age: 13, gender: "F", hobby: ["sing", "dance"]}, {$set: score: {"Chinese": 77, "English": 89, "Japanese": 70}})
+    db.class.update({name: "zheng", age: 7, gender: "M", hobby: ["pingpong", "kongfu"]}, {$set: score: {"Chinese": 66, "English": 72, "Japanese": 85}})
+    db.class.update({name: "wang", age: 7, gender: "F", hobby: ["sing", "draw"]}, {$set: score: {"Chinese": 78, "English": 76, "Japanese": 86}})
+    db.class.update({name: "liu", age: 10, gender: "M", hobby: ["tennis", "basketball"]}, {$set: score: {"Chinese": 88, "English": 78, "Japanese": 80}})
+
+按照性别分组统计每组人数
+    db.class.aggregate({$group: {_id: "$gender", {$sum: 1}}})
+
+按照姓名分组, 过滤出有重名的同学
+    db.class.aggregate([{$group: {_id: "$name", num: {$sum: 1}}}, {$match: {$gt: 1}}])
+
+统计每名男生的语文成绩
+    db.class.aggregate([{$match: {gender: "M"}, {$project: {_id: 0, name: 1, "score.Chinese": 1}}])
+
+将女生按照英语分数降序排列
+    db.class.aggregate([{$match: {gender: "F"}}, {$sort: {"score.English": -1}}])
+

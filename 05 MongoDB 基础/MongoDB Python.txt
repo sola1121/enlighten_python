@@ -1,0 +1,85 @@
+通过python操作数据库
+
+Python   -->   mongoDB编程接口 pymongo (第三方库)
+
+操作步骤
+
+    1. 创建mongo数据库的链接对象
+        db_conn = pymongo.MongoClient("localhost", 27017) 
+    2. 生成数据库对象
+        db = db_conn.databaseName   # 选择数据库 use databaseName, databaseName是数据库名
+    3. 生成集合对象
+        my_set = db.collectionName   # 选择集合 db.collectionName, collectionName是集合名
+
+    如果不需要切换数据库, 集合, 可以my_set = pymongo.MongoClient("localhost", 27017).databaseName.collectionName
+
+type(my_set)   # pymongo.collection.Collection
+
+增删改查操作
+
+    插入数据 insert(doc_or_docs, manipulate=True, check_keys=True, continue_on_error=False, **kwargs)
+            insert_many(documents, ordered=True, bypass_document_validation=False)   
+            insert_one(document, bypass_document_validation=False)
+            save()
+            注:插入对应的python数据类型是字典, 但是应为python字典无序, 插入结果文档顺序可能不同, 可以使用collections.OrderedDict
+
+    删除数据 
+        remove(spec_or_id=None, multi=True, **kwargs)
+            multi 默认为True, 表示删除所有符合条件的数据, 而在mongo中这是false
+                  设置为False, 表示只删除一条
+
+    查找数据
+        find(*args, **kwargs) --> 返回一个游标, 其是一个迭代器
+        示例:
+            cursor = my_set.find({"gender": {"$exists": True}}, {"_id": 0})
+            获取值:
+                print(next(cursor))
+                print(cursor.next())
+
+        查找函数:
+            cursor.sort()
+                mongoshell 中 --> sort({name: -1})
+                pymongo 中 --> sort([{name: -1}])
+                注: 使用sort排序的游标, 一定要是游标还未被使用过的, sort只对整体排序 
+            cursor.limit()
+            cursor.skip()
+            cursor.count()
+            ...
+        
+        find_one(filter=None, *args, **kwargs)
+
+    修改操作
+        update(spec, document, upsert=False, manipulate=False, multi=False, check_keys=True, **kwargs)
+        参数和mongoshell相同
+
+        update_one(filter, update, upsert=False, bypass_document_validation=False, collation=None): 只修改匹配到的第一条文档
+
+        update_many(filter, update, upsert=False, bypass_document_validation=False, collation=None): 修改匹配到的所有文档
+
+        注: 编程时mongo中的null, 可以使用python中的None替代
+    
+    特殊的复合操作函数
+
+        find_one_and_delete()
+        find_one_and_replace()
+        find_one_and_update()
+
+
+索引操作
+    创建索引
+        ensure_index(key_or_list, cache_for=300, **kwargs)
+
+    查看集合中的索引
+        list_indexes()
+
+    删除索引
+        drop_index(index_or_name)   # 删除索引
+        drop_indexes()   # 删除所有索引
+    
+    索引模型
+        pymongo.IndexModel(keys, **kwargs)   # 用于大量的创建索引
+
+
+聚合操作
+    aggregate([])
+    

@@ -1,0 +1,85 @@
+Tornado (龙卷风) 相似框架 Flask
+    1. 基本九行代码实现tornado服务器程序
+        from tornado.web import Application, RequestHandler
+        from tornado.httpserver import HTTPServer
+        from tornado.ioloop import IOLoop
+
+        class IndexHandler(RequestHandler):
+            def get(self, *args, **kwargs):   # 重写的继承的法法get
+                self.write("hello tornado!")
+
+            def post(self, *args, **kwargs):   # 重写的继承的方法post
+                pass
+
+        app = Application(handlers=[("/", IndexHandler)])   # 访问地址与对应的处理程序绑定
+        server = HTTPServer(app)   # 将应用程序传递给HTTPServer
+        server.listen(12345)   # 通过端口监听
+        IOLoop.current().start()   # 开始
+
+    2. 将端口号写到配置文件中
+        将端口号写入配置文件需要3步
+        from tornado.options import define, parse_config_file, options
+        1) 定义端口号在配置文件中的名称, 类型, 默认值
+            define('名称', type=int, default=8000)
+        2) 解析配置文件
+            parse_config_file('配置文件路径')
+        3) 读取配置文件中的内容
+            options.名称
+           
+    3. 利用路径的变化请求不同资源
+        /python/day03/source
+        /python/day04/source
+        服务器利用正则表达式分组获取不同路径的的内容生成不同的响应
+        /python/(day[0-9]+)
+        /python/(day[0-9]+)/([a-z0-9]+)
+    
+    4. 利用参数的变化请求不同的资源
+        /gloang?day=22&subject=go
+        /golang?day=33
+        服务器会调用RequestHandler中的相关方法获取请求参数, 再根据不同请求参数进行不同的响应
+            GET
+                get_query_argument('参数名称', 默认值)
+                    获取最后一个匹配到参数名称的传值, 提供默认值防止用户没有提供该参数时, 产生400错误
+                get_query_arguments('参数名称')
+                    以列表形式获取所有同名返回参数值(们), 即使用户没有提供该参数, 也不会产生400错误, 只会得到一个空列表
+            POST
+                get_body_argument('参数名称', 默认值)
+                    获取最后一个匹配到参数名称的传值, 提供默认值防止用户没有提供该参数时, 产生400错误
+                get_body_arguments('参数名称')
+                    以列表形式获取所有同名返回参数值(们), 即使用户没有提供该参数, 也不会产生400错误, 只会得到一个空列表
+        get_argument(s) = get_query_argument(s) + get_body_argument(s)
+            可用于处理json文件
+
+    5. 从一个页面跳转到另一个页面
+        继承自Requesthandler的handle功能类中
+            self.redirect("重定向地址")
+                用于重定向
+
+    处理上传文件
+        HTTPServerRequest, 它封装了
+
+    6. self.request
+        request是RequestHandler的一个属性, 引用HttpServerRequest对象, 该对象封装了与请求相关的所有内容
+        几乎请求中的所有东西都可以在其中找到
+        如下示例:
+            HTTPServerRequest(
+                protocol='http', host='127.0.0.1:12346', method='POST', uri='/login', version='HTTP/1.1', remote_ip='127.0.0.1', 
+                headers={
+                         'Accept-Encoding': 'gzip, deflate', 'Accept': 'text/html,application/xhtml+xml, application/xml;q=0.9,*/*;q=0.8', 
+                         'Accept-Language': 'en-GB,en;q=0.5', 'Connection': 'keep-alive', 'Content-Type': 'application/x-www-form-urlencoded', 
+                         'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0', 
+                         'Referer': 'http://127.0.0.1:8000/', 'Host': '127.0.0.1:12346', 'Upgrade-Insecure-Requests': '1', 
+                         'Content-Length': '33', 'Cookie': 'csrftoken=1D4uLoIZr0VdtfJZvZQfopGNB6nebC8BONrBWN4lgP5QaucwcuOZcjOEpnuCs2fW; 
+                         sessionid=eyjyi9nimvvna50t48a22e472pi5i5th'
+                         }
+            )
+        
+
+在<form></form>表单中上传文件, 应该添加enctype属性
+<from action="" method="post" enctype="multipart/form-data">
+    <input type="file" name="avatar">
+</form>
+在服务器上, 使用self.request.files
+{'avatar': [{'content_type': 'image/jpeg', 'filename': '001.jpg', 'body': '二进制的文件内容'}, ]}
+
+

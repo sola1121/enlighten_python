@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>多对多查询author与publisher</title>
+</head>
+<body>
+    <h2>作者:</h2>
+    <h4>名字: {{ author.name }}</h4>
+    <h4>邮箱: {{ author.email }}</h4>
+    <h2>出版社:</h2>
+    {% for pub in publishers %}
+        <h4>出版社名: {{ pub.name }}</h4>
+        <h4>网址: {{ pub.website }}</h4>
+    {% endfor %}
+
+    <h2>出版社:</h2>
+    <h4>出版社名: {{ publisher.name }}</h4>
+    <h4>网址: {{ publisher.website }}</h4>
+    {% for au in authors %}
+        <h4>{{ au.name }}</h4>
+        <h4>{{ au.email }}</h4>
+    {% endfor %}
+
+</body>
+</html>

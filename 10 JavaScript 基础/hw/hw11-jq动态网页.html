@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        table{
+            border-collapse:collapse;
+            text-align: center;
+        }
+        table td{
+            width: 10em;
+        }
+        table tr, table td{
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <!-- 使用form会导致button的提交, 会看不到结果 -->
+    <p>
+        商品名称 <input type="text" name="goodName" id="goodName">
+        商品价值 <input type="text" name="goodPrice" id="goodPrice">
+        商品数量 <input type="text" name="goodQuantity" id="goodQuantity">
+        <button id="btnConfirm">提交生成</button>
+    </p>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <td>商品名称</td>
+                    <td>商品价值</td>
+                    <td>商品数量</td>
+                    <td>对应操作</td>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+<script src="jQuery_3.3.1.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#btnConfirm").click(addElem)
+    })
+
+    function addElem(){
+        var new_tr = $("<tr></tr>")
+        var new_td1 = $("<td></td>")
+        new_td1.text($("#goodName").val())
+        var new_td2 = $("<td></td>")
+        new_td2.text($("#goodPrice").val())
+        var new_td3 = $("<td></td>")
+        new_td3.text($("#goodQuantity").val())
+        var new_td4 = $('<td><button onclick="btnModify()">修改数量</button><button onclick="btnDelete()">删除</button></td>')
+        new_tr.append(new_td1)
+        new_tr.append(new_td2)
+        new_tr.append(new_td3)
+        new_tr.append(new_td4)
+        $("tbody").append(new_tr)
+    }
+
+    function btnModify(){
+        // 获取购买数量的td
+        var $tdCount = $(this).parent().prev()
+        if(this.innerHTML == "修改数量"){
+            // 执行修改操作
+            this.innerHTML = "确认修改"
+            // 获取购买数量
+            var count = $tdCount.html()
+            // 清空购买数量td中的文本内容
+            $tdCount.empty()
+            // 创建减按钮, 并追加都$tdCount中
+            var $btnMinus = $("<button>-</button>")
+            // 为-绑定事件
+            $btnMinus.click(function(){
+                // 通过this找到文本框(下一个兄弟元素)
+                var iCount = $(this).next().val()
+                if (iCount <= 1){
+                    iCount = 1
+                } else {
+                    iCount--
+                }
+                $(this).next.val(iCount)
+            })
+            $tdCount.append($btnMinus)
+            // 创建文本框, 并追加到$tdCount中
+            var $txtCount = $("<input>")
+            $txtCount.css("width", "2em")
+            $txtCount.val(count)
+            $tdCount.append($txtCount)
+            // 创建加按钮, 并追加到$tdCount中
+            var $btnAdd = $("<button>+</button>")
+            $btnAdd.click(function(){
+                // 通过this找到文本框(上一个兄弟元素)
+                var iCount = $(this).prev().val()
+                if (iCount <=1){
+                    iCount = 1
+                } else {
+                    iCount++
+                }
+                $(this).prev.val(iCount)
+            })
+            $tdCount.append($btnAdd)
+        } else {
+            // 执行确定操作
+            $(this).html("修改数量")
+            // 通过$tdCount查找文本框
+            var iCount = $tdCount.children("input").val()
+            $tdCount.html(iCount)
+        }
+    }
+    
+    function btnDelete(){
+        if (confirm("确认删除.")){
+            console.info(this.innerHTML)
+            $(this).parent().parent().remove()
+        }
+    }
+
+</script>
+</html>

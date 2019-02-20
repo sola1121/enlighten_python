@@ -1,0 +1,79 @@
+线程中同步和互斥
+
+Event
+Lock
+Condition
+
+threading继承了python2的Thread和threading两个模块, 是比较古老的, 其中的一些代码命名方式还没有遵守python3的新规则
+
+线程中的Event与Lock与进程中的类似, 但是要注意, 它们是工作在同一个进程中的, 对其他进程没有影响
+
+---------------------------------------
+
+事件 Evnet
+
+    threading.Event 类
+
+    创建事件对象
+    et = threading.Event()
+
+    提供事件阻塞, 获得set结束阻塞的返回True, 通过timeout结束的返回False
+    et.wait([timeout])
+
+    对事件对象进程设置, 此时wait判断如果事件被set则结束阻塞
+    et.set()
+
+    清除对该事件对象的set
+    et.clear()
+
+    检测对象是否被设置, 被设置返回True, 没有返回False
+    et.is_set()
+
+---------------------------------------
+
+锁 Lock
+
+    threading.Lock 类
+
+    创建Lock对象
+    lo = threading.Lock()
+    
+    上锁, 默认为阻塞, 无超时
+    lo.acquire(blocking=True, timeout=-1) 
+
+    解锁
+    lo.release() 
+
+    with Lock对象:   # 给with段代码上锁
+        ...
+
+    当with代码段结束自动解锁
+
+    * 在Lock对象处于上锁状态的时候, 再企图上锁则会阻塞直到锁被释放, 才能继续执行上锁操作
+    * 有锁的方法只会和有相同锁的方法之间实现锁, 相互间才会唯一运行
+
+---------------------------------------
+
+条件变量 Condition
+
+    threading.Condition(lock=None) 类
+
+    创建条件变量
+    con = threading.Condition()
+
+    对资源加锁, 加锁后其他位置再加锁则阻塞
+    con.acquire() 
+
+    解锁
+    con.release()
+
+    wait函数只能在加锁的状态下使用
+    con.wait(timeout=None) 
+        wait函数会先解锁(release), 然后让线程处于等待通知的阻塞状态
+
+    发送通知, 线程接收到通知后, 结束wait阻塞, 并且执行acquire加锁操作
+    con.notify()
+
+    con.notify_all()
+
+

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FORM对象</title>
+</head>
+<body>
+    <form action="/06_register/" method="POST">
+        {% csrf_token %}
+        {{ form_object.as_p }}
+        <p><input type="submit" value="confirm"></p>
+    </form>
+</body>
+</html>

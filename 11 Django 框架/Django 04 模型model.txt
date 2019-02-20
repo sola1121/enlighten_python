@@ -1,0 +1,133 @@
+模型 - Model
+    1. 什么是模型
+        模型是根据数据库中数据表的结构来创建出来的
+        每一张表到编程语言中就是一个class, 表中的每一个列, 到编程语言中就是class的一个属性, 并且在模型中还可以完成对数据的CRUD操作
+    2. 创建和使用模型 - ORM
+        1) 什么是ORM
+            ORM : Object Relational Mapping , 对象关系映射
+                简称: ORM, O/RM, O/R Mapping
+
+            三大特征
+                ● 数据表到类(class)的映射
+                    将数据表自动生成一个类
+                    同时也允许将一个class类自动生成数据库中的一张表
+                ● 数据类型的映射
+                    允许将表中的字段的数据类型自动映射成编程语言中对应的数据类型
+                    也允许将编程语言的数据类型自动映射成表中的字段的数据类型
+                ● 关系映射
+                    在编程语言中允许将表与表之间的关系映射出来
+                    表与表之间的关系也可以自动映射到编程语言的class中
+                    数据库表中的关联关系
+                        一对一, 一对多, 多对多
+        2) ORM的优点
+            提高了开发的效率, 能够自动完成表到对象的映射
+            不用SQL编码, 也能够完成对数据的"CRUD操作, 可以省略庞大的数据访问层
+    3. 创建和配置数据库
+        1) 创建数据库(得选支持中文)
+            create database 数据库名 default charset utf8 collate utf8_general_ci;   # 创建了数据库webdb
+        2) 配置数据库(Django)
+            DATABASES = {
+                'default': {
+                    'ENGINE': 'django.db.backends.sqlite3',
+                    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+                }
+            }
+            以上默认的是sqlite3的配置
+            ● 连接数据库的配置如下
+                (1) ENGINE : 引擎
+                    'django.db.backends.postgresql'
+                    'django.db.backends.mysql'
+                    'django.db.backends.sqlite3'
+                    'django.db.backends.oracle'
+                (2) NAME : 要连接到的数据库名
+                (3) USER : 登录到数据库的用户名, 一般为root
+                (4) PASSWORD : 登录到数据库的密码
+                (5) HOST : 要连接的主机, 本机的话为localhost或127.0.0.1
+                (6) PORT : 指定端口, MySQL是3306, Oracle是1521, SQLserver是1433
+            ● 配置连接到MySQL
+                DATABASES = {
+                    'default': {
+                        'ENGINE': 'django.db.backends.mysql',
+                        'NAME': webdb,
+                        'USER': 'root',
+                        'PASSWORD': '123456',
+                        'HOST': '127.0.0.1',
+                        'PORT': '3306',
+                    }
+                }
+            ● Django中连接mysql的话依赖pymysql
+                安装 sudo pip3 install pymysql==0.7.11   # 推荐版本
+                在主目录中 __init__.py
+                    在 python3 中，改变了连接库，改为了 pymysql 库，使用pip install pymysql 进行安装，直接导入即可使用
+                    但是在 Django 中， 连接数据库时使用的是 MySQLdb 库，这在与 python3 的合作中就会报以下错误了
+                        # 在对应的主目录__init__.py中添加如下以解决
+                        import pymysql
+                        pymysql.install_as_MySQLdb()
+    4. 数据库的同步操作
+        1) ./manage.py makemigrations
+            作用: 将每个应用下的models.py文件生成一个数据库的中间文件, 并保存在migrations目录中
+        2) ./manage.py migrate
+            作用: 将每个应用下的migrations目录中的中间文件同步到数据库中
+    5. 编写models.py
+        1) 注意
+            (1) Models中的每个class都称为模型类(Model类), 实体类(Entry/Entity)
+            (2) Models中的每个模型类, 必须继承自models.Model, 用于映射到数据库
+        2) 编写模型类
+            from django.db import models
+            如: 
+            class Entry(models.Model):
+                属性1 = models.字段类型(字段选项)
+            示例:
+                # 创建一个Publisher模型类
+                # 表示出版信息, 并包含以下属性
+                #1 name: 表示出版社名称
+                #2 address: 表示出版社地址
+                #3 city: 表示出版社所在城市
+                #4 country: 表示出版社所在国家
+                #5 website: 表示出版社的网址
+
+                class Publisher(models.Model):
+                    name = models.CharField(max_length=30)
+                    address = models.CharField(max_length=50)
+                    city = models.CharField(max_length=20)
+                    country = models.CharField(max_length=10)
+                    website = models.URLField(max_length=10)
+
+---------------------------------------
+
+models.py与数据库
+    1. 模型中的字段类型和字段选项
+        1) 字段类型(Field Type)
+            ● BooleanField()
+            ● CharField()
+            ● DateField()
+            ● DateTimeField()
+            ● DecimalField()
+            ● EmailField()   # 存电子邮件 - varchar
+            ● FloatField()
+            ● ImageField()   # 存图片路径 - varchar
+                ImageField(upload_to="static/***/***")
+            ● IntegerField()
+            ● URLField()
+            ● TextField()   # 存大量文本数据 - text
+            ...
+        2) 字段选项(Field Option)
+            ● max_length
+                指定数据的最大长度
+                在CharField()必须要设置的选项
+            ● default
+                为当前字段指定默认值
+            ● null
+                指定当前字段是否允许为空, 默认值是false(不为空)
+            ● blank
+                可配合null, 如果数据库允许null, 那么在admin后台管理中也允许输入空
+            ...
+
+    2. 数据库的版本切换
+        1) ./manage.py migrate
+            执行所有应用中最新版本的数据库中间文件
+        2) ./manage.py migrate 应用名称 版本号
+            执行应用中 版本号 对应的中间文件 
+    3. 通过数据库自动导出Models
+        1) ./manage.py inspectdb > 文件名.py   # 导出的文件就相当于models.py文件
+    

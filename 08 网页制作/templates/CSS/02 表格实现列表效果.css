@@ -1,0 +1,38 @@
+/* charset=utf-8 */
+
+body{
+    font-size: 12px;
+}
+
+table{
+    width: 990px;
+    border-collapse: collapse;
+    border-bottom: #ddd solid 1px;
+}
+
+.content{
+    color: #9c9a9c;
+    line-height: 2.5;
+}
+
+.content a:link{
+    color: #005aa0;
+    text-decoration: none;
+}
+
+.content thead td{
+    color: #666;
+    font-weight: 900;
+    border-bottom: solid #ddd 1px;
+    text-align: center;
+}
+
+.content tbody td{
+    border-bottom: #ddd solid 1px;    
+    text-align: center;
+}
+
+.content td.con_title{
+    width: 610px;
+    text-align: left;
+}

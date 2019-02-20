@@ -1,0 +1,34 @@
+应用层  Python所在
+         ↓
+Library 标准库 (通常用C语言写) 系统提供的API(application interface)
+         ↓
+Operation System 操作系统
+         ↓
+硬件 (CPU, RAM, Disk, ...)
+
+
+Python中一切皆对象
+切实存在的东西,绑定的一段内存块,可以用id查到地址.
+Python所有的类都是继承object类, 所以其所建的实例都为对象
+
+程序存储在内存上, 文件存储在硬盘上
+
+文字其实都是图片, 是由编码来支持的,相当于图片的名字了,该名字的存储是字节码
+选择不同的命名方式, 将会有不同的存储大小, 毕竟就是文字(字节码)
+
+
+python一般会初始化0~256放入内存中, 以便能快速的使用
+
+
+python中对象会附带一定的属性, 双下划线开始和结尾
+
+
+Python中文参考文档
+http://usyiyi.cn
+
+python参考
+http://pymotw.com
+
+可以查看类
+http://ccbv.co.uk
+

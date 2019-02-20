@@ -1,0 +1,175 @@
+数据库 MongoDB 一款开源的非关系型数据库
+
+数据存储阶段
+
+    文件管理阶段, 如文件(.txt  .doc  .mp4  .png ...)
+    优点: 数据可以长期保存
+          可以存储大量的数据
+          使用简单
+    缺点: 数据一致性差
+          数据查找修改不方便
+          数据冗余度可能比较大
+
+    数据库管理阶段
+    优点: 数据组织结构化降低了冗余度
+          提高了增删改查的效率
+          容易拓展
+          方便程序调用, 做自动化处理
+    缺点: 需要sql或者其他特定的语句, 相对比较复杂
+          
+
+知识补充      
+    数据
+        能够输入到计算机中并被识别处理的信息集合
+
+    数据结构
+        研究一个数据集合中数据之间关系的
+
+    数据库
+        按照数据结构, 存储管理数据的仓库. 数据库是在数据库管理系统管理和控制下, 在一定介质上的数据集合
+
+    数据库管理系统
+        管理数据库的软件, 用于建立和维护数据库
+
+    数据库系统
+        由数据库和数据库管理系统, 开发工具等组成的集合
+
+
+关系型数据库
+    采用关系模型来组织数据结构的数据库 (二维表, 即行列型)
+    常见的关系型数据库 Oracle   DB2   SQLServer   MySql   SqLite
+    优点: 容易理解, 类似我们常见的表格
+          使用方便, 都是使用sql语句, sql语句非常成熟
+          数据一致性高, 冗余度低, 完整性好
+          技术成熟, 可以使用外部链接等比较复杂的操作
+
+    缺点: 不能很好的满足高并发需求, 每次都需要进行sql语句的解析
+          针对海量数据的瞬间爆发读写性能不足, 关系型数据库内部每步操作都需要加锁保证操作的原子性
+          数据拓展普遍比非关系型困难
+          数据一致性高, 但有时会浪费大量空间
+
+非关系型数据库 (NoSql --> not only sql)
+    优点: 高并发, 大数据读写能力强
+          支持分布式, 容易扩展
+          弱化了数据结构, 降低了数据的一致性
+    
+    缺点: 通用性差, 没有像sql那样一致的操作
+          操作灵活, 但容易混乱
+          没有join, 有的数据库也没有事务支持等操作
+
+
+NoSql的使用情况
+    1. 数据一致性要求低
+    2. 数据库并发处理要求高
+    3. 数据库设计时对大小的估算不确定, 需要分布拓展
+    4. 给定的数据比较容易建立起NoSql的模型
+
+
+NoSql分类
+    1. 键值型数据库
+        Redis ,  Oracle BDB  ,  Tokyo
+    2. 列存储数据库
+        HBase
+    3. 文档型数据库
+        MongoDB ,  CouchDB
+    4. 图形数据库
+
+
+MongoDB (非关系型数据库 --> 文档型数据库)
+    1. 由C++编写的数据库管理系统
+    2. 支持非常丰富的增删改查数据操作
+    3. 支持非常丰富的数据类型
+    4. 使用方便, 便于部署, 支持分布, 容易拓展
+    5. 支持众多的编程语言接口 (C++, python, C#, PHP, ruby, ...)
+
+
+Liunx工具集合
+/usr/bin  # 目录中
+
+MongoDB 安装
+
+    自动安装
+        sudo apt-get install mongodb
+
+        默认的安装位置: /var/lib/mongodb
+        配置文件位置: /etc/mongodb.conf
+        命令集: /usr/bin   /usr/local/bin
+    
+    手动安装
+        1. 在官网上下载合适的MongoDB版本
+        2. 选择安装目录解压 如: /usr/local/bin   /opt, 这时, /usr/local/bin   /opt就是命令集了
+            tar解压后得到mongo文件夹
+        3. 将文件夹的命令集目录(bin目录)添加到环境变量
+            PATH=$PATH:/opt/mongo..../bin
+            export PATH
+            将以上两句写在系统自启动脚本/etc/rc.local, 这样每次系统启动配置就会生效了
+        4. 重启系统
+
+
+MongoDB 命令
+
+    设置数据库存储位置
+        mongod --dbpath 目录
+    设置端口号
+        mongod --port 端口号
+        默认端口号 27017
+
+    mongo 命令 
+    进入mongo shell界面 mongodb的交互界面用来操作数据库
+
+    退出 mongo shell
+        quit()
+
+
+数据组成结构
+    键值对  --> 文档 --> 集合 --> 数据库
+
+    一般关系型数据库的存储方式
+    -----------------------------------
+    ID      |        name    |    age
+    -----------------------------------
+    1       |      siro      |     1
+    -----------------------------------
+    2       |     kizuna     |     5
+    -----------------------------------
+
+    MongoDB中数据的存储方式
+    {
+        "_id": ObjectId("5b03b86ea7ab110dc4db1297"),
+        "name": "siro",
+        "age": "1"
+    },
+    {
+        "_id": ObjectId("5b03b86ea7ab110dc4db4235"),
+        "name": "kizuna",
+        "age": "5"
+    }
+
+    MySql 和 MongoDB 概念对应
+        ----------------------------------
+        mysql           mongo         含义
+        -----------------------------------
+        database       database      数据库
+        table          collection    表/集合
+        column         field         字段/域
+        row            document      记录/文档
+        index          index          索引
+
+
+实验数据库
+
+use stu
+db.createCollection("vtuber")
+db.vtuber.insert([
+{ "_id" : 1, "name" : "kizuna_ai", "age" : 5, "gender" : "F" },
+{ "_id" : 2, "name" : "luna", "age" : 1, "gender" : "F" },
+{ "_id" : 3, "name" : "akari", "age" : 16, "gender" : "F" },
+{ "_id" : 4, "name" : "siro", "age" : 2, "gender" : "F" },
+{ "_id" : 5, "name" : "hinata", "age" : 1, "gender" : 1 },
+{ "_id" : 6, "name" : "nojia_loli", "age" : 2, "gender" : "F/M" },
+{other: ["nea", "yua", "tama"], info: "vtuber family"}
+])
+
+
+use book
+db.createCollection("books")

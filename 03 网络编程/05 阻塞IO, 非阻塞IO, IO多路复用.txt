@@ -1,0 +1,83 @@
+IO input output
+在内存中存在数据交换的操作
+内存和磁盘交换
+内存和网络交换
+
+IO密集型程序 : 程序中执行了大量的IO操作, 而较少需要CPU运算  消耗CPU资源少, 运行周期往往较长
+CPU密集型程序 : 程序中执行了大量的CPU运算, 而较少需要IO操作  消耗CPU资源多, 运行周期往往较短
+
+IO分类
+
+1) 阻塞IO : 默认形态
+    阻塞: 因为等待某种条件达成再继续运行  如: accept, recv, input等
+          处理IO事件的时候耗时较长也会产生阻塞  如: 文件的读写过程, 网络数据的传输过程等
+    阻塞IO是效率最低的IO
+
+2) 非阻塞IO
+    通过修改IO对象, 使其变为非阻塞状态(通过改变第一种阻塞形态实现)
+    通常用循环不断判断阻塞条件, 需要消耗更多CPU但是一定程度上提高了IO效率
+
+    server.setblocking(bool)
+        功能: 将套接字设置的阻塞状态
+        参数: bool类型, 默认为True, 即阻塞, 设置False为非阻塞
+    
+    超时等待(超时检测)
+    server.settimeout(second)
+        功能: 设置套接字的超时检测
+        参数: 超时时间
+    超时等待即对原本阻塞的函数进行设置, 使其不在始终阻塞, 而是阻塞等待一定时间后自动返回. 
+             在规定时间中如果正常结束阻塞则继续执行否则产生timeout异常
+
+    使用traceback模块
+    traceback 模块, 更专业的打印异常信息
+        traceback.print_exc()
+
+3) IO多路复用
+    同时监控多个IO事件, 当某个IO事件准备就绪(数据输入后,需要计算机处理时,这由OS内核决定), 就执行哪个IO事件, 形成类似并发的效果
+    通过循环判断来对IO中的事件进行判断, 触发响应事件
+
+    select 模块
+        select 方法   (支持Windows, linux, unix)
+            r, w, x = select(rlist, wlist, xlist [,timeout])
+                功能: 监控IO事件, 阻塞等待IO事件发生, select本生也是一个阻塞函数
+                参数: rlist, 列表, 存放我们要监控等待处理的IO  wait until ready for reading 
+                      wlist, 列表, 存放我们希望主动处理的IO  wait until ready for writing 
+                      xlist, 列表, 存放如果发生异常, 需要我们处理的IO事件  wait for an exceptional condition
+                      timeout, 数字, 超时检测 默认是一直阻塞
+                返回值: r, 列表, rlist当中准备就绪的IO
+                        w, 列表, wlist当中准备就绪的IO
+                        x, 列表, xlist当中准备就绪的IO
+
+            自我理解, rlist存放的是IO中的Input, 用于读取, wlist存放IO中的Output, 用于写入
+
+        poll 方法   (支持linux, unix)
+            (1) 创建poll对象
+                po = select.poll()   # poll对象
+            (2) 加入关注的IO
+                po.register(conn)
+                po.unregister(conn)   # 从关注的IO删除
+            (3) 使用poll函数监控
+                events = po.poll()   # 这里的poll函数是select.poll对象中的方法
+                功能: 阻塞等待register的事件, 只要有任意准备就绪的事件即返回
+                返回值: events [(fileNO, event),(...),...]   # 返回文件描述符, 和对应的事件组成的列表
+            (4) 处理发生的IO事件
+
+            常见poll中的IO事件
+                POLLIN   POLLOUT   POLLUP   POLLERR   POLLPRI   POLLVAL
+            同:  rlist    wlist    断开连接   xlist    紧急处理  无效数据
+                使用: server & POLLOUT 按位与运算, 判断server是否是POLLOUT
+                      POOLIN | POLLOUT 按位或运算, 相当于or
+
+        epoll 方法   (支持linux, unix)
+            效率上比select和poll稍微高
+            职能用于Linux, unix
+            支持边缘触发, select和poll只支持水平触发
+
+    IO多路复用注意点:
+        (1) 在处理IO过程中不应该发生死循环(某个IO单独占有服务器)
+        (2) IO多路复用是单进程程序, 是一个并发程序
+        (3) IO多路复用有较高的IO执行效率
+
+4) 事件驱动IO
+5) 异步IO
+

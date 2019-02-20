@@ -1,0 +1,180 @@
+1. MySQL用户账户管理
+    1) 开启MySQL远程连接
+        (1) 获取OS系统root权限
+            sudo -i
+        (2) cd到配置文件所在路径
+            cd /etc/mysql/mysql.conf.d/
+        (3) 使用编辑器打开 mysql.cnf
+            bind-address = 127.0.0.1   # 本地地址, 将其注释掉
+        (4) 重启mysql服务
+            /etc/init.d/mysql restart
+    2) 添加授权用户
+        (1) 使用root用户连接到服务器
+            mysql -uroot -p123456
+        (2) 添加新的授权用户
+            create user "用户名"@"IP地址" identitied by "密码";   -- 这里的IP地址是服务器允许连接的进的IP
+            示例: 
+                create user "leimili"@"%" identified by "leimili";
+            IP地址的表示方式
+                ◆ % 表示用户可以从任何地址连接到服务器
+                ◆ localhost 用户只能从本地连接
+                ◆ 指定一个IP表示用户只能从此IP连接到服务器
+    3) 给用户授权
+        grant 权限列表 on 库.表 to '用户名'@'IP地址' with grant option;
+        示例:
+            grant all privileges on *.* to 'leimili'@'%' with grant option;   -- 授予所有权限和所有表
+        常见权限列表:
+            select, update, delete, insert, drop, create, ...
+        库.表:
+            *.* 表示所有库的所有表
+        练习验证: 
+            linux下, 使用ifconfig查看系统IP地址
+            mysql -h服务器IP -u用户名 -p密码   -- 这里的IP是服务器的地址
+
+2. 数据备份(mysqldump, 在linux终端操作)
+    1) 命令格式
+        mysqldump -uroot -p密码 源库名 > 路径/xxx.sql
+    2) 示例
+        备份test2 库
+            mysqldump -uroot -p test2 > /home/tarena/桌面/test2.sql
+    3) 源库名的表示方式
+        --all-databases 备份所有的库
+        库名             备份指定的单个库
+        -B 库1 库2 ...   备份指定的多个库
+        库名 表1 表2 ... 备份指定库的指定表
+    4) 练习验证
+        mysqldump -uroot -p --all-databases > ~/桌面/all_databases.sql
+        mysqldump -uroot -p -B MOSHOU test2 > ~/桌面/MOSHOU_test2.sql
+        mysqldump -uroot -p test2 sheng city xian > ~/桌面/test2.sql
+
+3. 数据恢复(在linux终端操作)
+    1) 命令格式
+        mysql -u用户名 -p 目标库名 < 路径/xxx.sql
+    2) 练习验证
+        备份库 -> 删除库 -> 先创建空库 -> 恢复命令
+
+4. 备份分为完全备份和增量备份
+    完全备份: mysqldump
+    增量备份: binlog日志, xbackup工具
+
+5. 从所有库的备份文件中恢复某一个库(--one-database)
+    mysql -u用户名 -p --one-database 目标库名 < all_databases.sql
+    练习验证:
+        恢复库时库中新增的表不会删除
+        恢复时必须先创建空库
+
+6. 事务和事务回滚
+    1) 事务的定义:
+        一件事从开始发生到结束的整个过程
+    2) 作用
+        确保数据的一致性
+    3) 事务和事务回滚的应用
+        (1) mysql中默认SQL语句会自动commit到数据库
+            show variables like 'autocommit';   -- 可以设置自动提交
+        (2) 事务应用
+            ◆ 开启事务
+                mysql 命令行中 start transaction;
+                # 此时autocommit被禁用, SQL命令不会对数据库中数据做修改
+            ◆ 终止事务
+                mysql 命令行中
+                commit;   -- 提交
+                或者
+                rollback;   -- 回滚
+                注意:
+                    rollback 只针对对于表记录的操作, 对表内容的 增, 删, 改, 对创建库, 创建表的操作无效
+
+7. 存储引擎
+    1) 定义:
+        是用来处理表的处理器
+    2) 存储引擎的基本操作
+        (1) 查看已有表的存储引擎
+            show create table 表名;   # engine=...
+        (2) 创建表时指定存储引擎
+            create table 表名(...)engine=innodb;   # mysql中默认就是innodb
+            create table 表名(...)engine=myisam;
+        (3) 查看所有的存储引擎
+            show engines;
+    3) 工作中使用的存储引擎
+        innodb   myisam
+    4) 常用存储引擎特点
+        默认在/var/lib/mysql 中存储内容
+        (1) innodb特点
+            ◆ 共享表空间(同用一个文件) 库以目录的形式保存, 表以目录中文件保存
+                表名.frm   -- 表结构
+                表名.idb   -- 表数据和索引信息
+            ◆ 支持行级锁
+        (2) myisam特点
+            ◆ 独享表空间  库以目录形式保存, 表和索引分别以不同文件保存
+                表名.frm   -- 表结构
+                表名.myd   -- 表记录
+                表名.myi   -- 索引信息
+            ◆ 支持表级锁
+    5) 锁
+        (1) 加锁的目的
+            解决客户端并发访问的冲突问题
+        (2) 锁的类型
+            读锁(select)共享锁
+                加读锁之后不能更改表中的内容,但可以进行查询
+            写锁(insert, update, delete)互斥锁或排他锁
+        (3) 锁粒度
+            表级锁
+            行级锁
+            # 操作完成后会自动释放锁
+    6) 如何决定使用哪种存储引擎
+        (1) 执行查询操作表多的表使用myisam存储引擎(使用innodb的行锁会浪费资源, 不如直接给表加)
+        (2) 执行写操作比较多的表使用innodb存储引擎
+    7) 如何更改表的默认存储引擎
+        (1) sudo -i
+        (2) cd /etc/mysql/mysql.conf.d
+        (3) 使用编辑器打开 mysql.cnf
+            [mysqld]
+            default-storage-engine = 想要更改到的引擎
+        (4) /etc/init.d/mysql restart
+    8) memory存储引擎
+        将数据存储在内存中, 没错, 重启后就没了, 相当于直接使用内存的临时数据
+        表名.frm   -- 只有表结构文件
+
+8. MySQL调优简介
+    1) 选择合适的存储引擎
+        经常用来读的表使用myisam存储引擎
+        其余的表都用innodb
+    2) 基本的SQL语句调优(尽量避免全表扫描)
+        (1) 在select where 或 order by经常使用的字段, 建立索引
+        (2) where子句中不使用!=, 否则将放弃使用索引进行全表扫描
+        (3) 尽量避免用null值判断, 否则会全表扫描
+            select id from t1 where number is null;   -- 这样就会全表扫描
+            优化: 
+                在number字段设置默认值为0
+        (4) 尽量避免or 来连接条件, 导致全表扫描
+            select id from t1 wehre id=10 or id=20;   -- 这样就会全表扫描
+            优化:
+                select id from t1 wehre id=10;
+                union
+                select id form t1 where id=20;
+        (5) 模糊查询尽量避免使用前置 %, 这样会全表扫描
+        (6) 尽量避免in 和 not in 的使用, 这样会全表扫描
+            select id from t1 where id in(1, 2, 3);
+            优化:
+                select id from t1 where id=1
+                union
+                select id from t1 where id=2
+                union
+                select id from t1 wehre id=3;
+                具有连续性使用 between ... and ...
+        (7) 尽量避免使用select * ..., 要用具体的字段列表代替 *, 不要返回用不上任何字段
+
+9. Mysql workbench (mysql图形化管理界面)
+
+10. ER模型&ER图
+    1) 定义
+        ER模型即 实体 - 关系 模型
+        ER图即 实体关系图
+    2) 三个概念
+        (1) 实体
+        (2) 属性
+        (3) 关系
+            定义: 实体之间的关系
+            分类
+                一对一关系(1:1) : 班级和班长
+                一对多关系(1:n) : 公司和职工
+                对对多关系(m:n) : 学生和课程

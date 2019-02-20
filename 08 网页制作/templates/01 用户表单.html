@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Page Title</title>
+</head>
+<body>
+    <div><h3>增加管理员</h3>
+        <form action="#" method="POST">
+            <p>姓名: 
+                <input type="text" name="uname" maxlength="10"> 10个字符以内
+            </p>
+            <p>密码: 
+                <input type="password" name="passwd" maxlength="10"> 10个字符以内
+            </p>
+            <p>性别: 
+                <input type="radio" name="gender" value="M">男 
+                <input type="radio" name="gender" value="F">女
+            </p>
+            <p>角色: 
+                <input type="checkbox" name="role" value="0">超级管理员&nbsp;&nbsp;<input type="checkbox" name="role" value="1">账单管理员
+                &nbsp;&nbsp;&nbsp;至少选择一个角色
+            </p>
+            <p>头像: 
+                <input type="file" name="uimg">
+            </p>
+            <p>
+                <button type="submit">保存</button>
+                <button type="reset">重填</button>
+            </p>
+        </form>
+    </div>
+    <hr>
+    <h1>增加管理员</h1>
+    <form action="add" method="post">
+        <table>
+            <tr>
+                <td>姓名:</td>
+                <td><input type="text" name="uname" maxlength="10"></td>
+                <td>10个字符以内</td>
+            </tr>
+            <tr>
+                <td>密码:</td>
+                <td><input type="password" name="passwd" maxlength="10"></td>
+                <td>10个字符以内</td>
+            </tr>
+            <tr>
+                <td>性别:</td>
+                <td><input type="radio" name="gender" value="M">男<input type="radio" name="gender" value="F">女</td>
+            </tr>
+            <tr>
+                <td>角色: </td>
+                <td><input type="checkbox" name="role" value="0">超级管理员<br><input type="checkbox" name="role" value="1">账单管理员</td>
+                <td>至少选择一个角色</td>
+            </tr>
+            <tr>
+            <td>头像: </td>
+            <td><input type="file" name="uimg"></td>
+            <td></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="保存"></td>
+                <td><input type="reset" value="重填"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

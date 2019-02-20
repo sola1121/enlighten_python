@@ -1,0 +1,60 @@
+异常(高级)
+
+with语句
+语法:
+    with 表达式1 [as 变量名1], 表达式2 [as 变量名2], ...
+作用:
+    用于对资源访问的场合, 确定使用过程中不管是否发生异常, 都会执行必要的'清理'操作, 并释放资源
+    如: 文件打开后自动关闭, 线程中锁的自动获取和释放
+说明:
+    with语句和try-finally相似, 并不会变异常状态
+    as子句用于绑定表达式创建的对象
+
+环境管理器
+    类有__enter__和__exit__方法的类被称为环境管理器
+    能够用with进行管理的对象必须是环境管理器
+    将在进入with语句时被调用, 并返回由as便令管理的对象
+    __exit__将在离开with语句时被调用,具可以用参数来判断离开with语句时是否出现异常并作出相应的处理
+
+示例:
+class FileWriter:
+    def __init__(self, filename):
+        self.filename = filename
+    def write_log(self, s):
+        """此方法用于向文件内写入字符串,同时自动添加换行"""
+        self.file.write(s)
+        self.file.write("\n")
+    def __enter__(self):
+        """此方法用于实现环境管理器"""
+        self.file = open(self.filename, "w")
+        print("已进入__enter__方法, 文件打开成功")
+        return self   # 返回值用于向with中的as绑定
+    def __exit__(self, exec_type, exec_value, exec_tb):
+        """
+        exec_type 为异常类, 没有发生异常时为None
+        exec_value 为错误的对象, 没有发生异常时为None
+        exec_tb 为错误的traceback对象
+        """
+        self.file.close()
+        if exec_type is None:
+            print("退出with语句时没有发生异常")
+        else:
+            print("退出with语句时发生异常", exec_type, exec_value)
+        print("文件", filename, "已经关闭")
+        print("__exit__方法被调用, 已离开with语句")
+
+
+with FileWriter("log.txt") as fw:
+    while True:
+        s = input("请输入一行:")
+        if s == "exit":
+            break
+        if s == "error":
+            raise ValueError("故意制造的值错误")
+        fw.writeline(s)
+
+
+print("这是with语句之外, 也是程序的最后一条语句")
+
+
+

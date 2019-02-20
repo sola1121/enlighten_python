@@ -1,0 +1,25 @@
+pdb 调试
+
+标准库模块 pdb
+
+功能: 断点设置
+      单步调试
+      进入函数
+      查看当前代码段
+      查看变量值
+
+pdb命令: 
+    break, b 设置断点
+    continue, c 继续执行
+    list, l 查看当前代码段
+    step, s 进入函数
+    exit, q 退出
+    next, n 执行下一行
+    pp 打印变量
+    help 帮助, 查看pdb命令的帮助文档
+
+在代码段中设置断点, 进入pdb命令操作
+    pdb.set_trace()
+
+在命令行运行时直接进入pdb模式运行程序
+    python3 -m pdb filename.py

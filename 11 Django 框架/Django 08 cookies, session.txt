@@ -1,0 +1,71 @@
+cookies (正式叫cookie, 去复数是因为一个浏览器中可以保存多个)
+    1. 什么是cookies
+        cookies是一种数据存储技术
+        将一段文本保存在客户端(浏览器)的一种技术, 并可以长时间保存
+    2. cookies的应用场合
+        1) 保存登录信息
+        2) 保存搜索关键词
+    3. django中使用 cookies
+        1) 设置 cookies的值(将数据保存进客户端)
+            语法:
+                响应对象.set_cookie(key, value, expires)
+                    key : cookie的名字
+                    value : cookies的值
+                    expires : cookie保存的事件, 以s为单位
+            # 在views.py中
+            from django.shortcuts import render
+            from django.http import HttpResponse, HttpResponseRedirect
+            (1) 不使用模板
+                resp = HttpResponse("")
+                resp.set_cookie("username", "siro", 60*60*24)   # 将用户名保存一天
+                return resp
+            (2) 使用模板
+                resp = render(request, "xxx.html", locals())
+                resp.set_cookie(key, value, expires)
+                return resp
+            (3) 使用重定向
+                resp = HttpResponseRedirect("/xxx/")
+                resp.set_cookie(key, value, expires)
+                return resp
+            注意: 内容不能使用中文字符, 估计只能使用英文
+                  cookie中的内容都是以明文进行存储, 不要将敏感信息存入
+        2) 获取cookies的值(从客户端中取数据)
+            request.COOKIES
+            封装了当前站点下的所有cookie信息, 是一个字典
+
+---------------------------------------
+
+session - 会话
+    1. 什么是session
+        session, 实际上就是在服务器上为浏览器开辟一段空间, 用于保存相关的信息
+        session针对不同的版本型号浏览器 
+        当浏览器与服务器建立session, 在服务器端将会生成一段空间转门用于存储会话信息, 该空间会有一个sessionID
+        为了让同一个浏览器访问依然能识别, sessionID会作为内容保存到cookie中, 如果在session未回收时段内, 通过获取cookie, 同浏览器依然可访问旧的session空间
+    2. 在Django中使用session
+        1) 设置session的值
+            request.session["key"] = 值;
+
+            设置session过期时间
+            request.session.set_expire(time)
+            time就是以秒为单位的一个时间
+        2) 获取session的值
+            request.session[key] 或 request.session.get(key)
+        3) 删除session的值
+            del request.session[key]
+        应用: 在登录后会创建session, 在登出后会需要删除session
+              一般将登录成功的信息保存在session中
+    3. 在setting.py中, 有关session的设置
+        1) SESSION_COOKIE_AGE
+            作用: 设置sessionID在cookies中的存活时间
+            示例
+                SESSION_COOKIE_AGE=60*10   // 设置sessionID在cookie中保留10分钟
+        2) SESSION_EXPIRE_AT_BROWSER_CLOSE
+            作用: 设置在浏览器关闭时同时清除服务器上对应的session空间
+            示例
+                SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+
+
+python 中的uuid模块, 可用于生成不重复的id
+
+
+

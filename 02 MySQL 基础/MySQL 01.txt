@@ -1,0 +1,238 @@
+MySQL 数据库
+关系型数据库
+1) 数据时由行和列的形式去存储的
+2) 这一系列的行和列称为表
+3) 表中的每一行叫做一条记录
+4) 表中的每一列叫做一个字段
+5) 表和表之间的逻辑关联叫做关系
+
+关系型数据库一般是基于硬盘读写的
+非关系型数据库一般是是基于内存读写的
+
+MySQL的安装
+RedHat或CentOS上使用yum -y 命令
+Ubuntu上安装MySQL服务
+1) 安装服务端
+    sudo apt-get install mysql-server
+2) 安装客户端
+    sudo apt-get install mysql-client
+Windows上安装MySQL服务
+1) 下载MySQL安装包(windows)
+2) 双击,按教程安装即可
+
+查看当前MySQL版本: select version();
+
+名词介绍
+    1) DB (database)
+        DB就是数据库, 存储数据的仓库
+    2) DBMS (database management system)
+        数据库管理系统
+        管理数据库的软件: MySQL, Oracle, MongoDB, ...
+    3) DBS (database system)
+        数据库系统
+        DBS = DB(存储) + DBMS(数据库软件) + 数据库的应用(财务管理系统, 人事管理系统, ...) + 用户
+
+
+启动和连接MySQL服务
+先启动服务端sever --> 在使用客户端连接client --> 对client操作获取数据
+1. 服务启动
+    1) 查看MySQL服务的状态
+        sudo /etc/init.d/mysql status
+    2) 停止MySQL服务
+        sudo /etc/init.d/mysql stop
+    3) 启动MySQL服务
+        sudo /etc/init.d/mysql start
+    4) 重启MySQL服务 
+        sudo /etc/init.d/mysql restart
+2. 客户端连接
+    1) 命令格式
+        mysql -h客户机地址 -u用户名 -p密码   -- 不写-h (host)默认是本地连接, -P3306这是端口
+        例: mysql -hlocalhost -uroot -p123456
+3. 基本SQL命令
+    命令以; 结尾
+    命令 \c 终止命令
+    命令不区分大小写
+
+
+4. 库的管理
+    库的基本操作
+        1) 查看已有的库
+            show databases;
+        2) 创建库
+            create database 库名 [default charset=utf8];   -- 不设置默认字符集为latin1, 其不能识别中文
+        3) 查看创建库的语句
+            show create database 库名;
+        4) 查看当前库
+            select database();
+        5) 切换库
+            use 库名;
+        6) 查看库中已有表
+            show tables;
+        7) 删除库
+            drop 库名;
+    库的命名规则
+        1) 可以使用数字,字母,_,但是不能使用纯数字
+        2) 库名不区分大小写
+        3) 库名具有唯一性
+        4) 库名不能包含特殊字符,不能和MySQL中关键字相同
+
+5. 表的管理
+    表的基本操作
+        1) 创建表(可指定字符集)
+            create table 表名(
+                字段名1 数据类型1,
+                字段名2 数据类型2,
+                ...
+            ) default charset=utf8;
+        2) 查看创建表的语句
+            show create table 表名;
+        3) 查看表结构
+            desc 表名;
+        4) 删除表 
+            drop table 表名;
+        5) 查看库中所有的表
+            show tables;
+    表的命名规则同库的命名规则
+
+注意:
+    1) 所有的数据都是以文件形式存放在数据库目录下, MySQL是基于硬盘读写的
+    2) 库与表信息的存放: /var/lib/mysql , 访问可能需要权限,使用sudo -i使用管理员访问
+
+示例:
+create database python default charset=utf8;
+use python;
+create table py_mysql(
+	id int primary key,
+    kuname varchar(25) not null,
+    biaoname varchar(25) not null
+) default charset=utf8;
+
+6. 表字段修改
+    alter table 表名 执行动作;
+        1) 添加字段
+            alter table 表名 add 字段名 数据类型 first | after 定位字段名;   -- first表示添加到第一列, after表示添加到地位字段后
+        2) 删除字段
+            alter table 表名 drop 字段名;
+        3) 修改字段数据类型
+            alter table 表名 modify 字段名 新数据类型;
+            # 修改数据类型时会受到表中原有数据类型的限制
+        4) 修改字段名
+            alter table 表名 change 旧名 新名 数据类型;
+        5) 修改表名
+            alter table 表名 rename 新表名;
+
+
+7. 更改库, 表的默认字符集
+    1) 通过更改MySQL配置文件来实现, 更改配置的过程都如下
+    2) 步骤(ubuntu系统)
+        (1) 获取root用户权限
+            sudo -i
+        (2) cd 到MySQL配置文件所在路径
+            cd /etc/mysql/mysql.conf.d
+        (3) 把配置文件mysqld.cnf复制一份,mysqld.cnf.bak , 防止发生意外
+            cp mysqld.cnf mysql.cnf.bak
+        (4) vi 打开配置文件mysqld.cnf
+            vi mysqld.cnf
+            在[mysqld]下写入如下语句:
+            character_set_server=utf8
+        (5) 重启MySQL服务
+            sudo /etc/init.d/mysql restart 或者使用 /etx/init.d/mysql reload (重新加载配置文件)
+
+8. 客户端把数据库存储到数据库服务器上的过程
+    1) 连接到数据库服务器: mysql -u*** -p***
+    2) 选择一个库: use库名
+    3) 创建表或者修改表: create table ...
+    4) 断开与数据库服务器的连接 exit; | quit; | \q;
+
+
+9. 数据类型 (四大类: 数值型, 字符型, 枚举型, 日期型)
+    1) 数值类型(有符号signed和无符号unsigned)
+        (1) 整型
+            int   大整型(4个字节)
+                取值范围(无符号): 0 ~ 2**32 - 1
+            tinyint   微小整型(一个字节)
+                有符号(signed默认): -128 ~ 127
+                无符号(unsigned): 0 ~ 255
+            smallint   小整形(2字节)
+                取值范围(无符号): 0 ~ 65535
+            bigint   极大整型(8个字节)
+                取值范围(无符号):0 ~ 2**64 - 1
+        (2) 浮点型
+            float(4个字节, 最多显示7个有效位)
+                用法:
+                    字段名 float(m, n) m->总位数, n->小数数位数
+                        float(5, 2) -999.99 ~ 999.99
+                    注意: 浮点型插入整数时,会自动补全小数位
+                          小数位如果多于指定的位数,会对下一位进行四舍五入,7位上限
+            double(8个字节,最多显示15个有效位)
+                用法: 
+                    double(m, n)
+            decimal(M+个字节, 最多显示28个有效位)        decimal: 小数的
+                用法:
+                    字段名 decimal(M, D)
+    2) 字符类型
+        char(定长)
+            宽度取值范围: 1 ~ 255
+            不给定宽度默认为1
+        varchar(变长)
+            取值范围: 1 ~ 65535
+        注意: varchar没有默认宽度,必须给定一个宽度值
+              char, varchar使用时都给定宽度,但不要超过各自的范围
+        char和varchar的特点
+            char(定长)
+                浪费存储空间,但是性能高
+            varchar(变长)
+                节省存储空间,但是性能较低
+    3) 枚举类型
+        定义: 字段的值只能在列举的范围内去选择
+        (1) enum 单选
+            字段名 enum(值1, 值2, ...)   -- 单选最多65535个
+        (2) set 多选
+            字段名 set(值1, 值2, ...)   -- 多选最多有64个
+            # 在插入记录时 "值1, 值2, ..."
+    4) 日起时间类型
+        (1) year : 年 YYYY
+        (3) date : 日期 YYYYMMDD
+        (3) time : 时间 HHMMSS
+        (3) datetime : 日期时间 YYYYMMDDHHMMSS
+        (4) timestamp ：　日期时间　YYYYMMDDHHMMSS
+示例:
+create table t2(       -- 标准的 create table `t2`
+    id int,
+    name char(10),
+    age tinyint unsigned,   -- 创建无符号, unsigned写后面
+    birth_year year,
+    birthday date,
+    class time,
+    meeting datetime
+) default charset=utf8;
+
+insert into t2 vallues(1, "yui", 15, 2018, 20030520, 000430, 20180310123000);
+
+datetime和timestamp区别
+create table t3(
+    username  varcahr(20),
+    password varchar(16),
+    register datetime,
+    current timestamp,
+) default cahrset=utf8;
+
+insert into t3 values("yui", "yui123", 20180310000000, 20180310000000)
+insert into t3(register, current) values()
+
+在插入记录时,datetime不给值默认返回NULL
+在插入记录时,timestamp不给值默认返回系统当前时间
+
+
+10. source命令
+    同linux的source相似, 将文件中内容以命令执行
+
+
+练习
+一. 填空题
+    1. MySql中的数据类型有:
+    2. 关系型数据库的核心内容是:
+
+二. 简答题
+    1. 简述客户端把数据存储到数据库服务器上的过程.
+    2. char和varchar的区别? 各自的特点?

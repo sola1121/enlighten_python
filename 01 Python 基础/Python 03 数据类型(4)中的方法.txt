@@ -1,0 +1,112 @@
+方法(method)   在相应的类中定义
+
+Python3 中常用的字符串 
+属于对象(一个初始化的类)的函数
+使用方式
+  对象.方法名(方法传参)
+说明: 方法的调用同函数调用一样属于表达式
+
+字符串str方法的调用语法
+常用方法:
+    isdigit()   isalpha()   islower()   isupper()   isspace()
+    center(width[,fill])   count(sub[, start[,end]])   strip()   find(sub[, start[,end]])
+    replace(old, new[, count])   
+    upper()   lower()
+    split(sep=None)   join(iterable)
+
+St.isdigit()	判断字符串是否全为数字
+St.isalpha()	判断字符串是否全为字符
+St.islower()	判断字符串所有字符是否全为小写字符
+St.isupper()	判断字符串所有字符是否全为大写字符
+St.isspace()	判断字符串是否全为空白字符
+St.center(width[,fill])	将原字符串居中，左右默认填充空格
+St.count(sub[, start[,end]])	获取一个字符串中子串的个数, start从哪个位置开始找, end结束位置
+St.find(sub[, start[,end]])	获取字符串中子串sub的索引,失败返回-1
+St.strip()	返回去掉左右空白字符的字符串
+St.lstrip()	返回去掉左侧空白字符的字符串
+St.rstrip()	返回去掉右侧空白字符的字符串
+
+字符串操作	
+St.upper()	生成将英文转换为大写的字符串
+St.lower()	生成将英文转换为小写的字符串
+St.replace(old, new[, count])	将原字符串的old用new代替，生成一个新的字符串
+St.startswith(prefix[, start[, end]])	返回S是否是以prefix开头，如果以prefix开头返回True,否则返回False,
+St.endswith(suffix[, start[, end]])	返回S是否是以prefix开头，如果以prefix开头返回True,否则返回False
+
+以下是不常用的	
+St.title()	生成每个英文单词的首字母大写字符串
+St.isnumeric()	判断字符串是否全为大写字符
+
+示例:
+  s = "abc" 
+  print(s.isalpha())  # True
+  print(s.center(10, "-"))   # ---abc----
+
+占位符, 常应用于格式化字符串, 也可用于转换数据的表现方式
+%s	字符串
+%r	字符串，使用repr 而不是str
+%c	整数转为单个字符
+%d	十进制整数
+%o	八进制整数
+%x	十六进制整数(字符a-F小写)
+%X	十六进制整数(字符A-F大写)
+%e	指数型浮点数(e小写),如2.9e+10
+%E	指数型浮点数(E大写),如2.9E+10
+%f, %F	浮点十进制形式
+%g, %G	十进制形式浮点或指数浮点自动转换
+%%	等同于一个%字符
+
+
+列表list常用方法
+Ls.index(v [, begin[, end]])	返回对应元素的索引下标, begin为开始索引，end为结束索引,当 value 不存在时触发ValueError错误
+Ls.insert(index, obj)	将某个元素插放到列表中指定的位置
+Ls.count(x)	返回列表中元素的个数
+Ls.remove(x)	从列表中删除第一次出现在列表中的值
+Ls.copy()	复制此列表（只复制一层，不会复制深层对象)
+Ls.append(x)	向列表中追加单个元素
+Ls.extend(lst)	向列表追加另一个列表
+Ls.clear()	清空列表,等同于 L[:] = []
+Ls.sort(reverse=False)	将列表中的元素进行排序，默认顺序按值的小到大的顺序排列
+Ls.reverse()	列表的反转，用来改变原列表的先后顺序
+Ls.pop([index])	删除索引对应的元素，如果不加索引，默认删除最后元素，同时返回删除元素的引用关系
+
+
+元组tuple常用方法
+>>> help(dict) 中查看, 就是list去掉可以更改list的方法
+
+
+字典dict常用方法
+Di.clear()	清空字典
+Di.pop(key)	移除键，同时返回此键所对应的值
+Di.popitem() 随机返回一个键值对并从字典里移除他
+Di.copy()	返回字典D的副本,只复制一层(浅拷贝)
+Di.update(D2)	将字典 D2 合并到D中，如果键相同，则此键的值取D2的值作为新值
+Di.get(key, default)	返回键key所对应的值,如果没有此键，则返回default
+Di.setdefault(k, [default]) 若字典里有键k, 则直接返回k所对应的值; 若无, 则让Di[k] = default, 然后返回default
+Di.keys()	返回可迭代的 dict_keys 集合对象
+Di.values()	返回可迭代的 dict_values 值对象
+Di.items()	返回可迭代的 dict_items 对象
+Di.fromkeys(iter, [initial]) 将迭代器iter里的元素设置为映射里的键, 如果有initial参数, 就把他作为这些键对应的值, 默认None
+
+
+
+集合set常用方法
+Se.add(e)	在集合中添加一个新的元素e；如果元素已经存在，则不添加
+Se.remove(e)	从集合中删除一个元素，如果元素不存在于集合中，则会产生一个KeyError错误
+Se.discard(e)	从集合S中移除一个元素e;
+Se.clear()	清空集合内的所有元素
+Se.copy()	将集合进行一次浅拷贝
+Se.pop()	从集合S中删除一个随机元素;如果此集合为空，则引发KeyError异常
+Se.update(s2)	用 S与s2得到的全集更新变量S
+
+以下内容可以用运算符操作代替	
+Se.difference(s2)	用Se - s2 运算，返回存在于在S中，但不在s2中的所有元素的集合
+Se.difference_update(s2)	等同于 Se = Se - s2
+Se.intersection(s2)	等同于Se & s2
+Se.intersection_update(s2)	等同于S = Se & s2
+Se.isdisjoint(s2)	如果Se与s2交集为空返回True,非空则返回False
+Se.issubset(s2)	如果Se与s2交集为非空返回True,空则返回False
+Se.issuperset(...)	如果Se为s2的子集返回True,否则返回False
+Se.symmetric_difference(s2)	返回对称补集,等同于 Se ^ s2
+Se.symmetric_difference_update(s2)	用Se 与 s2的对称补集更新 Se
+Se.union(s2)	生成 Se 与 s2的全集

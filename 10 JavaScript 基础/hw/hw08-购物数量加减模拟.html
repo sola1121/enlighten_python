@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin:0 auto;
+            width: 50%;
+            height: 250px;
+            text-align: center;
+            padding-top: 50px;
+            border: 5px black solid;
+        }
+        #quan_form{
+            display: inline;
+        }
+        #quantity{
+            width: 24px;
+            height: 2em;
+            padding-left: 1em;
+            padding-right: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <button onclick="sub_quan()">-</button>
+        <form action="" method="post" id="quan_form">
+            <input type="text" name="quantity" id="quantity" value="1">
+        </form>
+        <button onclick="add_quan()">+</button>
+    </div>
+</body>
+    <script>
+        function $useId(id_code){
+            return document.getElementById(id_code)
+        }
+
+        function add_quan(){
+            var num = $useId("quantity")
+            if (Number(num.value) < 99){
+                num.value = Number(num.value) + 1
+            }
+        }
+
+        function sub_quan(){
+            var num = $useId("quantity")
+            if (Number(num.value) > 1){
+                num.value = Number(num.value) - 1
+            }
+        }
+    </script>
+</html>

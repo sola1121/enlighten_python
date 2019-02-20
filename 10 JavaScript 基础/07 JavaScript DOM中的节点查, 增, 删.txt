@@ -1,0 +1,74 @@
+DOM - 查询节点
+    1. 根据ID查询节点
+        document.getElementById()
+    2. 根据层级节点结构查询
+        1) parentNode
+            根据当前的节点的层级结构, 返回父元素节点
+        2) childNode
+            根据当前的节点的层级结构, 返回当前元素的所有子元素的数组
+            注意: 能够获取所有的文本节点和元素节点, 换行的标签换行会被当做\r\n\space对待, 是一个文本节点
+        3) children
+            根据当前的节点的层级结构, 返回当前元素的所有子元素节点的数组
+        示例:
+            var elem = document.getElementById("block_div")
+            // 获取父节点
+            var parent = elem.parentNode
+            // 获取子元素数组
+            var kids = elem.childNode
+            // 仅筛选出元素节点
+            for (var i=0; i<kids.length; i++){
+                if (kids[i].nodeType == 1){
+                    ...
+                }
+            }
+            // 如果使用children, 只获取子元素的节点, 就不用筛选
+            var kids = elem.children
+        4) nextSibling
+            获取当前节点的下一个兄弟节点
+            注意: 和childNode类似, 会获取所有的节点, 包括文本节点, html中的换行会被当成文本节点
+        5) nextElementSibling
+            获取当前节点的下一个元素兄弟节点
+        6) previousSibling
+            获取当前节点的上一个兄弟节点
+        7) preivousElementSibling
+            获取当前节点的上一个元素兄弟节点
+    3. 通过标签名称获取页面元素
+        document.getElementsByTagName("标签名")
+        elem. getElementsByTagName("标签名")   // 从已获取的元素中获取标签 
+        返回值: 返回包含指定标记的元素数组们
+    4. 通过元素的name属性值获取元素
+        name属性值主要用于表单中, 尤其单选框, 复选框, name可能对应多个值
+        document.getElementsByName("元素name")
+        返回值: 包含指定name属性值的元素的数组
+    5. 通过元素的class属性值获取元素
+        document.getElementsByClassName("元素class")
+        elem.getElementsByClassName("元素class")   // // 从已获取的元素中获取元素
+        返回值: 返回包含指定class名的元素
+
+---------------------------------------
+
+DOM - 增, 删节点
+    1. 创建节点
+        var elem = document.createElement("标签名")
+    2. 增加节点
+        将创建好的元素增加到网页中
+        注意: 要先创建节点后, 才能在指定地方添加节点
+        1) document.body.appendChild(elem)
+            在body最后一个位置追加elem新元素 
+        2) parentNode.appendChild(elem)
+            向prarentNode的内部追加elem新元素
+            parentNode可以表示页面上的任意一个节点
+        3) parentNode.insertBefore(newElem, oldElem)
+            将newElem插入到parentNode中oldElem之前, 这是一个相对位置的插入
+    3.删除节点
+        在DOM中, 删除节点的行为只能由父元素发起
+        1) 删除body中的子元素
+            document.body.removeChild(elem)        
+        2) 删除其他元素的子元素
+            parentNode.removeChild(elem)
+            删除parentNode中的子元素elem
+
+            
+
+
+

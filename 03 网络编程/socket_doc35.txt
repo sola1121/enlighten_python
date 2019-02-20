@@ -1,0 +1,1638 @@
+[0;34mIn [[1;34m6[0;34m]: [0mHelp on module socket:
+
+NAME
+    socket
+
+MODULE REFERENCE
+    https://docs.python.org/3.5/library/socket.html
+    
+    The following documentation is automatically generated from the Python
+    source files.  It may be incomplete, incorrect or include features that
+    are considered implementation detail and may vary between Python
+    implementations.  When in doubt, consult the module reference at the
+    location listed above.
+
+DESCRIPTION
+    This module provides socket operations and some related functions.
+    On Unix, it supports IP (Internet Protocol) and Unix domain sockets.
+    On other systems, it only supports IP. Functions specific for a
+    socket are available as methods of the socket object.
+    
+    Functions:
+    
+    socket() -- create a new socket object
+    socketpair() -- create a pair of new socket objects [*]
+    fromfd() -- create a socket object from an open file descriptor [*]
+    fromshare() -- create a socket object from data received from socket.share() [*]
+    gethostname() -- return the current hostname
+    gethostbyname() -- map a hostname to its IP number
+    gethostbyaddr() -- map an IP number or hostname to DNS info
+    getservbyname() -- map a service name and a protocol name to a port number
+    getprotobyname() -- map a protocol name (e.g. 'tcp') to a number
+    ntohs(), ntohl() -- convert 16, 32 bit int from network to host byte order
+    htons(), htonl() -- convert 16, 32 bit int from host to network byte order
+    inet_aton() -- convert IP addr string (123.45.67.89) to 32-bit packed format
+    inet_ntoa() -- convert 32-bit packed format IP to string (123.45.67.89)
+    socket.getdefaulttimeout() -- get the default timeout value
+    socket.setdefaulttimeout() -- set the default timeout value
+    create_connection() -- connects to an address, with an optional timeout and
+                           optional source address.
+    
+     [*] not available on all platforms!
+    
+    Special objects:
+    
+    SocketType -- type object for socket objects
+    error -- exception raised for I/O errors
+    has_ipv6 -- boolean value indicating if IPv6 is supported
+    
+    IntEnum constants:
+    
+    AF_INET, AF_UNIX -- socket domains (first argument to socket() call)
+    SOCK_STREAM, SOCK_DGRAM, SOCK_RAW -- socket types (second argument)
+    
+    Integer constants:
+    
+    Many other constants may be defined; these may be used in calls to
+    the setsockopt() and getsockopt() methods.
+
+CLASSES
+    builtins.Exception(builtins.BaseException)
+        builtins.OSError
+            gaierror
+            herror
+            timeout
+    builtins.object
+        _socket.socket
+            socket
+    enum.IntEnum(builtins.int, enum.Enum)
+        AddressFamily
+        SocketKind
+    
+    class AddressFamily(enum.IntEnum)
+     |  An enumeration.
+     |  
+     |  Method resolution order:
+     |      AddressFamily
+     |      enum.IntEnum
+     |      builtins.int
+     |      enum.Enum
+     |      builtins.object
+     |  
+     |  Data and other attributes defined here:
+     |  
+     |  AF_APPLETALK = <AddressFamily.AF_APPLETALK: 5>
+     |  
+     |  AF_ASH = <AddressFamily.AF_ASH: 18>
+     |  
+     |  AF_ATMPVC = <AddressFamily.AF_ATMPVC: 8>
+     |  
+     |  AF_ATMSVC = <AddressFamily.AF_ATMSVC: 20>
+     |  
+     |  AF_AX25 = <AddressFamily.AF_AX25: 3>
+     |  
+     |  AF_BLUETOOTH = <AddressFamily.AF_BLUETOOTH: 31>
+     |  
+     |  AF_BRIDGE = <AddressFamily.AF_BRIDGE: 7>
+     |  
+     |  AF_CAN = <AddressFamily.AF_CAN: 29>
+     |  
+     |  AF_ECONET = <AddressFamily.AF_ECONET: 19>
+     |  
+     |  AF_INET = <AddressFamily.AF_INET: 2>
+     |  
+     |  AF_INET6 = <AddressFamily.AF_INET6: 10>
+     |  
+     |  AF_IPX = <AddressFamily.AF_IPX: 4>
+     |  
+     |  AF_IRDA = <AddressFamily.AF_IRDA: 23>
+     |  
+     |  AF_KEY = <AddressFamily.AF_KEY: 15>
+     |  
+     |  AF_LLC = <AddressFamily.AF_LLC: 26>
+     |  
+     |  AF_NETBEUI = <AddressFamily.AF_NETBEUI: 13>
+     |  
+     |  AF_NETLINK = <AddressFamily.AF_NETLINK: 16>
+     |  
+     |  AF_NETROM = <AddressFamily.AF_NETROM: 6>
+     |  
+     |  AF_PACKET = <AddressFamily.AF_PACKET: 17>
+     |  
+     |  AF_PPPOX = <AddressFamily.AF_PPPOX: 24>
+     |  
+     |  AF_RDS = <AddressFamily.AF_RDS: 21>
+     |  
+     |  AF_ROSE = <AddressFamily.AF_ROSE: 11>
+     |  
+     |  AF_SECURITY = <AddressFamily.AF_SECURITY: 14>
+     |  
+     |  AF_SNA = <AddressFamily.AF_SNA: 22>
+     |  
+     |  AF_TIPC = <AddressFamily.AF_TIPC: 30>
+     |  
+     |  AF_UNIX = <AddressFamily.AF_UNIX: 1>
+     |  
+     |  AF_UNSPEC = <AddressFamily.AF_UNSPEC: 0>
+     |  
+     |  AF_WANPIPE = <AddressFamily.AF_WANPIPE: 25>
+     |  
+     |  AF_X25 = <AddressFamily.AF_X25: 9>
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from enum.Enum:
+     |  
+     |  name
+     |      The name of the Enum member.
+     |  
+     |  value
+     |      The value of the Enum member.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from enum.EnumMeta:
+     |  
+     |  __members__
+     |      Returns a mapping of member name->value.
+     |      
+     |      This mapping lists all enum members, including aliases. Note that this
+     |      is a read-only view of the internal mapping.
+    
+    class SocketKind(enum.IntEnum)
+     |  An enumeration.
+     |  
+     |  Method resolution order:
+     |      SocketKind
+     |      enum.IntEnum
+     |      builtins.int
+     |      enum.Enum
+     |      builtins.object
+     |  
+     |  Data and other attributes defined here:
+     |  
+     |  SOCK_CLOEXEC = <SocketKind.SOCK_CLOEXEC: 524288>
+     |  
+     |  SOCK_DGRAM = <SocketKind.SOCK_DGRAM: 2>
+     |  
+     |  SOCK_NONBLOCK = <SocketKind.SOCK_NONBLOCK: 2048>
+     |  
+     |  SOCK_RAW = <SocketKind.SOCK_RAW: 3>
+     |  
+     |  SOCK_RDM = <SocketKind.SOCK_RDM: 4>
+     |  
+     |  SOCK_SEQPACKET = <SocketKind.SOCK_SEQPACKET: 5>
+     |  
+     |  SOCK_STREAM = <SocketKind.SOCK_STREAM: 1>
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from enum.Enum:
+     |  
+     |  name
+     |      The name of the Enum member.
+     |  
+     |  value
+     |      The value of the Enum member.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from enum.EnumMeta:
+     |  
+     |  __members__
+     |      Returns a mapping of member name->value.
+     |      
+     |      This mapping lists all enum members, including aliases. Note that this
+     |      is a read-only view of the internal mapping.
+    
+    SocketType = class socket(builtins.object)
+     |  socket(family=AF_INET, type=SOCK_STREAM, proto=0, fileno=None) -> socket object
+     |  
+     |  Open a socket of the given type.  The family argument specifies the
+     |  address family; it defaults to AF_INET.  The type argument specifies
+     |  whether this is a stream (SOCK_STREAM, this is the default)
+     |  or datagram (SOCK_DGRAM) socket.  The protocol argument defaults to 0,
+     |  specifying the default protocol.  Keyword arguments are accepted.
+     |  The socket is created as non-inheritable.
+     |  
+     |  A socket object represents one endpoint of a network connection.
+     |  
+     |  Methods of socket objects (keyword arguments not allowed):
+     |  
+     |  _accept() -- accept connection, returning new socket fd and client address
+     |  bind(addr) -- bind the socket to a local address
+     |  close() -- close the socket
+     |  connect(addr) -- connect the socket to a remote address
+     |  connect_ex(addr) -- connect, return an error code instead of an exception
+     |  dup() -- return a new socket fd duplicated from fileno()
+     |  fileno() -- return underlying file descriptor
+     |  getpeername() -- return remote address [*]
+     |  getsockname() -- return local address
+     |  getsockopt(level, optname[, buflen]) -- get socket options
+     |  gettimeout() -- return timeout or None
+     |  listen([n]) -- start listening for incoming connections
+     |  recv(buflen[, flags]) -- receive data
+     |  recv_into(buffer[, nbytes[, flags]]) -- receive data (into a buffer)
+     |  recvfrom(buflen[, flags]) -- receive data and sender's address
+     |  recvfrom_into(buffer[, nbytes, [, flags])
+     |    -- receive data and sender's address (into a buffer)
+     |  sendall(data[, flags]) -- send all data
+     |  send(data[, flags]) -- send data, may not send all of it
+     |  sendto(data[, flags], addr) -- send data to a given address
+     |  setblocking(0 | 1) -- set or clear the blocking I/O flag
+     |  setsockopt(level, optname, value) -- set socket options
+     |  settimeout(None | float) -- set or clear the timeout
+     |  shutdown(how) -- shut down traffic in one or both directions
+     |  if_nameindex() -- return all network interface indices and names
+     |  if_nametoindex(name) -- return the corresponding interface index
+     |  if_indextoname(index) -- return the corresponding interface name
+     |  
+     |   [*] not available on all platforms!
+     |  
+     |  Methods defined here:
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  bind(...)
+     |      bind(address)
+     |      
+     |      Bind the socket to a local address.  For IP sockets, the address is a
+     |      pair (host, port); the host must refer to the local host. For raw packet
+     |      sockets the address is a tuple (ifname, proto [,pkttype [,hatype]])
+     |  
+     |  close(...)
+     |      close()
+     |      
+     |      Close the socket.  It cannot be used after this call.
+     |  
+     |  connect(...)
+     |      connect(address)
+     |      
+     |      Connect the socket to a remote address.  For IP sockets, the address
+     |      is a pair (host, port).
+     |  
+     |  connect_ex(...)
+     |      connect_ex(address) -> errno
+     |      
+     |      This is like connect(address), but returns an error code (the errno value)
+     |      instead of raising an exception when an error occurs.
+     |  
+     |  detach(...)
+     |      detach()
+     |      
+     |      Close the socket object without closing the underlying file descriptor.
+     |      The object cannot be used after this call, but the file descriptor
+     |      can be reused for other purposes.  The file descriptor is returned.
+     |  
+     |  fileno(...)
+     |      fileno() -> integer
+     |      
+     |      Return the integer file descriptor of the socket.
+     |  
+     |  getpeername(...)
+     |      getpeername() -> address info
+     |      
+     |      Return the address of the remote endpoint.  For IP sockets, the address
+     |      info is a pair (hostaddr, port).
+     |  
+     |  getsockname(...)
+     |      getsockname() -> address info
+     |      
+     |      Return the address of the local endpoint.  For IP sockets, the address
+     |      info is a pair (hostaddr, port).
+     |  
+     |  getsockopt(...)
+     |      getsockopt(level, option[, buffersize]) -> value
+     |      
+     |      Get a socket option.  See the Unix manual for level and option.
+     |      If a nonzero buffersize argument is given, the return value is a
+     |      string of that length; otherwise it is an integer.
+     |  
+     |  gettimeout(...)
+     |      gettimeout() -> timeout
+     |      
+     |      Returns the timeout in seconds (float) associated with socket 
+     |      operations. A timeout of None indicates that timeouts on socket 
+     |      operations are disabled.
+     |  
+     |  listen(...)
+     |      listen([backlog])
+     |      
+     |      Enable a server to accept connections.  If backlog is specified, it must be
+     |      at least 0 (if it is lower, it is set to 0); it specifies the number of
+     |      unaccepted connections that the system will allow before refusing new
+     |      connections. If not specified, a default reasonable value is chosen.
+     |  
+     |  recv(...)
+     |      recv(buffersize[, flags]) -> data
+     |      
+     |      Receive up to buffersize bytes from the socket.  For the optional flags
+     |      argument, see the Unix manual.  When no data is available, block until
+     |      at least one byte is available or until the remote end is closed.  When
+     |      the remote end is closed and all data is read, return the empty string.
+     |  
+     |  recv_into(...)
+     |      recv_into(buffer, [nbytes[, flags]]) -> nbytes_read
+     |      
+     |      A version of recv() that stores its data into a buffer rather than creating 
+     |      a new string.  Receive up to buffersize bytes from the socket.  If buffersize 
+     |      is not specified (or 0), receive up to the size available in the given buffer.
+     |      
+     |      See recv() for documentation about the flags.
+     |  
+     |  recvfrom(...)
+     |      recvfrom(buffersize[, flags]) -> (data, address info)
+     |      
+     |      Like recv(buffersize, flags) but also return the sender's address info.
+     |  
+     |  recvfrom_into(...)
+     |      recvfrom_into(buffer[, nbytes[, flags]]) -> (nbytes, address info)
+     |      
+     |      Like recv_into(buffer[, nbytes[, flags]]) but also return the sender's address info.
+     |  
+     |  recvmsg(...)
+     |      recvmsg(bufsize[, ancbufsize[, flags]]) -> (data, ancdata, msg_flags, address)
+     |      
+     |      Receive normal data (up to bufsize bytes) and ancillary data from the
+     |      socket.  The ancbufsize argument sets the size in bytes of the
+     |      internal buffer used to receive the ancillary data; it defaults to 0,
+     |      meaning that no ancillary data will be received.  Appropriate buffer
+     |      sizes for ancillary data can be calculated using CMSG_SPACE() or
+     |      CMSG_LEN(), and items which do not fit into the buffer might be
+     |      truncated or discarded.  The flags argument defaults to 0 and has the
+     |      same meaning as for recv().
+     |      
+     |      The return value is a 4-tuple: (data, ancdata, msg_flags, address).
+     |      The data item is a bytes object holding the non-ancillary data
+     |      received.  The ancdata item is a list of zero or more tuples
+     |      (cmsg_level, cmsg_type, cmsg_data) representing the ancillary data
+     |      (control messages) received: cmsg_level and cmsg_type are integers
+     |      specifying the protocol level and protocol-specific type respectively,
+     |      and cmsg_data is a bytes object holding the associated data.  The
+     |      msg_flags item is the bitwise OR of various flags indicating
+     |      conditions on the received message; see your system documentation for
+     |      details.  If the receiving socket is unconnected, address is the
+     |      address of the sending socket, if available; otherwise, its value is
+     |      unspecified.
+     |      
+     |      If recvmsg() raises an exception after the system call returns, it
+     |      will first attempt to close any file descriptors received via the
+     |      SCM_RIGHTS mechanism.
+     |  
+     |  recvmsg_into(...)
+     |      recvmsg_into(buffers[, ancbufsize[, flags]]) -> (nbytes, ancdata, msg_flags, address)
+     |      
+     |      Receive normal data and ancillary data from the socket, scattering the
+     |      non-ancillary data into a series of buffers.  The buffers argument
+     |      must be an iterable of objects that export writable buffers
+     |      (e.g. bytearray objects); these will be filled with successive chunks
+     |      of the non-ancillary data until it has all been written or there are
+     |      no more buffers.  The ancbufsize argument sets the size in bytes of
+     |      the internal buffer used to receive the ancillary data; it defaults to
+     |      0, meaning that no ancillary data will be received.  Appropriate
+     |      buffer sizes for ancillary data can be calculated using CMSG_SPACE()
+     |      or CMSG_LEN(), and items which do not fit into the buffer might be
+     |      truncated or discarded.  The flags argument defaults to 0 and has the
+     |      same meaning as for recv().
+     |      
+     |      The return value is a 4-tuple: (nbytes, ancdata, msg_flags, address).
+     |      The nbytes item is the total number of bytes of non-ancillary data
+     |      written into the buffers.  The ancdata item is a list of zero or more
+     |      tuples (cmsg_level, cmsg_type, cmsg_data) representing the ancillary
+     |      data (control messages) received: cmsg_level and cmsg_type are
+     |      integers specifying the protocol level and protocol-specific type
+     |      respectively, and cmsg_data is a bytes object holding the associated
+     |      data.  The msg_flags item is the bitwise OR of various flags
+     |      indicating conditions on the received message; see your system
+     |      documentation for details.  If the receiving socket is unconnected,
+     |      address is the address of the sending socket, if available; otherwise,
+     |      its value is unspecified.
+     |      
+     |      If recvmsg_into() raises an exception after the system call returns,
+     |      it will first attempt to close any file descriptors received via the
+     |      SCM_RIGHTS mechanism.
+     |  
+     |  send(...)
+     |      send(data[, flags]) -> count
+     |      
+     |      Send a data string to the socket.  For the optional flags
+     |      argument, see the Unix manual.  Return the number of bytes
+     |      sent; this may be less than len(data) if the network is busy.
+     |  
+     |  sendall(...)
+     |      sendall(data[, flags])
+     |      
+     |      Send a data string to the socket.  For the optional flags
+     |      argument, see the Unix manual.  This calls send() repeatedly
+     |      until all data is sent.  If an error occurs, it's impossible
+     |      to tell how much data has been sent.
+     |  
+     |  sendmsg(...)
+     |      sendmsg(buffers[, ancdata[, flags[, address]]]) -> count
+     |      
+     |      Send normal and ancillary data to the socket, gathering the
+     |      non-ancillary data from a series of buffers and concatenating it into
+     |      a single message.  The buffers argument specifies the non-ancillary
+     |      data as an iterable of bytes-like objects (e.g. bytes objects).
+     |      The ancdata argument specifies the ancillary data (control messages)
+     |      as an iterable of zero or more tuples (cmsg_level, cmsg_type,
+     |      cmsg_data), where cmsg_level and cmsg_type are integers specifying the
+     |      protocol level and protocol-specific type respectively, and cmsg_data
+     |      is a bytes-like object holding the associated data.  The flags
+     |      argument defaults to 0 and has the same meaning as for send().  If
+     |      address is supplied and not None, it sets a destination address for
+     |      the message.  The return value is the number of bytes of non-ancillary
+     |      data sent.
+     |  
+     |  sendto(...)
+     |      sendto(data[, flags], address) -> count
+     |      
+     |      Like send(data, flags) but allows specifying the destination address.
+     |      For IP sockets, the address is a pair (hostaddr, port).
+     |  
+     |  setblocking(...)
+     |      setblocking(flag)
+     |      
+     |      Set the socket to blocking (flag is true) or non-blocking (false).
+     |      setblocking(True) is equivalent to settimeout(None);
+     |      setblocking(False) is equivalent to settimeout(0.0).
+     |  
+     |  setsockopt(...)
+     |      setsockopt(level, option, value)
+     |      
+     |      Set a socket option.  See the Unix manual for level and option.
+     |      The value argument can either be an integer or a string.
+     |  
+     |  settimeout(...)
+     |      settimeout(timeout)
+     |      
+     |      Set a timeout on socket operations.  'timeout' can be a float,
+     |      giving in seconds, or None.  Setting a timeout of None disables
+     |      the timeout feature and is equivalent to setblocking(1).
+     |      Setting a timeout of zero is the same as setblocking(0).
+     |  
+     |  shutdown(...)
+     |      shutdown(flag)
+     |      
+     |      Shut down the reading side of the socket (flag == SHUT_RD), the writing side
+     |      of the socket (flag == SHUT_WR), or both ends (flag == SHUT_RDWR).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  family
+     |      the socket family
+     |  
+     |  proto
+     |      the socket protocol
+     |  
+     |  timeout
+     |      the socket timeout
+     |  
+     |  type
+     |      the socket type
+    
+    error = class OSError(Exception)
+     |  Base class for I/O related errors.
+     |  
+     |  Method resolution order:
+     |      OSError
+     |      Exception
+     |      BaseException
+     |      object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  characters_written
+     |  
+     |  errno
+     |      POSIX exception code
+     |  
+     |  filename
+     |      exception filename
+     |  
+     |  filename2
+     |      second exception filename
+     |  
+     |  strerror
+     |      exception strerror
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class gaierror(builtins.OSError)
+     |  Base class for I/O related errors.
+     |  
+     |  Method resolution order:
+     |      gaierror
+     |      builtins.OSError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.OSError:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.OSError:
+     |  
+     |  characters_written
+     |  
+     |  errno
+     |      POSIX exception code
+     |  
+     |  filename
+     |      exception filename
+     |  
+     |  filename2
+     |      second exception filename
+     |  
+     |  strerror
+     |      exception strerror
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class herror(builtins.OSError)
+     |  Base class for I/O related errors.
+     |  
+     |  Method resolution order:
+     |      herror
+     |      builtins.OSError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.OSError:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.OSError:
+     |  
+     |  characters_written
+     |  
+     |  errno
+     |      POSIX exception code
+     |  
+     |  filename
+     |      exception filename
+     |  
+     |  filename2
+     |      second exception filename
+     |  
+     |  strerror
+     |      exception strerror
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class socket(_socket.socket)
+     |  A subclass of _socket.socket adding the makefile() method.
+     |  
+     |  Method resolution order:
+     |      socket
+     |      _socket.socket
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __enter__(self)
+     |  
+     |  __exit__(self, *args)
+     |  
+     |  __getstate__(self)
+     |  
+     |  __init__(self, family=<AddressFamily.AF_INET: 2>, type=<SocketKind.SOCK_STREAM: 1>, proto=0, fileno=None)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __repr__(self)
+     |      Wrap __repr__() to reveal the real class name and socket
+     |      address(es).
+     |  
+     |  accept(self)
+     |      accept() -> (socket object, address info)
+     |      
+     |      Wait for an incoming connection.  Return a new socket
+     |      representing the connection, and the address of the client.
+     |      For IP sockets, the address info is a pair (hostaddr, port).
+     |  
+     |  close(self)
+     |      close()
+     |      
+     |      Close the socket.  It cannot be used after this call.
+     |  
+     |  detach(self)
+     |      detach() -> file descriptor
+     |      
+     |      Close the socket object without closing the underlying file descriptor.
+     |      The object cannot be used after this call, but the file descriptor
+     |      can be reused for other purposes.  The file descriptor is returned.
+     |  
+     |  dup(self)
+     |      dup() -> socket object
+     |      
+     |      Duplicate the socket. Return a new socket object connected to the same
+     |      system resource. The new socket is non-inheritable.
+     |  
+     |  get_inheritable(self)
+     |      Get the inheritable flag of the socket
+     |  
+     |  makefile(self, mode='r', buffering=None, *, encoding=None, errors=None, newline=None)
+     |      makefile(...) -> an I/O stream connected to the socket
+     |      
+     |      The arguments are as for io.open() after the filename, except the only
+     |      supported mode values are 'r' (default), 'w' and 'b'.
+     |  
+     |  sendfile(self, file, offset=0, count=None)
+     |      sendfile(file[, offset[, count]]) -> sent
+     |      
+     |      Send a file until EOF is reached by using high-performance
+     |      os.sendfile() and return the total number of bytes which
+     |      were sent.
+     |      *file* must be a regular file object opened in binary mode.
+     |      If os.sendfile() is not available (e.g. Windows) or file is
+     |      not a regular file socket.send() will be used instead.
+     |      *offset* tells from where to start reading the file.
+     |      If specified, *count* is the total number of bytes to transmit
+     |      as opposed to sending the file until EOF is reached.
+     |      File position is updated on return or also in case of error in
+     |      which case file.tell() can be used to figure out the number of
+     |      bytes which were sent.
+     |      The socket must be of SOCK_STREAM type.
+     |      Non-blocking sockets are not supported.
+     |  
+     |  set_inheritable(self, inheritable)
+     |      Set the inheritable flag of the socket
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  family
+     |      Read-only access to the address family for this socket.
+     |  
+     |  type
+     |      Read-only access to the socket type.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _socket.socket:
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  bind(...)
+     |      bind(address)
+     |      
+     |      Bind the socket to a local address.  For IP sockets, the address is a
+     |      pair (host, port); the host must refer to the local host. For raw packet
+     |      sockets the address is a tuple (ifname, proto [,pkttype [,hatype]])
+     |  
+     |  connect(...)
+     |      connect(address)
+     |      
+     |      Connect the socket to a remote address.  For IP sockets, the address
+     |      is a pair (host, port).
+     |  
+     |  connect_ex(...)
+     |      connect_ex(address) -> errno
+     |      
+     |      This is like connect(address), but returns an error code (the errno value)
+     |      instead of raising an exception when an error occurs.
+     |  
+     |  fileno(...)
+     |      fileno() -> integer
+     |      
+     |      Return the integer file descriptor of the socket.
+     |  
+     |  getpeername(...)
+     |      getpeername() -> address info
+     |      
+     |      Return the address of the remote endpoint.  For IP sockets, the address
+     |      info is a pair (hostaddr, port).
+     |  
+     |  getsockname(...)
+     |      getsockname() -> address info
+     |      
+     |      Return the address of the local endpoint.  For IP sockets, the address
+     |      info is a pair (hostaddr, port).
+     |  
+     |  getsockopt(...)
+     |      getsockopt(level, option[, buffersize]) -> value
+     |      
+     |      Get a socket option.  See the Unix manual for level and option.
+     |      If a nonzero buffersize argument is given, the return value is a
+     |      string of that length; otherwise it is an integer.
+     |  
+     |  gettimeout(...)
+     |      gettimeout() -> timeout
+     |      
+     |      Returns the timeout in seconds (float) associated with socket 
+     |      operations. A timeout of None indicates that timeouts on socket 
+     |      operations are disabled.
+     |  
+     |  listen(...)
+     |      listen([backlog])
+     |      
+     |      Enable a server to accept connections.  If backlog is specified, it must be
+     |      at least 0 (if it is lower, it is set to 0); it specifies the number of
+     |      unaccepted connections that the system will allow before refusing new
+     |      connections. If not specified, a default reasonable value is chosen.
+     |  
+     |  recv(...)
+     |      recv(buffersize[, flags]) -> data
+     |      
+     |      Receive up to buffersize bytes from the socket.  For the optional flags
+     |      argument, see the Unix manual.  When no data is available, block until
+     |      at least one byte is available or until the remote end is closed.  When
+     |      the remote end is closed and all data is read, return the empty string.
+     |  
+     |  recv_into(...)
+     |      recv_into(buffer, [nbytes[, flags]]) -> nbytes_read
+     |      
+     |      A version of recv() that stores its data into a buffer rather than creating 
+     |      a new string.  Receive up to buffersize bytes from the socket.  If buffersize 
+     |      is not specified (or 0), receive up to the size available in the given buffer.
+     |      
+     |      See recv() for documentation about the flags.
+     |  
+     |  recvfrom(...)
+     |      recvfrom(buffersize[, flags]) -> (data, address info)
+     |      
+     |      Like recv(buffersize, flags) but also return the sender's address info.
+     |  
+     |  recvfrom_into(...)
+     |      recvfrom_into(buffer[, nbytes[, flags]]) -> (nbytes, address info)
+     |      
+     |      Like recv_into(buffer[, nbytes[, flags]]) but also return the sender's address info.
+     |  
+     |  recvmsg(...)
+     |      recvmsg(bufsize[, ancbufsize[, flags]]) -> (data, ancdata, msg_flags, address)
+     |      
+     |      Receive normal data (up to bufsize bytes) and ancillary data from the
+     |      socket.  The ancbufsize argument sets the size in bytes of the
+     |      internal buffer used to receive the ancillary data; it defaults to 0,
+     |      meaning that no ancillary data will be received.  Appropriate buffer
+     |      sizes for ancillary data can be calculated using CMSG_SPACE() or
+     |      CMSG_LEN(), and items which do not fit into the buffer might be
+     |      truncated or discarded.  The flags argument defaults to 0 and has the
+     |      same meaning as for recv().
+     |      
+     |      The return value is a 4-tuple: (data, ancdata, msg_flags, address).
+     |      The data item is a bytes object holding the non-ancillary data
+     |      received.  The ancdata item is a list of zero or more tuples
+     |      (cmsg_level, cmsg_type, cmsg_data) representing the ancillary data
+     |      (control messages) received: cmsg_level and cmsg_type are integers
+     |      specifying the protocol level and protocol-specific type respectively,
+     |      and cmsg_data is a bytes object holding the associated data.  The
+     |      msg_flags item is the bitwise OR of various flags indicating
+     |      conditions on the received message; see your system documentation for
+     |      details.  If the receiving socket is unconnected, address is the
+     |      address of the sending socket, if available; otherwise, its value is
+     |      unspecified.
+     |      
+     |      If recvmsg() raises an exception after the system call returns, it
+     |      will first attempt to close any file descriptors received via the
+     |      SCM_RIGHTS mechanism.
+     |  
+     |  recvmsg_into(...)
+     |      recvmsg_into(buffers[, ancbufsize[, flags]]) -> (nbytes, ancdata, msg_flags, address)
+     |      
+     |      Receive normal data and ancillary data from the socket, scattering the
+     |      non-ancillary data into a series of buffers.  The buffers argument
+     |      must be an iterable of objects that export writable buffers
+     |      (e.g. bytearray objects); these will be filled with successive chunks
+     |      of the non-ancillary data until it has all been written or there are
+     |      no more buffers.  The ancbufsize argument sets the size in bytes of
+     |      the internal buffer used to receive the ancillary data; it defaults to
+     |      0, meaning that no ancillary data will be received.  Appropriate
+     |      buffer sizes for ancillary data can be calculated using CMSG_SPACE()
+     |      or CMSG_LEN(), and items which do not fit into the buffer might be
+     |      truncated or discarded.  The flags argument defaults to 0 and has the
+     |      same meaning as for recv().
+     |      
+     |      The return value is a 4-tuple: (nbytes, ancdata, msg_flags, address).
+     |      The nbytes item is the total number of bytes of non-ancillary data
+     |      written into the buffers.  The ancdata item is a list of zero or more
+     |      tuples (cmsg_level, cmsg_type, cmsg_data) representing the ancillary
+     |      data (control messages) received: cmsg_level and cmsg_type are
+     |      integers specifying the protocol level and protocol-specific type
+     |      respectively, and cmsg_data is a bytes object holding the associated
+     |      data.  The msg_flags item is the bitwise OR of various flags
+     |      indicating conditions on the received message; see your system
+     |      documentation for details.  If the receiving socket is unconnected,
+     |      address is the address of the sending socket, if available; otherwise,
+     |      its value is unspecified.
+     |      
+     |      If recvmsg_into() raises an exception after the system call returns,
+     |      it will first attempt to close any file descriptors received via the
+     |      SCM_RIGHTS mechanism.
+     |  
+     |  send(...)
+     |      send(data[, flags]) -> count
+     |      
+     |      Send a data string to the socket.  For the optional flags
+     |      argument, see the Unix manual.  Return the number of bytes
+     |      sent; this may be less than len(data) if the network is busy.
+     |  
+     |  sendall(...)
+     |      sendall(data[, flags])
+     |      
+     |      Send a data string to the socket.  For the optional flags
+     |      argument, see the Unix manual.  This calls send() repeatedly
+     |      until all data is sent.  If an error occurs, it's impossible
+     |      to tell how much data has been sent.
+     |  
+     |  sendmsg(...)
+     |      sendmsg(buffers[, ancdata[, flags[, address]]]) -> count
+     |      
+     |      Send normal and ancillary data to the socket, gathering the
+     |      non-ancillary data from a series of buffers and concatenating it into
+     |      a single message.  The buffers argument specifies the non-ancillary
+     |      data as an iterable of bytes-like objects (e.g. bytes objects).
+     |      The ancdata argument specifies the ancillary data (control messages)
+     |      as an iterable of zero or more tuples (cmsg_level, cmsg_type,
+     |      cmsg_data), where cmsg_level and cmsg_type are integers specifying the
+     |      protocol level and protocol-specific type respectively, and cmsg_data
+     |      is a bytes-like object holding the associated data.  The flags
+     |      argument defaults to 0 and has the same meaning as for send().  If
+     |      address is supplied and not None, it sets a destination address for
+     |      the message.  The return value is the number of bytes of non-ancillary
+     |      data sent.
+     |  
+     |  sendto(...)
+     |      sendto(data[, flags], address) -> count
+     |      
+     |      Like send(data, flags) but allows specifying the destination address.
+     |      For IP sockets, the address is a pair (hostaddr, port).
+     |  
+     |  setblocking(...)
+     |      setblocking(flag)
+     |      
+     |      Set the socket to blocking (flag is true) or non-blocking (false).
+     |      setblocking(True) is equivalent to settimeout(None);
+     |      setblocking(False) is equivalent to settimeout(0.0).
+     |  
+     |  setsockopt(...)
+     |      setsockopt(level, option, value)
+     |      
+     |      Set a socket option.  See the Unix manual for level and option.
+     |      The value argument can either be an integer or a string.
+     |  
+     |  settimeout(...)
+     |      settimeout(timeout)
+     |      
+     |      Set a timeout on socket operations.  'timeout' can be a float,
+     |      giving in seconds, or None.  Setting a timeout of None disables
+     |      the timeout feature and is equivalent to setblocking(1).
+     |      Setting a timeout of zero is the same as setblocking(0).
+     |  
+     |  shutdown(...)
+     |      shutdown(flag)
+     |      
+     |      Shut down the reading side of the socket (flag == SHUT_RD), the writing side
+     |      of the socket (flag == SHUT_WR), or both ends (flag == SHUT_RDWR).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _socket.socket:
+     |  
+     |  proto
+     |      the socket protocol
+     |  
+     |  timeout
+     |      the socket timeout
+    
+    class timeout(builtins.OSError)
+     |  Base class for I/O related errors.
+     |  
+     |  Method resolution order:
+     |      timeout
+     |      builtins.OSError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.OSError:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.OSError:
+     |  
+     |  characters_written
+     |  
+     |  errno
+     |      POSIX exception code
+     |  
+     |  filename
+     |      exception filename
+     |  
+     |  filename2
+     |      second exception filename
+     |  
+     |  strerror
+     |      exception strerror
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+
+FUNCTIONS
+    CMSG_LEN(...)
+        CMSG_LEN(length) -> control message length
+        
+        Return the total length, without trailing padding, of an ancillary
+        data item with associated data of the given length.  This value can
+        often be used as the buffer size for recvmsg() to receive a single
+        item of ancillary data, but RFC 3542 requires portable applications to
+        use CMSG_SPACE() and thus include space for padding, even when the
+        item will be the last in the buffer.  Raises OverflowError if length
+        is outside the permissible range of values.
+    
+    CMSG_SPACE(...)
+        CMSG_SPACE(length) -> buffer size
+        
+        Return the buffer size needed for recvmsg() to receive an ancillary
+        data item with associated data of the given length, along with any
+        trailing padding.  The buffer space needed to receive multiple items
+        is the sum of the CMSG_SPACE() values for their associated data
+        lengths.  Raises OverflowError if length is outside the permissible
+        range of values.
+    
+    create_connection(address, timeout=<object object at 0x7f332440c1a0>, source_address=None)
+        Connect to *address* and return the socket object.
+        
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default.
+    
+    dup(...)
+        dup(integer) -> integer
+        
+        Duplicate an integer socket file descriptor.  This is like os.dup(), but for
+        sockets; on some platforms os.dup() won't work for socket file descriptors.
+    
+    fromfd(fd, family, type, proto=0)
+        fromfd(fd, family, type[, proto]) -> socket object
+        
+        Create a socket object from a duplicate of the given file
+        descriptor.  The remaining arguments are the same as for socket().
+    
+    getaddrinfo(host, port, family=0, type=0, proto=0, flags=0)
+        Resolve host and port into list of address info entries.
+        
+        Translate the host/port argument into a sequence of 5-tuples that contain
+        all the necessary arguments for creating a socket connected to that service.
+        host is a domain name, a string representation of an IPv4/v6 address or
+        None. port is a string service name such as 'http', a numeric port number or
+        None. By passing None as the value of host and port, you can pass NULL to
+        the underlying C API.
+        
+        The family, type and proto arguments can be optionally specified in order to
+        narrow the list of addresses returned. Passing zero as a value for each of
+        these arguments selects the full range of results.
+    
+    getdefaulttimeout(...)
+        getdefaulttimeout() -> timeout
+        
+        Returns the default timeout in seconds (float) for new socket objects.
+        A value of None indicates that new socket objects have no timeout.
+        When the socket module is first imported, the default is None.
+    
+    getfqdn(name='')
+        Get fully qualified domain name from name.
+        
+        An empty argument is interpreted as meaning the local host.
+        
+        First the hostname returned by gethostbyaddr() is checked, then
+        possibly existing aliases. In case no FQDN is available, hostname
+        from gethostname() is returned.
+    
+    gethostbyaddr(...)
+        gethostbyaddr(host) -> (name, aliaslist, addresslist)
+        
+        Return the true host name, a list of aliases, and a list of IP addresses,
+        for a host.  The host argument is a string giving a host name or IP number.
+    
+    gethostbyname(...)
+        gethostbyname(host) -> address
+        
+        Return the IP address (a string of the form '255.255.255.255') for a host.
+    
+    gethostbyname_ex(...)
+        gethostbyname_ex(host) -> (name, aliaslist, addresslist)
+        
+        Return the true host name, a list of aliases, and a list of IP addresses,
+        for a host.  The host argument is a string giving a host name or IP number.
+    
+    gethostname(...)
+        gethostname() -> string
+        
+        Return the current host name.
+    
+    getnameinfo(...)
+        getnameinfo(sockaddr, flags) --> (host, port)
+        
+        Get host and port for a sockaddr.
+    
+    getprotobyname(...)
+        getprotobyname(name) -> integer
+        
+        Return the protocol number for the named protocol.  (Rarely used.)
+    
+    getservbyname(...)
+        getservbyname(servicename[, protocolname]) -> integer
+        
+        Return a port number from a service name and protocol name.
+        The optional protocol name, if given, should be 'tcp' or 'udp',
+        otherwise any protocol will match.
+    
+    getservbyport(...)
+        getservbyport(port[, protocolname]) -> string
+        
+        Return the service name from a port number and protocol name.
+        The optional protocol name, if given, should be 'tcp' or 'udp',
+        otherwise any protocol will match.
+    
+    htonl(...)
+        htonl(integer) -> integer
+        
+        Convert a 32-bit integer from host to network byte order.
+    
+    htons(...)
+        htons(integer) -> integer
+        
+        Convert a 16-bit integer from host to network byte order.
+    
+    if_indextoname(...)
+        if_indextoname(if_index)
+        
+        Returns the interface name corresponding to the interface index if_index.
+    
+    if_nameindex(...)
+        if_nameindex()
+        
+        Returns a list of network interface information (index, name) tuples.
+    
+    if_nametoindex(...)
+        if_nametoindex(if_name)
+        
+        Returns the interface index corresponding to the interface name if_name.
+    
+    inet_aton(...)
+        inet_aton(string) -> bytes giving packed 32-bit IP representation
+        
+        Convert an IP address in string format (123.45.67.89) to the 32-bit packed
+        binary format used in low-level network functions.
+    
+    inet_ntoa(...)
+        inet_ntoa(packed_ip) -> ip_address_string
+        
+        Convert an IP address from 32-bit packed binary format to string format
+    
+    inet_ntop(...)
+        inet_ntop(af, packed_ip) -> string formatted IP address
+        
+        Convert a packed IP address of the given family to string format.
+    
+    inet_pton(...)
+        inet_pton(af, ip) -> packed IP address string
+        
+        Convert an IP address from string format to a packed string suitable
+        for use with low-level network functions.
+    
+    ntohl(...)
+        ntohl(integer) -> integer
+        
+        Convert a 32-bit integer from network to host byte order.
+    
+    ntohs(...)
+        ntohs(integer) -> integer
+        
+        Convert a 16-bit integer from network to host byte order.
+    
+    setdefaulttimeout(...)
+        setdefaulttimeout(timeout)
+        
+        Set the default timeout in seconds (float) for new socket objects.
+        A value of None indicates that new socket objects have no timeout.
+        When the socket module is first imported, the default is None.
+    
+    sethostname(...)
+        sethostname(name)
+        
+        Sets the hostname to name.
+    
+    socketpair(family=None, type=<SocketKind.SOCK_STREAM: 1>, proto=0)
+        socketpair([family[, type[, proto]]]) -> (socket object, socket object)
+        Create a pair of socket objects from the sockets returned by the platform
+        socketpair() function.
+        The arguments are the same as for socket() except the default family is AF_UNIX
+        if defined on the platform; otherwise, the default is AF_INET.
+
+DATA
+    AF_APPLETALK = <AddressFamily.AF_APPLETALK: 5>
+    AF_ASH = <AddressFamily.AF_ASH: 18>
+    AF_ATMPVC = <AddressFamily.AF_ATMPVC: 8>
+    AF_ATMSVC = <AddressFamily.AF_ATMSVC: 20>
+    AF_AX25 = <AddressFamily.AF_AX25: 3>
+    AF_BLUETOOTH = <AddressFamily.AF_BLUETOOTH: 31>
+    AF_BRIDGE = <AddressFamily.AF_BRIDGE: 7>
+    AF_CAN = <AddressFamily.AF_CAN: 29>
+    AF_DECnet = 12
+    AF_ECONET = <AddressFamily.AF_ECONET: 19>
+    AF_INET = <AddressFamily.AF_INET: 2>
+    AF_INET6 = <AddressFamily.AF_INET6: 10>
+    AF_IPX = <AddressFamily.AF_IPX: 4>
+    AF_IRDA = <AddressFamily.AF_IRDA: 23>
+    AF_KEY = <AddressFamily.AF_KEY: 15>
+    AF_LLC = <AddressFamily.AF_LLC: 26>
+    AF_NETBEUI = <AddressFamily.AF_NETBEUI: 13>
+    AF_NETLINK = <AddressFamily.AF_NETLINK: 16>
+    AF_NETROM = <AddressFamily.AF_NETROM: 6>
+    AF_PACKET = <AddressFamily.AF_PACKET: 17>
+    AF_PPPOX = <AddressFamily.AF_PPPOX: 24>
+    AF_RDS = <AddressFamily.AF_RDS: 21>
+    AF_ROSE = <AddressFamily.AF_ROSE: 11>
+    AF_ROUTE = <AddressFamily.AF_NETLINK: 16>
+    AF_SECURITY = <AddressFamily.AF_SECURITY: 14>
+    AF_SNA = <AddressFamily.AF_SNA: 22>
+    AF_TIPC = <AddressFamily.AF_TIPC: 30>
+    AF_UNIX = <AddressFamily.AF_UNIX: 1>
+    AF_UNSPEC = <AddressFamily.AF_UNSPEC: 0>
+    AF_WANPIPE = <AddressFamily.AF_WANPIPE: 25>
+    AF_X25 = <AddressFamily.AF_X25: 9>
+    AI_ADDRCONFIG = 32
+    AI_ALL = 16
+    AI_CANONNAME = 2
+    AI_NUMERICHOST = 4
+    AI_NUMERICSERV = 1024
+    AI_PASSIVE = 1
+    AI_V4MAPPED = 8
+    BDADDR_ANY = '00:00:00:00:00:00'
+    BDADDR_LOCAL = '00:00:00:FF:FF:FF'
+    BTPROTO_HCI = 1
+    BTPROTO_L2CAP = 0
+    BTPROTO_RFCOMM = 3
+    BTPROTO_SCO = 2
+    CAN_BCM = 2
+    CAN_BCM_RX_CHANGED = 12
+    CAN_BCM_RX_DELETE = 6
+    CAN_BCM_RX_READ = 7
+    CAN_BCM_RX_SETUP = 5
+    CAN_BCM_RX_STATUS = 10
+    CAN_BCM_RX_TIMEOUT = 11
+    CAN_BCM_TX_DELETE = 2
+    CAN_BCM_TX_EXPIRED = 9
+    CAN_BCM_TX_READ = 3
+    CAN_BCM_TX_SEND = 4
+    CAN_BCM_TX_SETUP = 1
+    CAN_BCM_TX_STATUS = 8
+    CAN_EFF_FLAG = 2147483648
+    CAN_EFF_MASK = 536870911
+    CAN_ERR_FLAG = 536870912
+    CAN_ERR_MASK = 536870911
+    CAN_RAW = 1
+    CAN_RAW_ERR_FILTER = 2
+    CAN_RAW_FD_FRAMES = 5
+    CAN_RAW_FILTER = 1
+    CAN_RAW_LOOPBACK = 3
+    CAN_RAW_RECV_OWN_MSGS = 4
+    CAN_RTR_FLAG = 1073741824
+    CAN_SFF_MASK = 2047
+    CAPI = <capsule object "_socket.CAPI">
+    EAI_ADDRFAMILY = -9
+    EAI_AGAIN = -3
+    EAI_BADFLAGS = -1
+    EAI_FAIL = -4
+    EAI_FAMILY = -6
+    EAI_MEMORY = -10
+    EAI_NODATA = -5
+    EAI_NONAME = -2
+    EAI_OVERFLOW = -12
+    EAI_SERVICE = -8
+    EAI_SOCKTYPE = -7
+    EAI_SYSTEM = -11
+    HCI_DATA_DIR = 1
+    HCI_FILTER = 2
+    HCI_TIME_STAMP = 3
+    INADDR_ALLHOSTS_GROUP = 3758096385
+    INADDR_ANY = 0
+    INADDR_BROADCAST = 4294967295
+    INADDR_LOOPBACK = 2130706433
+    INADDR_MAX_LOCAL_GROUP = 3758096639
+    INADDR_NONE = 4294967295
+    INADDR_UNSPEC_GROUP = 3758096384
+    IPPORT_RESERVED = 1024
+    IPPORT_USERRESERVED = 5000
+    IPPROTO_AH = 51
+    IPPROTO_DSTOPTS = 60
+    IPPROTO_EGP = 8
+    IPPROTO_ESP = 50
+    IPPROTO_FRAGMENT = 44
+    IPPROTO_GRE = 47
+    IPPROTO_HOPOPTS = 0
+    IPPROTO_ICMP = 1
+    IPPROTO_ICMPV6 = 58
+    IPPROTO_IDP = 22
+    IPPROTO_IGMP = 2
+    IPPROTO_IP = 0
+    IPPROTO_IPIP = 4
+    IPPROTO_IPV6 = 41
+    IPPROTO_NONE = 59
+    IPPROTO_PIM = 103
+    IPPROTO_PUP = 12
+    IPPROTO_RAW = 255
+    IPPROTO_ROUTING = 43
+    IPPROTO_RSVP = 46
+    IPPROTO_SCTP = 132
+    IPPROTO_TCP = 6
+    IPPROTO_TP = 29
+    IPPROTO_UDP = 17
+    IPV6_CHECKSUM = 7
+    IPV6_DONTFRAG = 62
+    IPV6_DSTOPTS = 59
+    IPV6_HOPLIMIT = 52
+    IPV6_HOPOPTS = 54
+    IPV6_JOIN_GROUP = 20
+    IPV6_LEAVE_GROUP = 21
+    IPV6_MULTICAST_HOPS = 18
+    IPV6_MULTICAST_IF = 17
+    IPV6_MULTICAST_LOOP = 19
+    IPV6_NEXTHOP = 9
+    IPV6_PATHMTU = 61
+    IPV6_PKTINFO = 50
+    IPV6_RECVDSTOPTS = 58
+    IPV6_RECVHOPLIMIT = 51
+    IPV6_RECVHOPOPTS = 53
+    IPV6_RECVPATHMTU = 60
+    IPV6_RECVPKTINFO = 49
+    IPV6_RECVRTHDR = 56
+    IPV6_RECVTCLASS = 66
+    IPV6_RTHDR = 57
+    IPV6_RTHDRDSTOPTS = 55
+    IPV6_RTHDR_TYPE_0 = 0
+    IPV6_TCLASS = 67
+    IPV6_UNICAST_HOPS = 16
+    IPV6_V6ONLY = 26
+    IP_ADD_MEMBERSHIP = 35
+    IP_DEFAULT_MULTICAST_LOOP = 1
+    IP_DEFAULT_MULTICAST_TTL = 1
+    IP_DROP_MEMBERSHIP = 36
+    IP_HDRINCL = 3
+    IP_MAX_MEMBERSHIPS = 20
+    IP_MULTICAST_IF = 32
+    IP_MULTICAST_LOOP = 34
+    IP_MULTICAST_TTL = 33
+    IP_OPTIONS = 4
+    IP_RECVOPTS = 6
+    IP_RECVRETOPTS = 7
+    IP_RETOPTS = 7
+    IP_TOS = 1
+    IP_TRANSPARENT = 19
+    IP_TTL = 2
+    MSG_CMSG_CLOEXEC = 1073741824
+    MSG_CONFIRM = 2048
+    MSG_CTRUNC = 8
+    MSG_DONTROUTE = 4
+    MSG_DONTWAIT = 64
+    MSG_EOR = 128
+    MSG_ERRQUEUE = 8192
+    MSG_FASTOPEN = 536870912
+    MSG_MORE = 32768
+    MSG_NOSIGNAL = 16384
+    MSG_OOB = 1
+    MSG_PEEK = 2
+    MSG_TRUNC = 32
+    MSG_WAITALL = 256
+    NETLINK_DNRTMSG = 14
+    NETLINK_FIREWALL = 3
+    NETLINK_IP6_FW = 13
+    NETLINK_NFLOG = 5
+    NETLINK_ROUTE = 0
+    NETLINK_USERSOCK = 2
+    NETLINK_XFRM = 6
+    NI_DGRAM = 16
+    NI_MAXHOST = 1025
+    NI_MAXSERV = 32
+    NI_NAMEREQD = 8
+    NI_NOFQDN = 4
+    NI_NUMERICHOST = 1
+    NI_NUMERICSERV = 2
+    PACKET_BROADCAST = 1
+    PACKET_FASTROUTE = 6
+    PACKET_HOST = 0
+    PACKET_LOOPBACK = 5
+    PACKET_MULTICAST = 2
+    PACKET_OTHERHOST = 3
+    PACKET_OUTGOING = 4
+    PF_CAN = 29
+    PF_PACKET = 17
+    PF_RDS = 21
+    SCM_CREDENTIALS = 2
+    SCM_RIGHTS = 1
+    SHUT_RD = 0
+    SHUT_RDWR = 2
+    SHUT_WR = 1
+    SOCK_CLOEXEC = <SocketKind.SOCK_CLOEXEC: 524288>
+    SOCK_DGRAM = <SocketKind.SOCK_DGRAM: 2>
+    SOCK_NONBLOCK = <SocketKind.SOCK_NONBLOCK: 2048>
+    SOCK_RAW = <SocketKind.SOCK_RAW: 3>
+    SOCK_RDM = <SocketKind.SOCK_RDM: 4>
+    SOCK_SEQPACKET = <SocketKind.SOCK_SEQPACKET: 5>
+    SOCK_STREAM = <SocketKind.SOCK_STREAM: 1>
+    SOL_CAN_BASE = 100
+    SOL_CAN_RAW = 101
+    SOL_HCI = 0
+    SOL_IP = 0
+    SOL_SOCKET = 1
+    SOL_TCP = 6
+    SOL_TIPC = 271
+    SOL_UDP = 17
+    SOMAXCONN = 128
+    SO_ACCEPTCONN = 30
+    SO_BINDTODEVICE = 25
+    SO_BROADCAST = 6
+    SO_DEBUG = 1
+    SO_DONTROUTE = 5
+    SO_ERROR = 4
+    SO_KEEPALIVE = 9
+    SO_LINGER = 13
+    SO_MARK = 36
+    SO_OOBINLINE = 10
+    SO_PASSCRED = 16
+    SO_PEERCRED = 17
+    SO_PRIORITY = 12
+    SO_RCVBUF = 8
+    SO_RCVLOWAT = 18
+    SO_RCVTIMEO = 20
+    SO_REUSEADDR = 2
+    SO_REUSEPORT = 15
+    SO_SNDBUF = 7
+    SO_SNDLOWAT = 19
+    SO_SNDTIMEO = 21
+    SO_TYPE = 3
+    TCP_CORK = 3
+    TCP_DEFER_ACCEPT = 9
+    TCP_FASTOPEN = 23
+    TCP_INFO = 11
+    TCP_KEEPCNT = 6
+    TCP_KEEPIDLE = 4
+    TCP_KEEPINTVL = 5
+    TCP_LINGER2 = 8
+    TCP_MAXSEG = 2
+    TCP_NODELAY = 1
+    TCP_QUICKACK = 12
+    TCP_SYNCNT = 7
+    TCP_WINDOW_CLAMP = 10
+    TIPC_ADDR_ID = 3
+    TIPC_ADDR_NAME = 2
+    TIPC_ADDR_NAMESEQ = 1
+    TIPC_CFG_SRV = 0
+    TIPC_CLUSTER_SCOPE = 2
+    TIPC_CONN_TIMEOUT = 130
+    TIPC_CRITICAL_IMPORTANCE = 3
+    TIPC_DEST_DROPPABLE = 129
+    TIPC_HIGH_IMPORTANCE = 2
+    TIPC_IMPORTANCE = 127
+    TIPC_LOW_IMPORTANCE = 0
+    TIPC_MEDIUM_IMPORTANCE = 1
+    TIPC_NODE_SCOPE = 3
+    TIPC_PUBLISHED = 1
+    TIPC_SRC_DROPPABLE = 128
+    TIPC_SUBSCR_TIMEOUT = 3
+    TIPC_SUB_CANCEL = 4
+    TIPC_SUB_PORTS = 1
+    TIPC_SUB_SERVICE = 2
+    TIPC_TOP_SRV = 1
+    TIPC_WAIT_FOREVER = -1
+    TIPC_WITHDRAWN = 2
+    TIPC_ZONE_SCOPE = 1
+    __all__ = ['fromfd', 'getfqdn', 'create_connection', 'AddressFamily', ...
+    has_ipv6 = True
+
+FILE
+    /usr/lib/python3.5/socket.py
+
+
+
+[0;34mIn [[1;34m7[0;34m]: [0m

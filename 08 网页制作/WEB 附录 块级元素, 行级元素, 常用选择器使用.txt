@@ -1,0 +1,141 @@
+1、块级元素 行级元素？
+块级（block）元素的特点：
+①总是在新行上开始；
+②高度，行高以及外边距和内边距都可控制；
+③宽度缺省是它的容器的100%，除非设定一个宽度；
+④它可以容纳内联元素和其他块元素。
+
+内联（inline）元素的特点：
+①和其他元素都在一行上；
+②高，行高及外边距和内边距不可改变；
+③宽度就是它的文字或图片的宽度，不可改变；
+④内联元素只能容纳文本或者其他内联元素。
+
+---------------------------------------
+
+1、块级元素：
+    div:文档节
+    section:文档节
+    nav:导航
+    header:页眉
+    article:文章
+    aside:文章侧栏
+    footer:页脚
+    details:元素的细节
+    summary:details元素可见的标题
+    dialog:对话框窗口
+    h1,h2,h3,h4,h5,h6:标题
+    p:段落
+    ul:无序列表
+    ol:有序列表
+    dir:目录列表
+    li:项目
+    dl:列表
+    dt:列表项目
+    dd:项目描述
+    menu:命令的菜单,列表
+    menuitem:菜单项目
+    command:命令按钮
+    form:表单
+    fieldset:围绕元素的边框(可用于表单内元素分组)
+    legend:在边框上的标题
+    select:选择列表(内联元素)
+    optgroup:组合选择列表选项
+    option:选择列表选项(也可做datalist选项)
+    datalist:下拉列表(id要与input中list属性值绑定)
+    table:表格
+    caption:表格标题
+    thead:组合表头内容(th)
+    tbody:组合主体内容(td)
+    tfoot:组合表注内容(td)
+    tr:表格行
+    th:表头单元格
+    td:表格单元
+    col:表格列属性;(空标签)
+    colgroup:表格格式化列组;
+    * iframe:内联框架
+    figure:媒介内容分组
+    figcaption:figure标题
+    * map:图像映射
+    area:图像区域
+    canvas:图形容器(脚本来绘制图形)
+    video:视频
+    source:媒介源
+    track:文本轨道
+    audio:声音内容
+    br:换行(空标签)
+    hr:水平分割线(空标签)
+    pre:源格式文本
+    blockquote:块引用
+    address:文档联系信息
+    center:居中文本(不赞成使用)
+    spacer:在水平和垂直方向插入空间(空元素)
+
+2、行级（内联）元素：
+    span:内联容器
+    abbr:缩写
+    em:强调
+    strong:粗体强调
+    mark:突出显示的文本
+    b:粗体
+    i:斜体
+    bdi:文本方向
+    bdo:文字方向
+    big:大字体
+    small:小字体
+    sup:上标
+    sub:下标
+    * del:被删除的文本
+    strike:删除线
+    s:删除线
+    * ins:被插入的文本
+    u:下划线
+    nobr:禁止换行
+    wbr:单词换行时机(空标签)
+    tt:打字机文本
+    kbd:键盘文本
+    time:日期/时间
+    cite:引用
+    q:短引用("")
+    font:字体设定(不常用)
+    acronym:缩写(html5不支持)
+    dfn:字段(不常用)
+    a:锚点
+    img:图片
+    embed:内嵌(空标签)
+    label:input标记(点击文本触发控件)
+    input:输入框
+    * button:按钮
+    keygen:生成秘钥(空标签)
+    textarea:多行文本输入框
+    output:输出结果
+    ruby:中文注音
+    rt:注音
+    rp:浏览器不支持ruby元素显示的内容
+    progress:进度条
+    meter:度量
+    var:定义变量
+    code:计算机代码文本
+    samp:计算机代码样本
+    select:下拉列表
+
+可变元素为根据上下文语境决定该元素为块元素或者内联元素。
+　　* applet - java applet
+　　* button - 按钮
+　　* del - 删除文本
+　　* iframe - inline frame
+　　* ins - 插入的文本
+　　* map - 图片区块(map)
+　　* object - object对象
+　　* script - 客户端脚本
+
+---------------------------------------
+
+body, h1, h2, h3, h4, h5, h6, p, ol, ul{
+    margin: 0;
+    padding: 0;
+}
+
+img{
+    vertical-align: bottom;
+}

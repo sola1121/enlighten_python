@@ -1,0 +1,173 @@
+shell编程
+
+1. sh
+2. bash
+# /etc/passwd查看用户的默认bash, sh解释执行器没有高亮显示, 也没有自动补全
+
+一般shell脚本文件以.sh结尾
+
+执行方式
+    1. 方式一
+        chmod +x 脚本文件名.sh
+        ./脚本文件名.sh
+    2. 方式二
+        sh 脚本文件名.sh
+    3. 示例
+        # 创建目录的shell脚本
+        #! /bin/bash
+        cd /
+        mkdir /home/$USER/new_dir
+
+shell基础
+    1. 变量赋值
+        变量名=值
+        # 注意: 等号两侧不能有空格
+        1) 赋值方式
+            直接赋值
+                x=10   y=20
+            获取命令的执行结果给变量赋值
+                time=$(date)
+                time=`date`
+            接收从键盘输入的字符给变量赋值
+                read -p "提示信息" -t 5 变量名   # t是超时选项
+        2) 撤销赋值
+            unset $变量名
+    2. 输出语句
+        echo $变量名
+
+        # 从键盘接收输入并输出
+        #!/bin/bash
+        read -p "input strings" info
+        echo $info
+    3. '' 和 "" 的区别
+        '' 无法获取变量的值, 按照纯字符串记录
+        "" 可以获取变量的值
+    
+    4. 运算符
+        1) 算数运算符
+            +   -   *   /   %
+            ++
+        2) let 运算表达式
+            let $i++
+        3) expr 运算表达式
+            sum=`expr $i + 5`
+        4) 比较运算符
+            文件状态
+                -e : 文件/目录是否存在
+                -d : 判断是否为目录
+                -f : 判断是否为文件
+            字符比较
+                =   !=
+                空 : -z
+                非空: !-z 或 -n
+            数值比较
+                == : -eq
+                != : -ne
+                >  : -gt
+                >= : -ge
+                <  : -lt  
+                <= : -le
+
+if 条件判断
+    1. 语法格式
+        if test ; then
+            执行命令
+        fi
+
+    2. 多分支
+        if test ;then
+            执行命令
+        elif test;then
+            执行命令
+        ...
+        else
+            执行命令
+        fi
+
+for 循环语句
+    1. 语法格式
+        for 变量名 in 值列表; do
+            执行命令
+        done
+    2. 造数方法 seq
+        seq 5   # 1 2 3 4 5
+        seq  1 2 10   # 1 3 5 7 9
+    3. C-for格式循环
+        1) 语法格式
+            for((i=0; i<10; i++)); do
+                执行命令
+            done
+
+while 循环语句
+    1. 语法格式
+        while test ; do
+            执行命令
+        done
+    2. 打印1-10
+        x=10
+        while test $x -lt 10; do
+            echo $x
+            $x = [$x + 1]
+        done
+
+until 循环语句
+    特点
+        条件判断不成立时执行循环体, 成立时循环
+    until test
+    do
+        执行命令
+    done
+
+case分支结构
+    根据变量值的不同执行不同的操作
+    语法格式
+        case $变量名 in
+        模式1)
+            命令
+        ;;
+        模式2)
+            命令
+        ;;
+        ...
+        *)
+            命令
+        esac
+    示例
+    #!/bin/bash
+    read -p "输入字符: " char
+    case $char in
+    [a-z]|[A-Z])
+        echo "是字母"
+    ;;
+    [0-9])
+        echo "是数字"
+    ;;
+    *)
+        echo "其他字符"
+    esac
+
+创建函数
+    function 函数名(){
+        命令块
+    }
+    示例
+    #!/bin/bash
+    function is_dir(){
+        read -p "输入要创建的目录名称" dir
+        if test -d /home/tarena/$dir; then
+            echo "目录已存在"
+        else
+            mkdir /home/tarena/$dir
+            echo "/home/tarena/$dir创建已经成功"
+        fi
+    }
+    is_dir   # 调用
+
+
+命令行参数
+    $0 代表本身
+    $1 代表第一个参数
+    $2 代表第二个参数
+    $3 代表第三个参数
+    $? 上一条命令的执行结果, 0代表成功, 非0表示失败
+

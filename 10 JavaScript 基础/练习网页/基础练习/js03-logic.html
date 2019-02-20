@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var input = window.prompt("输入年份数字");
+        var year = parseInt(input);
+        if ((year%4 == 0 && year % 100 != 0) || (year%400==0)){
+            console.info(year, true)
+        } else {
+            console.info(year, false)
+        }
+        
+        var input = window.prompt("输入一个字符");
+        var word = input[0];
+        var hans = false, en=false, num = false;
+        if ("\u4e00"<= word && word <= "\u9fa5"){
+            hans=true;
+        }
+        else if (("a"<=word && word<="z" )|| ("A"<=word && word<="Z")){
+            en = true;
+        }
+        else if (0<=word && word<=9){
+            num = true;
+        }
+        console.info("是数字吗?", num, "\n是英文吗?", en, "\n是汉子吗?", hans)
+
+        // // 判断是否数字
+        // var isNum = input>=0 || input <=9;
+        // // 判断是否中文
+        // var isCHN = input >= "\u4e00" && input <= "\u9fa5";
+        // // 判断是否英文
+        // var isEN = (input >= "a" && input <= "z") || (input >= "A" && input <= "Z") 
+        // console.info("是数字吗?", isNum, "\n是英文吗?", isEN, "\n是汉子吗?", isCHN)
+    </script>
+</body>
+</html>

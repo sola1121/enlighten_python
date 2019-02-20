@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="replaceMsg()">消息过滤</button>
+    <button onclick="MSreplace()">替换微软字符</button>
+    <script>
+        function replaceMsg() {
+            var msg = "二营长, 你他娘的意大利炮呢. 轰他狗娘养的."
+            var reg = /娘/g
+            var new_msg = msg.replace(reg, "*")   // 使用正则过滤, 如果使用子字符串其只替换第一次出现的匹配到的字符
+            console.log(new_msg)
+            var count_arr = msg.match(reg)
+            console.log("共出现了", count_arr.length)
+        }
+
+        function MSreplace(){
+            var msg = "Microsoft is a big company, microsoft's color is red and has MICROSOFT logo like microsoft."
+            var reg = /microsoft/gi
+            // 查询msg中共出现了多少个microsoft
+            var count_arr = msg.match(reg, msg)
+            // 进行替换
+            var new_msg = msg.replace(reg, "微软")
+            console.info("找到" + count_arr.length + "个microsoft")
+            console.info(new_msg)
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+正则表达式
+
+动机
+    1. 处理文本成为计算机常见工作之一
+    2. 对文本内容的搜索提取是一项比较复杂困难的工作
+    3. 为了快速方便处理上述问题, 正则表达式技术诞生, 主键发展为一个被总多语言使用的独立技术
+
+定义: 
+    即高级文本匹配模式, 提供了搜索, 替代等功能. 
+    本质是由一系列特殊符号和字符组成的子串, 这个子串即是正则表达式.
+    这个表达式描述了字符和字符的重复行为, 可以匹配一类特征的字符串.
+
+目标: 
+    1. 熟练使用正则表达式符号
+    2. 正确组合和理解一般的正则表达式
+    3. 能够使用python操作正则表达式
+
+正则表达式的特点
+    * 方便进行检索和修改
+    * 支持语言众多
+    * 灵活多样
+    * 可以用到的场景
+        mongo正则类型, django等框架作为url匹配, 爬虫
+
+---------------------------------------
+
+正则表达式的使用
+
+元字符
+    
+    1. 普通字符: 如, abc
+        匹配规则: 匹配相应的普通字符
+        re.findall("abc", "abcdefg")   # ['abc']
+
+    2. 逻辑或: |
+        匹配规则: 匹配|两边任意一个正则表达式符合的情况
+        re.findall("ab", "abcdefgabcdefg")    # ['ab', 'cd', 'ab', 'cd']
+        注: |两侧不要有没用的空格
+
+    3. 匹配单一字符: .
+        匹配规则: 匹配除了换行符以外任意字符
+        re.findall("a.c", "abcdefgabcdefg")   # ['abc', 'abc']
+
+    4. 匹配开始位置: ^
+        匹配规则: 匹配一个字符串的开始位置
+        re.findall("^a", "abcdefg")   # ['a']
+        re.findall("^a", "gfedcba")   # []
+-------------------
+    5. 匹配结束位置: $
+        匹配规则: 匹配目标字符串的结束位置
+        re.findall("a$", "abcdefg")   # []
+        re.findall("a$", "gfedcba")   # ['a']
+
+    6. 匹配重复: *
+        匹配规则: 匹配前面的正则表达式重复0次或多次
+        re.findall("ab*", "abcdefg")   # ['ab']
+        re.findall("ab*", "acd")   # ['a']        
+        注: 匹配重复的正则表达式, 一般的和其他的正则表达式结合使用, 本身不能单独使用
+    
+    7. 匹配重复: +
+        匹配规则: 匹配前面的正则表达式重复1次或多次
+        re.findall(".+", "abcdefg")   # ['abcdefg]
+        re.findall("ab+", "acd")   # []
+    
+    8. 匹配重复: ?
+        匹配规则: 匹配前面的正则表达式重复0次或多次
+        re.findall("ab?", "abcdefga")   # ['ab', 'a']
+
+    9. 匹配重复: {n} , n是一个数字 
+        匹配规则: 匹配指定的重复次数
+        re.findall("a{1}", "abcdrfg")   # #['a']
+    
+    10. 匹配重复: {m, n} , m,n都是数字
+        匹配规则: 匹配前面的正则表达式重复m次到n次
+        re.findall("a{1, 2}", "abcdefgaa")  # []
+-------------------
+    11. 匹配字符集合: []
+        匹配规则: 匹配括号范围内的任意一个字符
+        [abcdefg]
+        [A-Z]
+        [a-z0-9]
+        re.findall("[e-g]", "abcdefg")   # ['e', 'f', 'g']
+    
+    12. 匹配字符集合的取反: [^...]
+        匹配规则: 匹配除指定字符集之外的任意字符
+        re.findall("[^d-g]", "abcdefg")   # ['a', 'b', 'c']
+-------------------
+    13. 匹配任意(非)数字字符: \d   \D
+        匹配规则: \d匹配任意数字字符 同[0-9], \D匹配任意非数字字符 同[^0-9]
+        re.findall("1\d{5}", "abcdefg 12345678910")   # ['123456']
+        re.findall("\D+", "abcdefg 12345678910")   # ['abcdefg ']
+    
+    14. 匹配(非)普通字符 (普通字符: 数字字母下划线): \w   \W
+        匹配规则: \w匹配任意一个普通字符 同[0-9a-zA-Z_], \W匹配任意一个非普通字符[^0-9a-zA-Z_] 
+        re.findall("\w+{2}", "abcdefg $ 12345678910")   # ['abcdefg']
+        re.findall("\W+", "abcdefg $ 12345678910")   # [' $ ']
+
+    15. 匹配(非)空字符: \s   \S
+        匹配规则: \s匹配任意空字符, \S匹配任意非空字符
+        re.findall("\s", "abd c 123 \r\n\t\0")   # [' ', ' ', ' ', '\r', '\n', '\t']
+        re.findall("\S", "abd c 123 \r\n\t\0")   # ['a', 'b', 'd', 'c', '1', '2', '3', '\x00']
+    
+    16. 匹配起止位置: \A   \Z
+        匹配规则: \A匹配开始位置 同开头^, \Z匹配结束位置 同结束$
+        绝对匹配: \Aabc\Z, 仅能匹配abc
+        re.findall("\A/\w+/\w+\Z", "/admin/desktop")   # ['/admin/desktop']
+    
+    17. 匹配(非)单词边界位置: \b   \B
+        匹配规则: \b匹配单词边界, \B匹配非单词边界
+        单词边界: 数字字母下划线和其他字符的交界位置为单词的边界
+        re.findall(r"\bfg\b", "abcde fg, abcdefg")  # ['fg']
+        re.findall(r"\bfg\B", "abcde fg, abcdefg")  # []
+
+
+
+元字符总结
+    匹配单个字符: 普通字符   .   \d   \D    \w   \W   \s   \S   [...]   [^...]
+    匹配重复性: *   +   ?   {n}   {m, n}
+    匹配某个位置: 开头^   末尾$   \A   \Z   \b   \B
+    其他: |   ()   \
+
+
+转义字符   \
+    如果想匹配字符串中的元字符, 需要使用转义
+
+
+贪婪和非贪婪
+    正则表达式默认的重复匹配模式: 
+    贪婪模式, 尽可能多的向后匹配
+        *   +   ?   {m, n} 这四种情况下会产生贪婪模式
+    非贪婪模式,
+        *?  +?  ??  {m, n}?
+
+
+正则表达式分组
+    使用 () 可以为一个正则表达式建立一个子组, 子组可以看做内部的整体
+
+    子组的作用
+        1. 增加子组后对正则表达式整体的匹配内容没有影响
+        2. 子组可以改变重复元字符的重复行为
+        3. 子组在某些操作中可以对子组匹配内容单独提取
+
+    子组的注意事项
+        1. 每个正则表达式可以有多个子组, 由外到内由左到右为第一, 第二,...子组
+        2. 子组通常不要交叉
+
+    捕获组和非捕获组 (命名组合非命名组)
+        子组命名格式： (?P<name>正则内容)
+
+        1. 很多编程接口可以通过名字获取子组匹配内容
+        2. 捕获组中的正则表达式可以通过名字重复调用: (?P=name)
+            示例:
+                (?P<t1>ab)cdef(?P=t1)   -->   abcdefab
+
+---------------------------------------
+
+re模块
+
+re模块中
+    属性: 
+        re.A ,  re.ASCII : 匹配ASCII
+        re.U ,  re.UNICODE : 匹配Unicode
+        re.DEBUG
+        re.I ,  re.IGNORECASE : flag, 忽略大小写
+        re.L ,  re.LOCALE 
+        re.M ,  re.MULTILINE : flag, ^$断行匹配, 可以匹配每一行的开头结尾位置
+        re.S ,  re.DOTALL : flag, 对元字符 . 起作用, 可以让它匹配换行
+        re.X ,  re.VERBOSE : flag, 为正则表达式添加注释 
+
+        多个flag同时使用, 如: re.X | re.I
+
+    方法:      
+        re.compile(pattern, flags=0)
+        re.match(pattern, string, flags=0)
+        re.fullmatch(pattern, string, flags=0) 
+        re.search(pattern, string, flags=0)
+        re.findall(pattern, string, flags=0) 
+        re.finditer(pattern, string, flags=0) 
+        re.split(pattern, string, maxsplit=0, flags=0) 
+        re.sub(pattern, repl, string, count=0, flags=0) 
+        re.subn(pattern, repl, string, count=0, flags=0) 
+        re.escape(pattern)
+        re.purge() 
+        exception re.error(msg, pattern=None, pos=None) 
+
+        re.findall(pattern, string, flags=0) 
+            功能: 使用正则表达式匹配字符串
+            参数: pattern 正则表达式
+                string 目标字符串
+            返回值: 返回一个列表, 匹配到的所有内容    
+
+
+compile对象
+    生成compile对象
+        re.compile(pattern, flags=0)
+            功能: 获取正则表达式对象
+            参数: pattern, 正则表达式
+                flags, 功能标志位, 提供更丰富的匹配
+            返回值: 正则表达式对象 设为regex
+
+            compile对象 属性方法(re模块没有)
+                flags : 标志位
+                pattern : 正则表达式
+                groupindex : 捕获组形成的字典
+
+    属性:
+        regex.flags 
+            The regex matching flags. 
+            This is a combination of the flags given to compile(), any (?...) inline flags in the pattern, 
+            and implicit flags such as UNICODE if the pattern is a Unicode string.
+
+        regex.groups 
+            The number of capturing groups in the pattern.
+
+        regex.groupindex 
+            A dictionary mapping any symbolic group names defined by (?P<id>) to group numbers. 
+            The dictionary is empty if no symbolic groups were used in the pattern.
+
+        regex.pattern 
+            The pattern string from which the RE object was compiled.
+
+
+    方法:
+        regex.search(string[, pos[, endpos]]) 
+        regex.match(string[, pos[, endpos]]) 
+        regex.fullmatch(string[, pos[, endpos]]) 
+        regex.finditer(string[,pos [, endpos]])
+
+        regex.findall(string, pos, endpos)
+            功能: 通过正则表达式匹配字符串
+            参数: string目标字符串
+                pos 目标字符串的匹配开始位置
+                endpos 目标字符串的结束位置
+            注: 如果正则表达式有子组则只显示子组匹配内容
+
+            示例:
+                regex = compile("字$符$内$容")
+                regex.findall("$")
+
+        regex.split(string)
+            功能: 按照正则表达式切割目标字符串
+            参数: 目标字符串
+            返回值: 切割后的内容列表
+
+        regex.sub(repl, string, count=0)
+            功能: 替换正则表达式匹配到的内容
+            参数: repl, 要替换的内容
+                string, 目标字符串
+                count, 最多替换几处
+            返回值: 返回替换后新的字符串
+        
+        regex.subn(repl, string, count=0) 
+            功能: 替换正则表达式匹配到的内容
+            参数: repl, 要替换的内容
+                string, 目标字符串
+                count, 最多替换几处
+            返回值: 返回替换后新的字符串和实际替换的个数
+
+
+match对象:
+    生成match对象
+        regex.search(string[, pos[, endpos]]) 
+        regex.match(string[, pos[, endpos]]) 
+        regex.fullmatch(string[, pos[, endpos]]) 
+            功能: 要求字符串能够完全匹配
+
+        re.finditer(pattern, string, flags=0)
+            功能: 使用正则表达式匹配目标内容
+            参数: pattern正则表达式 
+                  string目标字符串
+            返回值: 迭代对象, 迭代的每个内容为一个match对象 设为match
+
+        re.match(pattern, string, flags=0)
+            功能: 匹配一个字符串的开头
+            参数: pattern, 正则表达式
+                  string, 目标字符串
+            返回值: 如果匹配到即返回match对象
+                    如果没有匹配到即返回None
+
+        注: match只能匹配字符串的开头位置, search可以匹配任意位置, 但是也只能匹配一处
+            通常match对象调用其属性时往往需要try异常处理
+
+        re.search(pattern, string, flags=0) 
+            功能: 匹配一个字符串
+            参数: pattern, 正则表达式
+                  string, 目标字符串
+            返回值: 如果匹配到即返回match对象
+                    如果没有匹配到即返回None
+    属性: 
+        match.pos 
+            The value of pos which was passed to the search() or match() method of a regex object. 
+            This is the index into the string at which the RE engine started looking for a match.
+
+        match.endpos 
+            The value of endpos which was passed to the search() or match() method of a regex object. 
+            This is the index into the string beyond which the RE engine will not go.
+
+        match.lastindex 
+            The integer index of the last matched capturing group, or None if no group was matched at all. 
+            For example, the expressions (a)b, ((a)(b)), and ((ab)) will have lastindex == 1 if applied to the string 'ab', 
+            while the expression (a)(b) will have lastindex == 2, if applied to the same string.
+
+        match.lastgroup 
+            The name of the last matched capturing group, or None if the group didn抰 have a name, or if no group was matched at all.
+
+        match.re 
+            The regular expression object whose match() or search() method produced this match instance.
+
+        match.string 
+            The string passed to match() or search().
+    方法:
+        match.expand(template) 
+        match.__getitem__(g) 
+
+        match.start([group]) 
+        match.end([group]) 
+
+        match.span([group]) 
+        For a match m, return the 2-tuple (m.start(group), m.end(group)). 
+        Note that if group did not contribute to the match, this is (-1, -1). group defaults to zero, the entire match.
+
+        match.group(n)
+            功能: 获取match对象匹配的内容
+            参数: 默认为0表示获取这则表达式的匹配内容
+                如果传入大于0的正整数表示获取对应子组匹配内容
+            返回值: 返回匹配的内容
+
+        match.groups()
+            功能: 得到所有子组匹配的内容
+
+        match.groupdict()
+            功能: 得到所有捕获组匹配内容
+
+
+练习示例:
+    ^[0-9]\w{1,9}$  长度8-10位的密码,以数字开头,数字字母下划线组成
+    读取一个文件内容, 将文件中所有的以大写字母开头的单词匹配出来
+
+    匹配18位身份证号
+    \d{17}(\d|[xX]) 前17为数字, 最后一位可能为数字或字母x
+
+

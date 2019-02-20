@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .block-div{
+            margin: 0 auto;
+            border: 1px solid black;
+            width: 300px;
+            height: 200px;
+            padding: 10px 20px 10px 20px;
+        }
+        #test{
+            border: 1px red solid;
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="block-div">
+        <div id="test"></div>
+        <button onclick="testShow()">testShow触发按钮</button>
+        <form action="" method="post" id="form_ele">
+            <input type="text" id="input_text1" name="in1">
+            <input type="text" id="input_text2" name="in2">
+            <input type="button" value="确认提交" onclick="show_value()">
+        </form>
+    </div>
+</body>
+<script src="02_window.document.js"></script>
+</html>

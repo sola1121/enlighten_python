@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        字符串中必须包含@符号<br>
+        字符串中必须包含.符号<br>
+        最后一个.必须在@之后<br>
+        截取邮箱服务商<br>
+        输入省份证号截取生日<br>
+    </div>
+    <button onclick="mail()">输入邮箱地址</button>
+    <button onclick="birth()">输入身份证号</button>
+    <button onclick="testSplit()">拆分一个字符串</button>
+    <script>
+        function mail(){
+            var mail_address = window.prompt("输入邮箱地址: ")
+            var index_at = mail_address.indexOf("@")   // 从开头算起, 第一个出现的@
+            var index_point = mail_address.lastIndexOf(".")   // 从结尾算起, 第一个出现的.
+            if (index_at == -1 || index_point ==-1){
+                window.alert("验证失败")
+            } else {
+                window.alert("邮箱初步验证成功.")
+                var facilitator = mail_address.substring(index_at+1, index_point)
+                window.alert("服务由 " + facilitator + " 提供")
+            }
+        }
+
+        function birth(){
+            var ID = window.prompt("输入身份证号:")
+            var birth_day = ID.substring(6, 14)   // 19800907
+            if (birth_day.length != 18){
+                window.alert("身份证不合法.")
+            } else {
+                var year = birth_day.substr(0, 4)
+                var month = birth_day.substr(4, 2)
+                var day = birth_day.substr(6, 2)
+                window.alert("出生: " + year + "年" + month + "月" + day + "日")
+            }
+        }
+
+        function testSplit() {
+            var code = "1045_5&10221_8&73569_6"
+            var code_arr = code.split("&")
+            console.info("共有" + code_arr.length + "种")
+            for (var i=0; i<code_arr.length; i++){
+                var serial = (code_arr[i].split("_"))[0]
+                var quantity = (code_arr[i].split("_"))[1]
+                console.info("编号: " + serial + ", 数量: " + quantity)
+            }
+        }
+    </script>
+</body>
+</html>

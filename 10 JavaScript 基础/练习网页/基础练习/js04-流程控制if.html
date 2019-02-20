@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var year = window.prompt("输入年: ")
+        var month = window.prompt("输入月: ")
+        var day = window.prompt("输入日: ")
+        year = Number(year)
+        month = Number(month)
+        day = Number(day)
+        var sum = 0
+        var isLeap = false
+        if((year%4==0 && year%100!=0) || (year%400 == 0)){
+            isLeap = true
+        }
+        for(m=1; m<month; m++){
+            if ((m & 1)==1) {
+                sum += 31
+            } else {
+                if (m == 2){
+                    if (isLeap){
+                        sum += 29
+                    } else {
+                        sum += 28
+                    }
+                continue
+                }
+                sum += 30
+            }
+        }
+        sum += day
+        if (month == 1){
+            sum = day
+        }
+        console.info("这是", year,"年的第", sum, "天.")
+    </script>
+</body>
+</html>

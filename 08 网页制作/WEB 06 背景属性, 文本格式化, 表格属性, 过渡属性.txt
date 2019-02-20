@@ -1,0 +1,200 @@
+背景属性
+    1. 背景颜色
+        属性: background-color
+        取值: 合法的颜色值
+        注意: 背景颜色是从边框的位置处就开始绘制
+    2. 背景图像
+        属性: background-image
+        取值: url("图片路径")
+        示例:
+            background-image: url("images/example.png")
+    3. 背景平铺
+        属性: background-repeat
+        取值:
+            repeat
+                默认值, 横纵都平铺
+            no-repeat
+                不平铺
+            repeat-x
+                横向平铺
+            repeat-y
+                纵向平铺
+    4. 背景图片尺寸
+        属性: background-size
+        取值
+            width height
+                以px为单位的数值
+            width% height%
+                采用当前元素尺寸占比作为背景图片尺寸
+    5. 背景图片的位置
+        作用
+            改变背景图在元素中的默认位置
+        属性
+            background-position
+        取值
+            x y
+                以px为单位的数值, 用空格隔开
+                x, 背景图像水平偏移距离
+                    取值为正, 背景图像向右偏移
+                    取值为负, 背景图像向左偏移
+                y, 背景图像垂直偏移距离
+                    取值为正, 背景图像向下偏移
+                    取值为负, 背景图像向上偏移
+            %x %y
+                0% 0%
+                    背景图在左上角
+                100% 100%
+                    背景图在右下角
+                50% 50%
+                    背景图在中间
+                95% 0%
+                    偏右 靠上
+            关键字
+                x: left / center / right
+                y: top / center / bottom
+    6. 背景属性 - 简写方式
+        属性: background
+        取值: color url() repeat position
+
+---------------------------------------
+
+文本格式化属性
+1. 字体属性
+    指定字体
+        属性: font-family
+        取值: 由 , 隔开的字体列表
+        注意: 如果字体名称中包含中文或空格的话, 要用引号引起来
+    指定字体大小
+        属性: font-size
+        取值: px 或 pt为单位
+    指定字体加粗
+        属性: font-weight
+        取值
+            normal : 非加粗显示
+            bold : 加粗显示
+            value : 无单位的数字
+                400, 等同normal
+                900, 等同bold
+    字体的样式
+        属性: font-style
+        取值
+            normal : 非斜体显示
+            italic : 斜体显示
+    字体属性(简写)
+        属性: font
+        取值: style weight size family
+        注意: 使用简写方式时, 必须要设置family的值, 否则无效
+            font: 12px; /* 无效 */
+            font: 12px Console;
+
+2.文本属性
+    文本颜色
+        属性: color
+        取值: 合法的颜色值
+    文本的排列方式
+        作用: 控制某元素内的文本, 图片行内块元素的排列方式
+        属性: text-align
+        取值: left / right / center / justify(两端对齐) 
+    文字修饰
+        作用: 指定线条修饰效果
+        属性: text-decoration
+        取值
+            none , 无任何线条显示
+            underline , 下划线
+            overline , 上划线
+            line-through , 删除线
+    行高
+        作用: 指定一行文本数据的所占高度
+        特点: 如果行高的高度高于文本的高度的话, 那么文本将在行高的范围内垂直居中显示
+        使用场合
+            文本垂直居中
+            行间距
+        属性: line-height
+        取值
+            以px为单位的数值
+            没有单位的数字, 表示的是当前字体的倍数
+
+---------------------------------------
+
+表格属性
+    1. 表格的常用属性
+        尺寸属性
+        边框属性
+        文本格式化属性
+        背景属性
+        框模型
+            margin不能用在td上
+    2. 表格的特有属性
+        边框合并
+            属性: border-collapse
+            取值
+                sepqrate
+                    默认值, 分离边框(双线边框)模式
+                collapse
+                    边框合并
+        边框边距
+            作用: 设置每两个单元格之间的距离
+            属性: border-spacing
+            取值
+                指定一个数值
+                    水平和垂直间距相等
+                给定两个数值, 之间用空格隔开
+                    第一个值, 水平间距
+                    第二个值, 垂直间距
+
+---------------------------------------
+
+过渡效果 - transition
+    什么是过渡
+        使得CSS的属性值在一段时间内平缓变化的一个效果
+    语法
+        1) 指定过渡属性
+            作用: 指定那个属性值在变化的时候使用过渡的效果
+            属性: transition-property
+            取值
+                (1) 属性名称
+                (2) all
+                    但凡能使用过渡效果的属性值在变化时一律都使用过渡来体现
+                允许使用过渡效果的属性
+                    所有与颜色有关的属性
+                    所有取值为数字的属性
+            示例:
+                transition-property: background-color;   /* 背景颜色在变化时使用过渡效果 */
+        2) 指定过渡时长
+            作用: 指定在多长时间内完成过渡效果
+            属性: transition-duration
+            取值: 以s秒或ms毫秒为单位的数字, 1s = 1000ms
+            示例:
+                transition-duration: 0.3s;   /* 在300ms中完成过渡 */
+        注意: 过渡属性和过渡时长都是需要指定的
+        3) 指定过渡的速度时间曲线函数
+            作用: 指定过渡效果变化速率
+            属性: transition-timing-function
+            取值
+                ease
+                    默认值, 慢速开始, 快速变快, 慢速结束
+                linear
+                    匀速
+                ease-in
+                    慢速开始, 加速结束
+                ease-in-out
+                    慢速开始和结束, 中间先加速后减速
+        4) 指定过渡延迟
+            作用: 当激发过渡效果后, 要等待多长时间再开始执行操作
+            属性: transition-delay
+            取值: 以s秒或ms毫秒为单位的数字
+        指定多个过渡示例:
+            transition-property: width, color;   /* all */
+            transition-duration: 3s;
+            transition-timing-function: ease-in;
+            width: 5em;
+            color: #6cf;
+            /* 写在变后的样式中, 不会有过渡回原央视的效果, 写在原样式中, 会有变回的过渡效果 */
+        5) 过渡属性
+            属性: transition
+            取值: property duration timing daley
+            示例: 
+                transition: color 2s ease-in 0.1s;
+    
+
+

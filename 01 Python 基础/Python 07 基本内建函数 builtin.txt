@@ -1,0 +1,250 @@
+Built-in Functions   
+abs()  dict()  help()  min()  setattr() 
+all()  dir()  hex() next()  slice() 
+any()  divmod()  id() object()  sorted() 
+ascii()  enumerate()  input()  oct()  staticmethod() 
+bin()  eval()  int()  open()  str() 
+bool()  exec()  isinstance()  ord()  sum() 
+bytearray()  filter()  issubclass()  pow()  super() 
+bytes()  float()  iter()  print()  tuple() 
+callable()  format()  len()  property()  type() 
+chr()  frozenset()  list()  range()  vars() 
+classmethod()  getattr()  locals() repr() zip() 
+compile()  globals()  map()  reversed() __import__() 
+complex()  hasattr()  max()  round()   
+delattr()  hash()  memoryview()  set() 
+
+---------------------------------------
+
+函数调用
+    函数名(传参列表)
+    注: 函数调用是表达式, 通常用于返回一个对象
+
+>>> dir(__builtins__)   # 查看详细
+
+help()函数查看帮助
+>>> help(函数名)
+>>> help("语句名")
+在交互模式下查看当前作用域的所有变量
+  >>> help("__main__")
+  按q退出
+
+dir()函数
+格式:
+    dir([对象]) -> 返回字符串列表
+作用:
+    1)如果没有参数可调用,则返回当前作用域内所有变量的列表
+    2)如果给定一个对象作为参数,则返回这个对象的所有变量的列表
+        ●对于模块,返回这个模块的全部变量
+        ●对于一个类对象,返回类对象的所有变量,并递归基类的所有变量
+        ●对于其他对象,返回所有变量,类变量和基类变量
+
+dir(obj) 函数, 返回所有属性的字符串列表
+help(obj) 函数, 可以查看模块相关的文档字符串
+
+--------------------------------------
+
+基本输出函数 print()
+    作用: 将一系列对象的值以字符串形式输出到标准输出设备上(默认为终端)
+    格式: print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+    关键字参数:
+        sep: 两个值之间的分隔符,默认为一个空格' '
+        end: 输入完毕后在流末尾自动追加一个字符串,默认为换行符'\n'
+        file: 流对象,默认为sys.stdout
+        flush: 是否立即将流进行输出
+
+
+基本输入函数 input()
+    作用: 从标准输入设备上读取一个字符串,末尾换行字符会被删除. 返回一段字符串,返回值一律是字符型
+    格式: input("prompt")
+是一个阻塞函数
+
+
+查看内存地址函数 id()
+    返回一个对象在内存中的地址
+
+
+内建的数值型函数
+    1)abs(x) 返回x的绝对值
+    2)round(number[, ndigits]) 对数值进行四舍五入, ndigits是小数点向右数取整的位数, 负数表示向左数取整
+    3)pow(z, y, z=None) 相当于 x**y 或 x**y%z
+
+
+数值对象的构造(创建)函数
+    1)int(x, base=10) 用字符串或数字转换为整数,如果不给出参数,则返回0, 最大进制base=36
+    2)float(obj) 用字符串或数字转换为浮点数,如果不给出参数,则返回0.0
+    3)complex(r=0.0, i=0.0) 用数字创建一个复数(实部为r,虚部为i)
+    4)bool(x) 用x创建一个布尔值(True/False)
+
+
+Python3中常用的序列函数
+    len(seq_) 返回字符串的长度(整数)
+    max(x) 返回序列的最大值元素
+    min(x) 返回序列的最小值元素
+    sum(x) 返回序列中所有元素的和(元素必须是数值类型)
+    any(x) 真值测试,如果列表中有一个值为真得元素则返回True
+    all(x) 真值测试,如果列表中所有元素都为真才返回True
+    str(obj) 将对象obj序列化为字符串
+    list(iterable) 用可迭代对象来生成一个列表
+    tuple(iterable) 用可迭代对象来生成一个元组 
+    reversed(seq) 返回反向顺序的迭代器对象
+    sorted(iterable, reverse=False) 返回排序的列表
+
+字符串的构造函数 str()
+    str(obj='') 将对象转换为字符串
+
+列表的构造(创建)函数 list
+  list() 生成一个空的列表, 等同于[]
+  list(iterable)   # 可用迭代对象创建一个列表
+示例:
+    L = list()   # 创建一个空列表, 用L绑定
+
+元组的构造(创建)函数 tuple
+    tuple() 生成一个空的元组, 等同于()
+    tuple(iterable) 用可迭代对象生成一个元组
+示例:
+    t = tuple()   # 等同于 t = ()
+    t = tuple(range(5))   # t = (0, 1 , 2, 3, 4)
+
+
+字符编码转换函数
+    ord(c) 返回一个字符的Unicode编码值
+    chr(i) 返回i这个值所对应的字符
+
+
+整数转换为字符串函数
+    hex(i) 将整数转换为十六进制的字符串
+    oct(i) 将整数转换为八进制的字符串
+    bin(i) 将整数转换为二进制的字符串
+注: 0b 开头的为二进制 如: 0b10101
+    0o 开头的为八进制 如: 0o3552
+    0x 开头的为十六进制 如: 0xdd78
+
+
+range 函数
+作用: 用来创建一个用来生成一系列整数的可迭代对象(整数序列生成器)
+
+range(stop) 从零开始,每次生成一个整数后+1操作,直到stop为止(不包含stop)
+range(start, stop[, step]) 从start开始,每次生成一个整数后移动step,直到stop为止(不包含stop,step可以为负数) 
+
+
+对象转字符串函数
+type(x) 用来返回x对象的类型
+repr(obj) 返回一个能代表此对象的表达式的字符串, 通常: eval(repr(obj)) = obj    represent: 代表; 表现
+        类似type返回的, 是给解释器看的
+str(obj) 通过给定的对象返回一个字符串(这个字符串通常是给人阅读的)
+
+
+globals 和locals 函数
+    globals()返回当前全局作用域内的变量的字典
+    locals()返回当前局部作用域内的变量的字典
+
+
+eval 和 exec函数
+eval函数
+作用: 
+    把一个字符串当成一个python表达式来执行,返回表达式执行后的结果\
+    # 返回表达式结果
+格式:
+    eval(source, globals=None, locals=None)
+
+exec函数
+作用:
+    把一个字符串当成一段程序代码来执行
+    # 执行语句
+格式:
+    exec(source, globals=None, locals=None)
+
+优先去找局部变量locals
+golbals 参数得是一个字典,字典中所存为变量 locals 可以为任意
+可结合使用globals()和locals()使用
+eval解释不了语句, exec才能解释语句
+
+iter(iterable) 从可迭代对象中返回一个迭代器,iter必须是一个能提供迭代器的对象
+next(iterable) 从迭代器对象中获取下一个记录. 如果无法获取下一条记录,则触发StopIteration异常
+
+zip(iter1, iter2, iter3, ...) 返回一个zip对象,此对象用于生成一个元素,此元组的个数是由最小的可迭代对象决定
+enumerate(iterable, start=0) 生成带索引的枚举对象,返回的迭代类型为索引-值对(index-value对),默认索引从零开始,可以用start指定
+
+
+open函数
+作用:
+    用于打开一个文件,返回此文件流对象,如果文件打开失败,返回IOError异常
+格式:
+    open("filename", 'rt')
+    
+
+encode 编码
+decode 解码, 一般解码成unicode
+
+
+用于类的函数
+    isinstance(obj, class_or_tuple)
+    返回这个对象obj是否是某个类创建的对象,或者某些类中的一个类的对象,如果是返回True,否返回False
+    issubclass(cls, class或tuple) 
+    判断一个类是否继承自其它的类,如果此类cls是class或tuple中的派生类,则返回True,否则返回False
+
+
+对象的属性管理函数
+    getattr(obj, name[, default])
+    从一个对象的到对象的属性, getattr(x, 'y')等同于x.y当属性不存在时,如果给出default参数,则返回default,如果没有给出default,则产生一个AttributeError错误
+
+    hasattr(obj, name)
+    用给定的name返回对象obj是否有此属性,此种做法可以避免getattr(obj, name)时引发错误, 他返回True或False
+
+    setattr(obj, name, value)
+    给对象obj的名为name的属性设置相应的值, setattr(x, 'y', v)等同于x.y = v
+
+    delattr(obj, name) 
+    删除对象obj中name属性, delattr(x, 'y') 等同于del x.y
+
+
+super函数
+    super(类型, obj) 返回绑定超类的super实例(要求obj必须为type类型实例)
+    super() 返回绑定超类的实例,等同于:super(__class__, 实例方法的第一个参数),必须用在方法内
+作用:
+    返回基类的实例,用基类实例来间接调用其父类的方法
+
+
+---------------内建高阶函数------------------
+接收函数或返回函数
+
+map 函数   映射
+    map(func, *iterables)   # 可以有多个可迭代对象用于映射
+作用:
+    用函数对可迭代对象中的每一个元素作为参数计算出新的可迭代对象.当最短的一个迭代器完成迭代后此迭代器生成结束
+示例:
+    def power2(x, y):
+        return x ** 2 + y
+    mit = map(power2, range(1, 10), range(1, 10))
+    [x for x in mit]
+
+filter 函数   筛选
+    filter(func, iterable)
+作用:
+    筛选可迭代对象iterable中的数据,返回一个可迭代对象,此可迭代对象将对iterable生成的数据进行筛选
+    函数func将对iterable中的每个元素进行求值,返回False则将此数据丢弃,返回True,则保留此数据
+示例:
+    def isodd(x):
+        return x % 2 == 1
+    odd = [x for x in filter(isodd, range(10))]   # 生成奇数列表    
+    [x for x in filter(lambda x: x%2==1, range(1, 10))]
+
+sorted 函数   排序
+    sorted(iterable, key=None, reverse=False)
+作用:
+    将原可迭代对象进行排序,生成排序后的列表
+说明:
+    iterable可迭代对象
+    key所给为函数,是用来提供一个值,这个值将作为排序的依据
+    reverse标志用来设置是否转置(升降序)
+示例:
+    ls = [5, -2, -4, 0, 3, 1]
+    ls1 = sorted(ls)
+    ls1 = sorted(ls, reverse=True)
+    ls1 = sorted(ls, key=abs)   # [0, 1, -2, 3, -4, 5] 以绝对值大小排序
+    names = ["Kizuna_ai", "Luna", "Akari", "Siro", "Nojanori"]
+    ls1 = sorted(names, key=len)   # 以字符长短排序
+
+
+functools.reduce() 函数 取消内置, 放在了functools标准库中

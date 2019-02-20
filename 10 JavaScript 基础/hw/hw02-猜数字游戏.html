@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var num = Math.round(100 * Math.random());   // 1-100之间的随机数
+        window.alert(num);
+        do{
+            var user_num = window.prompt("我猜是: ");
+            if (user_num < num){
+                console.info("你猜小了, 在来.");
+            } else if (user_num > num){
+                console.info("你猜大了, 在来.");
+            } else if (user_num == num) {
+                console.info("你猜对了, 是", num);
+                break;
+            }
+        } while(num != "e" || num !="exit");
+    </script>
+</body>
+</html>

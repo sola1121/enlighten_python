@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模板中的标签的使用</title>
+</head>
+<body>
+    {% for name in names %}
+        <h5
+            {% if forloop.first %}
+                style="color: blue;"
+            {% endif %}
+            {% if forloop.last %}
+                style="color: brown;"
+            {% endif %}
+        >{{ forloop.counter }}. {{ name }}</h5>
+    {% endfor %}
+</body>
+</html>

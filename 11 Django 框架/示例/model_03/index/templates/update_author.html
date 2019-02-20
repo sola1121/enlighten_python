@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改author</title>
+</head>
+<body>
+    <form action="/update_author/{{ author.id }}/" method="post">
+        {% csrf_token %}
+        <p>
+            姓名:
+            <input type="text" name="author_name" value="{{ author.name }}">
+        </p>
+        <p>
+            年龄:
+            <input type="number" name="author_age" value="{{ author.age }}" aria-valuemax="120" aria-valuemin="0">
+        </p>
+        <p>
+            邮箱:
+            <input type="email" name="author_email" value="{{ author.email }}">
+        </p>
+        <p>
+            <input type="submit" value="确认修改">
+        </p>
+    </form>
+</body>
+</html>

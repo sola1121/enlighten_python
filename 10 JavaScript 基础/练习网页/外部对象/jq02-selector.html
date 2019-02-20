@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <p>ipsum, dolor sit amet </p>
+    <p>consectetur adipisicing elit. </p>
+    <p>Beatae, laborum! Quidem rerum </p>
+    <p>repellat impedit voluptatum </p>
+    <p>ratione numquam nesciunt commodi </p>
+    <p>earum deleniti reiciendis harum </p>
+    <p>facere ipsum iusto, iste placeat vero odio!</p>
+    <button id="hidden_p">隐藏</button>
+    <button onclick="run_func()">手动载入</button>
+</body>
+<script src="jQuery_3.3.1.js"></script>
+<script>
+    window.onload = run_func
+
+    function run_func(){
+        $("p:odd").css("background-color", "blue")
+        $("#hidden_p")[0].onclick = hidden_p   // 注意使用时DOM, 而不是jQuery
+    }
+
+    function hidden_p(){
+        $("p:gt(3)").css("visibility", "hidden")
+    }
+</script>
+</html>

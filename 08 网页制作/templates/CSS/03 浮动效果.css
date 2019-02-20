@@ -1,0 +1,29 @@
+/* charset=utf-8 */
+
+body{
+    width: 75%;
+    margin-left: 15%;
+}
+
+#content{
+    width: 1280px;
+    border: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px
+}
+
+.detail{
+    border: 0px;
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 250px;
+    height: 250px;
+    background-color: gray;
+    float: left;
+    text-align: center;
+    line-height: 2;
+}

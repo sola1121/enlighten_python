@@ -1,0 +1,59 @@
+JavaScript概述
+    什么是JavaScript
+        JavaScript简称"JS", 是一种运行于JS解释器或执行引擎中的解释性脚本语言
+
+JS发展史
+    1. 1992年Nombas公司开发了一款脚本语言, 能够运行在网页中, 最初名叫CMM(C--), 之后更名ScriptEase
+    2. 1995年Netscape(网景)为自己的浏览器Navigator2.0开发了另一款脚本语言 - LiveScript, 后更名为JavaScript
+    3. 1996年Microsoft, 为自己的浏览器IE3.0开发了一款JavaScript的克隆版本JScript
+    4. 1997年Netscape找到ECMA(欧洲计算机制造联合会). Netscape将JS核心交给了ECMA, 从此JS的核心被更名为ECMA Script, 简称"ES"
+
+完整的JS组成
+    1. 核心 - ECMAScript
+        包含了JS中最基本的语法规范
+    2. 浏览器对象模型 - BOM模型
+        Browser Object Model
+        提供了一系列的可操作方法和属性用于和浏览器进行交互
+    3. 文档对象模型 - DOM模型
+        Document Object Model
+        提供了一些列的可操作方法和属性用于和文档进行交互
+
+
+
+JS的使用方式
+    1. 在元素事件中编写JS代码
+        事件: 用户在元素上所激发的行为操作
+            示例
+                onclick事件, 当用户单击元素时
+                语法
+                    <标记 onclick="JS执行代码">
+                    JS可执行代码
+                    console.log("将在终端中输出");
+    2. 将代码嵌入在网页的<script></script>里
+        语法
+            在网页的任意位置处, 均可以嵌入
+            <script>可执行的JS代码<script>
+        特点
+            网页加载时就执行
+        示例
+            document.write("将在网页中输出");
+            注意: 将document.write编写在按钮中的话, 在执行时会刷新网页中的内容
+    3. 将JS代码编写在外部的JS文件中
+        1) 创建一个JS文件(xxx.js), 编写JS代码
+        2) 在使用的网页中对JS文件进行引入
+            <script src="外部JS文件路径"></script>
+            注意: 在从外部引入JS的script标记里面是不能再编写JS脚本的
+
+JS的基础语法
+    1. JS都是由语句来组成的
+        1) 语句是由运算符, 关键字和表达式构成的
+        2) JS中严格区分大小写
+        3) 每条语句必须以 ; 表示结束
+        4) 所有的标识符, 符号必须都是英文的
+    2. JS中的注释
+        单行注释: //
+        多行注释: /**/
+
+
+
+

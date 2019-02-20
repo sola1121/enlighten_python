@@ -1,0 +1,65 @@
+body, p, h1, h2, h3, h4, h5, h6, ul, ol{
+    margin: 0;
+}
+
+img{
+    vertical-align: bottom;
+}
+
+#container{
+    width: 1000px;
+    margin: 0px auto;
+}
+/* 标题 */
+div.item>p.title{
+    border-top: 1px solid #ccc;
+    margin-top: 25px;
+    padding-top: 15px;
+    margin-bottom: 10px;
+    line-height: 42px;
+}
+
+div.item>p.title>a{
+    margin: 0;
+    float: right;
+}
+div.item>p.title>img{
+    float: left;
+    height: 42px;
+    width: auto;
+    margin-bottom: 15px;
+}
+
+/* 内容项 */
+.list{
+    clear: both;
+}
+
+div.list>div{
+    width: 190px;
+    height: auto;
+    float: left;
+    margin-right: 10px;
+}
+
+div.list>div>p img{
+    width:190px;
+}
+
+div.content{
+    font-size: 12px;
+}
+
+div.list div.content>a.cart{
+    float: right;
+    margin-top: 5px;
+}
+
+div.list div.content>p{
+    color: #555;
+    margin: 5px 0;
+}
+
+div.list div.content>div{
+    color: #999;
+}

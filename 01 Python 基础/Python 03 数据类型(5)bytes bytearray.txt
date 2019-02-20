@@ -1,0 +1,98 @@
+什么是二进制文件
+    文件中以字节(bytes)为单位存储,不以字符为单位进行存储的文件
+
+
+---------------------------------------
+
+字节串(也叫字节序列) bytes
+作用:
+    存储以字节为单位的数据
+    字节串是不可变的字节序列
+
+说明:
+    字节是0~255之间的整数
+    注: 因为一个字节就只有8位用来存储二进制数 2**8
+创建空字节串
+    b''
+    b""
+    b''''''
+    b""""""
+创建非空字节串
+    b'ABCD'
+    b"ABCD"
+    b'''ABCD'''
+    b"""ABCD"""
+    b'\x41\x42\x43\x44'
+
+字节串生成函数
+    bytes() 生成一个空字节串等同于 b''
+    bytes(整数可迭代对象) 用可迭代对象初始化一个字节串
+    bytes(整数n) 生成n个值为0的字节串
+    bytes(字符串, encoding='utf-8') 用字符串的转换编码生成一个字节串
+示例:
+by = bytes()
+by = bytes([0x41, 0x42, 0x43, 0x44])
+by = bytes(10)
+by = bytes("abc", encoding="utf-8")
+
+bytes 运算
+    +   +=   *   *=
+    <   <=   >   >=   ==   !=
+    in / not in
+    索引 index / 切片 slice 
+    (同字符串规则完全相同)
+
+max(x)
+min(x)
+len(x)
+sum(x)
+any(x)
+all(x)
+以上都可以用于bytes操作
+
+
+bytes与 str的区别
+  bytes存储字节(0~255)
+  str存储Unicode字符(0~65535)
+
+decode 解码, 默认解码到Unicode
+encode 编码
+bytes 与 str转换:
+    str ---> bytes
+        by = s.encode(encoding="utf-8")   # 编辑为utf-8编码
+    bytes ---> str
+        s = by.decode(encoding="utf-8")   # 由utf-8编码解码
+
+
+---------------------------------------
+
+字节数组 bytearray
+    可变的字节序列
+
+创建函数 bytearray
+    bytearray() 创建空的字节数组
+    bytearray(整数n)
+    bytearray(整数可迭代对象)
+    bytearray(字符串, encoding="utf-8")
+没有字面值,只能使用函数创建
+
+操作方式与bytes完全相同
+    +   +=   *   *=
+    <   <=   >   >=   ==   !=
+    in / not in
+    索引 index /切片 slice
+    (字节数数组支持索引和切片赋值操作,规则同列表的索引和切片赋值)
+
+示例:
+    ba = bytearray(b'abcdefg')
+    ba[0] = 0x41  # ba = bytearray(b'Abcdefg')
+    ba[1::2] = bytearray(b'BDF')  # 修改bdf为大写
+
+bytearray 的方法:
+   BA代表bytearray
+   BA.clear()    清空字节数组
+   BA.append(n)  追加一个字节(n为0~255的整数)
+   BA.remove(value)  删除第1个出现的字节,如果没有出现，则触发ValueError错误
+   BA.reverse()  字节的顺序反转
+   BA.decode(encoding='utf-8')  将bytearray转换为字符串
+   BA.find(sub[, start[, end]])  查找sub 子节数数组

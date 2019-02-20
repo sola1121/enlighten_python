@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="create_div()">创建一个div</button>
+    <script>
+        function create_div(){
+            var new_div = document.createElement("div")
+            new_div.setAttribute("id", "square_box")   // new_div.id = "square_box"
+            new_div.innerText = "动态创建的div"
+            new_div.style.border = "balck 1px solid"
+            new_div.style.width = "200px"
+            new_div.style.height = "200px"
+            new_div.style.backgroundColor = "red"
+            console.info(new_div)
+
+            document.body.appendChild(new_div)
+        }
+    </script>
+</body>
+</html>

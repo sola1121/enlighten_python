@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="main_run()">开始计算</button>
+    <script>
+        function isLeap(year){
+            if ((year % 4==0 && year % 100 !=0) || (year % 400 ==0)){
+                return true
+            } else {
+                return false
+            }
+        }
+
+        function main_run(){
+            var input_year = parseInt(window.prompt("输入年: "))
+            var input_month = parseInt(window.prompt("输入月: "))
+            var input_day = parseInt(window.prompt("输入日: "))
+            var total_days = 0
+            // 判断年份, 计算年份中的天数
+            for (var i=1990; i<input_year; i++){
+                total_days += 365
+                if (isLeap(i)){
+                    total_days += 1
+                }
+            }
+            // 判断月份, 计算月份中的天数
+            for (var i=1; i<input_month; i++){
+                switch(i){
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 11:
+                        total_days += 31
+                        break
+                    case 4:
+                    case 6:
+                    case 10:
+                    case 12:
+                        total_days += 30
+                        break
+                    case 2:
+                        if (isLeap(i)){
+                            total_days += 1
+                        } 
+                        break
+                }
+            }
+            // 加上日期
+            total_days += input_day
+            result = total_days % 7
+
+            // 输出判断内容
+            switch (result){
+                case 0:
+                    window.alert("周日")
+                    break
+                case 1:
+                    window.alert("周一")
+                    break
+                case 2:
+                    window.alert("周二")
+                    break
+                case 3:
+                    window.alert("周三")
+                    break
+                case 4:
+                    window.alert("周四")
+                    break
+                case 5:
+                    window.alert("周五")
+                    break
+                case 6:
+                    window.alert("周六")
+                    break
+                default:
+                    window.alert("Unknow Error")
+            }
+        }
+    </script>
+</body>
+</html>

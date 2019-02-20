@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #container{
+            margin: 0 auto; /* 居中 */
+            width: 50%; 
+            position: relative; /* 为了给absolute做参考系 */
+        }
+        #red-box, #blue-box, #green-box{
+            width: 100px;
+            height: 150px;
+        }
+        #red-box{
+            background-color: rgb(255, 0, 0);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+        #green-box{
+            background-color: rgb(0, 255, 0);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        #blue-box{
+            background-color: rgb(0, 0, 255);
+            position: absolute;
+            top: 40px;
+            left: 40px;
+        }
+        #red-box:hover, #blue-box:hover, #green-box:hover{
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="red-box"></div>
+        <div id="green-box"></div>
+        <div id="blue-box"></div>
+    </div>
+</body>
+</html>

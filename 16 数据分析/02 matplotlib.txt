@@ -1,0 +1,123 @@
+matplotlib
+    实现数据可视化
+
+基本绘图函数
+    import matplotlib.pyplot as plt
+
+    对所画线段
+    plt.plot(水平坐标数组, 垂直坐标数组, linestyle=线型, linewidth=线宽, color=线色, label=图例文本)
+
+    对所画点
+    plt.plot(..., linestyle="o")
+    plt.scatter(水平坐标数组, 垂直坐标数组, marker=点型, s=大小, edgecolor=勾边色, facecolor=填充色, zorder=Z序)   # Z序就是叠放顺序
+
+    对xy轴的刻度范围
+    plt.xlim(左边界, 右边界)
+    plt.ylim(上边界, 下边界)
+
+    对xy轴的刻度位置
+    plt.xticks(刻度位置数组, 刻度文本数组)
+    plt.yticks(刻度位置数组, 刻度文本数组)
+
+    设置坐标轴
+    ax = plt.gca()   # 获取当前坐标轴
+    ax.spines["left"].set_position(("data", 0))   # 将左坐标轴移动到零点
+    ax.spines["right"].set_color(颜色)   # 设置右坐标轴颜色
+
+    设置图例位置
+    当plot设置了label设置了图例, 可以使用
+    plt.legend(loc=位置字符)
+
+    备注文本
+    更具xy在图形上在建立一个坐标系, 可以在上面书写一些内容
+    plt.annotate(备注文本, xy=需要备注的坐标位置, xycoods=目标坐标系, xytext=文本位置, textcoords=文本坐标系, fontsize=字体大小, arrowprops=箭头)
+
+
+图形对象
+    import matplotlib.pyplot as plt
+
+    plt.figure(图形对象名, figsize=窗口大小, dpi=分辨率, facecolor=颜色, ...)
+    如果图形对象名是新的, 那么就会创建一个新的图形对象, 显示时会新建一个窗口. 可以借此在一个程序中显示多个窗口.
+
+子图
+    缺省布局
+    plt.subplot(行数, 列数, 图号)
+    如: plt.subplot(2,2,1)   # 2行2列的1号图
+
+    栅格布局
+    import matplotlib.gridspec as gs
+
+    grid = gs.Gridspec(行数, 列数)   # 格栅布局器
+    plt.subplot(grid[行, 列])    # 指定在subplot中使用的栅格, 占了几行几列
+
+    自由布局
+    plt.axes([左下角水平坐标, 左下角垂直坐标, 宽度, 高度])
+    其中所有的尺寸参数都是相对比例
+
+    坐标刻度定位器
+    定位器对象 = plt.xxxLocator()
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(定位器对象)   # 主刻度
+    ax.xaxis.set_minor_locator(定位器对象)   # 次刻度
+
+散点图
+
+区域填充
+    plt.fill_between(水平坐标数组, 垂直坐标起点数组, 垂直坐标终点数组, 条件, color=颜色, alpha=透明度)
+
+柱状图
+    plt.bar(水平坐标数组, 高度数组, ec=边缘颜色, fc=填充色, label=标签文本, alpha=透明度)
+
+等高线
+    plt.contour(x, y, z, 线数, colors=颜色, linewidth=线宽)
+    plt.contourf(x, y, z, 线数, cmap=颜色映射)
+    将同等的z坐标连接起来, 达到二维展现的三维效果
+
+热像图
+    plt.imshow(矩阵, cmap=颜色映射, origin=垂直轴的方向)
+
+饼图
+    plt.pie(值列表, 间隙列表, 标签, 颜色列表, 格式串, shadow=是否带阴影, startangele=角度数)
+
+
+三维图形
+
+    三维曲面
+        from mpl_toolkits.mplot3d import axes3d
+        ax = plt.gca(projection="3d")
+        ax.plot_surface(x, y, z, rstride=行距, cstride=列距, cmap=颜色映射)   # 三维平面
+        ax.plot_wireframe(x, y, z, rstride=行距, cstride=列距, linewidth=线宽, color=颜色)   # 三维线框
+
+    三维散点
+        ax.scatter(x, y, z, s=大小, c=颜色, marker=点型)
+
+    画三维, 可以不用栅格化z轴了, 因为这是在三维表示的平面中画图
+
+极坐标系
+    plt.gca(projection="polar")
+    plt.plot...
+    plt.scatter...
+    x ,  y
+    |    |
+    v    v
+    极角 极径
+
+半对数坐标
+    plt.semilogy(...)
+    可以将小的增量显示得更明显, 小尺度会较大放大, 大尺度较小放大
+
+简单动画
+    import matplotlib.animation as anime
+    def 更新函数(顺序号):
+        更新画面帧
+    anime.FuncAnimation(图形图像, 更新函数, 生成器, interval=间隔时间毫秒)
+
+    ------------------
+
+    def 更新函数(生成值):
+        更新画面帧
+    def 生成器():
+        for ...:
+            产生新的数据
+            yield 生成值
+    anime.FuncAnimation(图形对象, 更新函数, 生成器, interval=间隔时间毫秒)

@@ -1,0 +1,239 @@
+数据类型
+------------------------------
+      类型            值
+------------------------------
+    整型             整数
+    布尔类型       true/false
+    浮点型           小数
+    Arrays         数组类型, 如[1, 2, 3]
+    Timestamp       时间戳
+    Date            时间日期
+    Object          内部文档
+    Null            空值
+    Symbol          特殊字符
+    String          字符串
+    Binary data     二进制字串
+    Code            代码
+    regex           正则表达式
+    ObjectId        ObjectId字串
+
+
+时间类型
+    mongo中存储时间的格式 ISODate
+
+    方法1 自动生成当前时间
+        db.books.insert({title: "mysql study", date: new Date()})
+
+    方法2 生成当前时间
+        db.books.insert({title: "mysql study", date: ISODate()})
+
+    方法3 将生成的时间变为字符串存储
+        db.books.insert({title: "mysql study", date: Date()})
+
+    指定时间的转换
+    ISODate()
+        功能: 生成mongo时间类型
+        参数: 如果不加参数, 则生成当前时间
+            参数格式:   "2018-10-01 00:00:00", "20181001 00:00:00", "20181001"
+        示例:
+            db.books.insert({title: "python study", date: ISODate(20181001 00:00:01)})
+
+    时间戳获取
+        ISODate().valueOf()
+            db.books.insert({title: "go language", date: ISODate().valueOf()})
+
+null
+    如果某个域存在却没有值可以设置为null
+        db.books.insert({title: "go web", price: null})
+
+    表示某个域不存在可以通过null进行匹配
+        db.books.find({date: null}, {_id: 0})
+        可以查找到date不存在的文档
+
+Object类型 (值是一个文档)
+    插入多层文档
+    db.books.insert({title: "python data structure", author: "van", publication: {price: 45, publication_date: "2017-01-30", press: "Posts and Telecom Press"}})
+    db.books.insert({title: "python web", author: "ross", publication: {price: 30, publication_date: "2017-10-22", press: "China Machine Press"}})
+
+    当使用外层文档引用内部文档的时候, 可以用 . 运算符引用内部, 在使用时需要加上引用
+    db.books.find({"publication.press": "China Machine Press"}, {_id: 0})
+    db.books.find({title: "python web"}, {$set: {"publication.price": 60}})
+
+数组的下标引用
+    使用一个数组时, 可以使用 . 序列下标的方式使用数组具体的某一项. 同样需要引号
+    db.books.update({info: "vtuber family", {$set: {"other.0": "huni"}}})   # 将数组第0个
+
+文档查找结果的有序性
+    可以通过[]取查找结果的某一项
+    db.vtuber.find({}, {_id: 0})[1]
+
+---------------------------------------
+
+索引
+
+指的是建立指定键值及所在文档中存储位置的对照清单. 使用索引可以方便我们进行快速查找, 减少遍历次数, 提高提高查找效率
+
+集合中创建索引
+    ensureIndex()
+        功能: 创建索引
+        参数: 索引类别, 索引选项
+    * 1表示为该域创建正向索引, -1表示逆向索引
+    * _id域会自动创建索引
+    示例: 
+        db.vtuber.ensureIndex({name: 1})
+
+查看集合中的索引
+    getIndexes()
+        功能: 显示所创建的索引
+
+删除索引
+    dropIndex()
+        功能: 删除索引
+        参数: 删除索引的名称
+    * _id的索引是不能被删除的
+    * 可以通过索引名或者键值对指定删除的索引
+    示例:
+        db.vtuber.dropIndex("age_1")
+        db.vtuber.dropIndex({age: 1})
+
+删除所有索引
+    dropIndexes()
+
+索引类型
+
+    复合索引
+        db.vtuber.ensureIndex({name: 1, age: -1})
+        根据多个域创建一个索引
+
+    数组索引
+    如果对某个数组域创建索引, 那么表示对数组中的每个值均创建了索引, 通过数组中单个值查询, 也是索引查询
+        db.vtuber.ensureIndex({"other": 1})
+
+    子文档索引
+    如果对一个域创建索引, 值是一个文档则也会创建索引
+    如果对子文档某一个域进行索引创建, 则只有通过子文档中的该域查找时为索引查找
+        db.books.ensureIndex({"publication": 1})
+        db.books.find({"publication": {文档全部内容}})   # 只有这样才能使用文档的索引
+
+        db.books.ensureIndex({"publication.press": 1})   # 为文档中的某项创建索引, 查找时索引可用
+
+    覆盖索引
+    查找时只获取索引项的内容, 而不必去获取原数据中的其他内容, 这样就不去连接原来的数据直接返回即可
+        db.vtuber.find({name: "siro"}, {_id: 0, name: 1})   # name为索引项, 显示也只要name域
+
+    唯一索引 unique
+    创建索引时希望索引域的值均不相同, 也可以据此限制索引域的值
+        db.vtuber.ensureIndex({name: 1}, {"unique": true})   # 创建name的唯一索引, 前提是name值不同
+        当对某个域创建了唯一索引后, 即不允许在插入相同的值的文档
+
+    稀疏索引 (间隙索引) sparse
+    只针对有指定域的文档创建索引表, 没有该域的文档, 不会插入到索引表中
+        db.vtuber.ensureIndex({"info": 1}, {sparse: true})
+
+索引约束
+    1. 影响数据的插入, 删除, 修改操作. 当数据发生改变时, 索引表必须同步更新
+    2. 索引也是需要占用一定的空间资源
+    综上:
+        当数据库大量的操作是插入, 修改, 删除操作, 而非查询操作时, 不适合创建索引. 
+        数据量比较小时, 考虑到空间成本, 也不适合创建索引. 
+        即使适合创建索引的情况, 也不是索引越多越好.
+
+---------------------------------------
+
+聚合
+
+对数据文档进行整理统计
+
+    db.collectionName.aggregate()
+        功能: 聚合函数, 配合聚合条件进行数据整理统计
+        参数: 聚合条件
+
+聚合操作符
+
+    $group 分组, 一般和分组操作符配合使用确定按什么分组
+
+    分组操作符   (和$group配合)
+
+        $sum 求和
+            db.vtuber.aggregate({$group: {_id: "$gender", num: {$sum: 1}}})   # 按照gender分组, 每一个值统计加1
+                         聚合      分组     按gender分组    统计结果名  
+            db.vtuber.aggregate({$group: {_id: "$gender", ageSum: {$sum: "$age"}}})   # 按照gender分组, 统计age和
+
+        $avg 求均值
+            db.vtuber.aggregate({$group: {_id: "$gender", ageAvg: {$avg: "$age"}}})   # 按照gender分组, 统计平均age
+
+        $min 组中最小值
+            db.vtuber.aggregate({$group: {_id: "$gender", ageMin: {$min: "$age"}}})    # 按照gender分组, 求每组age的最小值
+        
+        $max 组中最大值
+            db.vtuber.aggregate({$group: {_id: "$gender", ageMax: {$max: "$age"}}})    # 按照gender分组, 求每组age的最大值
+
+        $first 每个分组中第一个键值
+            db.vtuber.aggregate({$group: {_id: "$gender", name: {$first: "$name"}}})   # 按照gender分组, 每组第一个name键与其值
+
+        $last 每个分组中最后一个键值
+            db.vtuber.aggregate({$group: {_id: "$gender", name: {$last: "$name"}}})   # 按照gender分组, 每组最后一个name键与其值
+
+    $project
+        用于修饰文档的显示结构
+        示例:
+            db.vtuber.aggregate({$project: {_id: 0, name: 1, age: 1}})
+            db.vtuber.aggregate({$project: {_id: 0, Name: "$name", Age:"$age"}})
+                
+    $match
+        过滤数据
+        操作符同find的query
+        示例:
+            db.vtuber.aggregate({$match: {gender: "F"}})   # 过滤出gender为"F"的
+
+    $skip
+        跳过前几条文档
+        示例:
+            db.vtuber.aggregate({$skip: 2})   # 跳过前面2个文档
+
+    $limit
+        显示几条文档
+        示例:
+            db.vtuber.aggregate({$limit: 2})   # 前面2个文档    
+
+    $sort
+        排序, 1升序, -1降序
+        示例:
+            db.vtuber.aggregate({$sort: {name: 1}})   # 按name升序排
+
+    聚合管道
+        将前一个聚合操作的结果给下一个聚合操作继续执行, 类似于关系型数据库子查询
+            db.collectionName.aggregate([{❶}, {❷}, ...])   # ❶的结果将会传递给❷继续执行   
+        示例:
+            match---> project ---> sort
+            db.vtuber.aggregate([{$match: {age: {$gt: 4}}}, {$project: {_id: 0, name: 1, age: 1}}, {$sort: {name: -1}}])        
+            group ---> match
+            db.vtuber.aggregate([{$group: {_id: "$gender", num: {$sum: 1}}}, {$match: {$nor: [{_id: "M"]}, {id: "F"}}])
+            
+---------------------------------------
+
+目录04
+
+数据类型    Date()   ISODate()   valueOf()
+            null的使用
+
+Object : 通过 . 取内部文档, 通过 . 取数组索引
+
+索引创建 ensureIndex()
+        唯一索引
+        稀疏索引
+
+查看索引 getIndexes()
+
+删除索引 dropIndex()
+        dropIndexes()
+
+聚合操作 aggregate()
+
+    聚合操作符: $group   $match   $project   $limit   $skip   $sort
+
+
+
+
+
+

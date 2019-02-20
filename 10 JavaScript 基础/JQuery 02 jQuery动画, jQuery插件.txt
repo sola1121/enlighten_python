@@ -1,0 +1,15 @@
+jQuery动画
+    1. 基本的显示 / 隐藏
+        语法:
+            显示: $obj.show()   或者   $obj.show("执行时间")   // 单位ms
+            隐藏: $obj.hide()   或者   $obj.hide("执行时间")   // 单位ms
+    2. 滑动式显示 / 隐藏
+        语法:
+            显示: $obj.slideDown()   或者   $obj.slideDown("执行时间")   // 单位ms
+            隐藏: $obj.slideUp()   或者   $obj.slideUp("执行时间")   // 单位ms
+    3. 淡入淡出式显示 / 隐藏
+        语法:
+            显示: $obj.fadeIn()   或者   $obj.fadeIn("执行时间")   // 单位ms
+            隐藏: $obj.fadeOut()   或者   $obj.fadeOut("执行时间")   // 单位ms
+
+jQuery插件

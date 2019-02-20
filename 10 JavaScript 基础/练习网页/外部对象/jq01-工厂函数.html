@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jQuery_3.3.1.js"></script>
+</head>
+<body>
+    <div id="main">这是id为main的div元素.</div>
+    <button onclick="btnClick()">获取元素</button>
+    <button onclick="dom2jq()">DOM->jQuery</button>
+    <button onclick="jq2dom()">jQuery->DOM</button>
+</body>
+    <script>
+        function btnClick(){
+            // 通过jquery选择器获取id="main的元素
+            var main_obj = $("#main")
+            console.info(main_obj)
+            console.info(main_obj.html())
+        }
+        function dom2jq(){
+            // 1. 通过DOM的操作, 得到id为main的元素
+            var main_obj = document.getElementById("main")
+            // 2. 再将其转换为jq对象
+            var $main_obj = $(main_obj)
+            $main_obj.html("DOM转换JQuery对象成功")
+        }
+        function jq2dom(){
+            // 1. 使用jQuery获取id为main的元素
+            var $main_obj = $("#main")
+            // 2. 再将其转换为dom对象
+            var main_obj = $main_obj[0]   // var main_obj = $main_obj.get(0)
+            main_obj.innerHTML="jQuery转换DOM对象成功"
+        }
+    </script>
+</html>

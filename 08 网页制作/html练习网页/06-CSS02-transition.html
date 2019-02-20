@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #div-size01{
+            background-color: rgb(183, 241, 74);
+            color: black;
+            width: 40%;
+        }
+        #div-image01{
+            width:500px;
+            height:500px;
+            background-image: url("images/robot.png");
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+        }
+        #div-font01{
+            width: 50%;
+            margin-left: 25%;
+            padding: 1em 1em 1em;
+            border: black 1px solid;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 18pt;
+            font-style: italic;
+            font-weight: 900;
+            text-align: justify;
+        }
+        /* 谜一样的居中显示 */
+        #div-font02{
+            margin-left: 25%;
+            width: 200px;
+            height: 200px;
+            text-align: center;
+            line-height: 1.5;
+            overflow: scroll;
+        }
+        #div-table01{
+            width: 10%;
+            margin-left: 40em; 
+        }
+        #div-table01 table, #div-table01 td{
+            border: solid black 5px;
+            border-collapse: collapse;
+        }
+        /* 之下是过渡效果的实验 */
+        #div-trans01{
+            width: 25%;
+            margin-left: 25%;
+            height: 5em;
+            background-color: rgb(155, 226, 40);
+            transition-property: background-color, width, border-radius;
+            transition-duration: 5s;
+        }
+        #div-trans01:hover{
+            
+            background-color: rgb(52, 191, 233);
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body text-align="center">
+    <div id="div-size01">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed quia vero doloribus! 
+        Cumque vitae quasi repellendus voluptatum voluptas provident numquam neque laborum omnis possimus, 
+        dolorem in eum perspiciatis eveniet commodi!
+    </div>
+    <div id="div-image01">
+    </div>
+    <hr>
+    <div id="div-font01">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+        Suscipit iste ducimus ex dolore unde aliquam quod! Deleniti, velit odit doloribus, 
+        aliquid magni vero amet saepe ad, labore iure iusto dolore?
+    </div>
+    <div id="div-font02">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>
+        Eius nam repellat et earum quas voluptatibus excepturi tempore a quos facilis qui, <br>
+        corporis assumenda nisi eaque voluptates, rem doloribus libero eligendi. <br>
+    </div>
+    <hr>
+    <div id="div-table01">
+        <table>
+            <tr>
+                <td>python</td>
+                <td>go</td>
+                <td>c</td>
+                <td>c++</td>
+            </tr>
+            <tr>
+                <td>javescript</td>
+                <td>shell</td>
+                <td>sql</td>
+                <td>java</td>
+            </tr>
+        </table>
+    </div>
+    <div id="div-trans01">
+        测试过渡效果
+    </div>
+</body>
+</html>

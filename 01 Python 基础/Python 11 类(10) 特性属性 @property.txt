@@ -1,0 +1,57 @@
+特性属性 @property   (似乎被叫做魔法属性)
+
+作用:
+    实现其他语言所谓的getter和setter方法
+    用来模拟一个属性,通过property装饰器可以对模拟属性的赋值和取值加以控制
+示例1:
+class Student:
+    def __init__(self, a):
+        self.__age = a   # 封装保存年龄的属性
+
+    def setage(self, a):   # setter方法来改变属性的值
+        print("setage ran.")
+        if 0 <= a <= 140:
+            self.__age = a
+
+    def getage(self):   # getter方法用来获取属性的值
+        print("getage ran.")
+        return self.__age
+    
+    age = property(setage, getage)
+
+s1 = Student(20)
+print("s1绑定的对象年龄是: %s" % s1.getter())
+s1.setage(40)
+
+s1.age = 10000 
+
+
+示例2:
+# 用装饰器实现getter和setter
+class Student:
+    def __init__(self, a):
+        self.__age = a   # 封装保存年龄的属性
+
+    @property
+    def age(self, a):   # setter方法来改变属性的值
+        print("setage ran.")
+        if 0 <= a <= 140:
+            self.__age = a
+
+    @age.setter   # 等同于将age = property(setter)
+    def age(self, value):   # getter方法用来获取属性的值
+        if isinstance(value, int):
+            raise TypeError
+        if value < 0 or value > 140:
+            raise ValueError
+        self.__age = value
+        return self.__age
+
+s1.age = 1000   # 会报错, 实现了设置变量属性时的判断值
+print("s1对象的年龄是:", s1.age)
+
+
+理解: 用来模拟get() 和 set() 方法, 让类中的变量属性不会裸露在外被直接调用, 也可以增加判断变量属性的一些限制条件
+      不用在额外定义get() 和 set() 方法, 使用 @ 原函数名.setter 的方法将具有set()的特征, 同理 @ 原函数名 getter
+      使用看上去任然像是直接调用变量属性, 实则调用了prperty中的setter和 getter
+      

@@ -1,0 +1,39 @@
+本地套接字--进程间通信方法之一  用于Linux和Unix系统
+
+Linux下通过ls -l查看目录下内容
+文件的类型
+b(块设备文件)   c(字符设备文件)   d(文件夹)   -(普通文件)   l(连接文件)   s(套接字文件)   p(管道文件)
+
+本地套接字文件的意义: 在Linux/Unix操作系统下, 提供本地进程间通信的一种方式                                                       
+
+本地套接字创建流程
+服务端:
+1) 创建unix套接字
+    server = socket(AF_UNIX, SOCK_STREAM, 0)
+2) 绑定套接字文件
+    file_address = './link_file'   # 在创建之前应该判断是否已经存在文件, 若果存在, 要做一定的处理
+    server.bind(file_address)   # 文件会被自动创建
+3) 监听
+    server.listen(20)
+4) 接收连接
+    conn, addr = server.accept()
+5) 消息收发
+    conn.recv
+    conn.send
+
+客户端:
+1) 创建unix套接字
+    client = socket(AF_UNIX, SOCK_STREAM, 0)
+2) 连接已存在的套接字文件
+    client.connect(file_address)
+3) 消息收发
+    client.send
+    client.recv
+
+
+os.unlink() 或 os.remove()
+功能: 删除某个文件
+参数: 一个可以表示路径的字符串
+os.path.exists()
+功能: 判断一个问价您是否存在
+参数: 一个可以表示路劲的字符串

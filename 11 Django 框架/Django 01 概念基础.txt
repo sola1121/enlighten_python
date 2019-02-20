@@ -1,0 +1,147 @@
+Django 框架
+
+什么是框架
+    框架是一个为了解决开放性问题而存在的一种结构
+    框架本身提供了一些最基本的功能. 我们只需要在框架的基础功能之上搭建属于自己的操作即可
+python中的WEB框架
+    Django : 功能完善的WEB框架
+    Tornado : 异步框架
+    Flask : 轻量级的WEB框架
+    ... ...
+
+---------------------------------------
+
+Web与服务器
+    1) WEB: 表示用户可以浏览的网页内容(HTML, CSS, JS)
+    2) 服务器
+        能够给用户提供服务的机器
+        (1) 硬件 与 软件
+            硬件范畴: 一台机器
+            软件范畴: 一个能够接收用户请求并给出响应的程序
+                APACHE
+                TOMCAT
+                IIS
+                Nginx
+                ... ... 
+        (2) 作用
+            ● 存储WEB所需要的信息(HTML, 图片, 文件)
+            ● 能够处理用户的请求(request), 并给出响应(response)
+            ● 执行服务器端程序: 数据库操作, ...
+        (3) WEB 与 服务器之间的关系
+
+---------------------------------------
+
+Django框架 
+    使用python语言来开发服务器端处理程序
+    1) 什么是Django
+        是一个开源框架, 2005年发布, 采用python语言开发. 早起是做欣慰以及内容管理网站的. 提供了非常强大的后台管理系统.
+    2) Django的框架模式 - MTV
+        M : Models 层
+            模型层, 负责数据库的建模以及CRUD(create, retrieve, update, delete)的操作
+        T : Templates 层
+            模板层, 用于处理用户显示的内容, 如HMTL
+        V : Views 层
+            视图层, 处理与用户交互的部分操作, 从模型中获取数据, 再将数据发送给模板, 并显示给用户
+        一般的框架模式 MVC                
+            M : models 模型层
+                模型层, 负责数据库的建模以及CRUD的操作                    
+            V : views 视图层
+                用于处理用户显示的内容, 处于请求和响应之间, 是处理请求, 返回响应的操作函数
+            C : controllers 控制层
+                处理与用户交互的部分内容, 中模型中获取数据, 再交给视图层, 再显示给用户
+            与Django模式的对应关系
+                M --- M
+                T --- V
+                V --- C
+
+3. Django框架的使用
+    1) Django介绍
+        网址: 官网 www.djangoproject.com
+             中文文档网 djangobook.py3k.cn
+    2) Django的安装
+        (1) 查看已安装的Django版本
+            1. 进入到终端以及python的交互模式
+                python3 / ipython3
+            2. 在交互模式中输入import django
+                如果未报错: 说明已经安装过django
+                如果报错: 说明从未安装
+            3. 查看已安装的版本
+                交互模式中: django.VERSION
+        (2) 安装
+            1. 在线安装 - 使用包管理器pip
+                sudo pip3 install django
+                (默认安装的Django最高版本)
+                sudo pip3 install django==1.11.8
+                (指定安装1.11.8版本)
+
+            2. 离线安装
+                1) 下载所需的Django安装包
+                2) 在环境中解压Django包
+                    tar -xvf Django-1.11.8.tar.gz
+                3) 进入到 Django-1.11.8 中
+                4) 安装
+                    sudo python3 setup.py install
+    3) 使用Django
+        (1) 创建Django项目
+            使用django-admin 指令, 创建Django项目
+                django-admin startproject 项目名
+        (2) 启动服务, 用于访问
+            使用manage.py文件, 启动服务
+            python3 manage.py runserver [地址:端口号]
+        (3) 访问网站
+			启动服务成功后，在浏览器中，通过以下地址访问：
+			http://127.0.0.1:8000
+			http://localhost:8000
+
+			http://localhost:8000/admin
+ 
+Django的项目结构介绍
+    1) manage.py
+        负责执行django中的各项操作文件
+        如
+            启动服务
+            创建管理员
+            创建应用
+            数据库同步操作
+
+        调用方式
+            (1) python3 manage.py 子命令
+            (2) ./manage.py 子命令   # 要注意python版本
+    2) 主目录(名称与项目名称相同)
+        (1) __init__.py
+            项目初始化文件, 每当服务器启动的时候, 都会自动执行
+        (2) urls.py
+            项目的基础url(路由)配置文件
+        (3) wsgi.py
+            应用服务器配置文件, 进行部署的时候使用
+        (4) settings.py
+            项目的主设置文件
+            1、BASE_DIR
+				获取当前项目的根目录路径
+			2、DEBUG ：调试模式
+				开发过程, 推荐使用True
+				上线运行, 推荐改为False
+			3、ALLOWED_HOSTS
+				设置允许访问本项目的地址列表
+				如果不设置的话，只有本机能访问(localhost/127.0.0.1)能访问
+				推荐写'*', 表示任何地址都允许访问该项目(局域网)
+
+				python3 manage.py runserver 0.0.0.0:8000   # 使用0.0.0.0这是广播地址, 局域网内的计算机都可以访问了
+				./manage.py runserver 0.0.0.0:8000
+            4. INSTALLED_APPS
+                指定已安装的应用，如果有自定义应用的话，需要在此位置进行注册
+            5. MIDDLEWARE
+                指定注册的中间件
+            6. ROOT_URLCONF
+                指定项目的基础路由配置文件, 一般urls.py文件
+            7. TEMPLATES：指定模板的信息
+            8. DATABASES：指定数据库的信息
+            9. LANGUAGE_CODE
+                指定网站的显示语言，如果要使用中文则可以修改为 zh-Hans
+            10. TIME_ZONE
+                指定时区，如果指定中国时区，则可以修改为  Asia/Shanghai
+
+
+自我理解
+    MTV 在M(models)中书写数据库映射, 在T(template)中书写网页, 需要配置settings.py, 在V(views)中写处理代码, 是实际的处理运行
+    

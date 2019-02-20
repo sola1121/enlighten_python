@@ -1,0 +1,270 @@
+jQuery
+    1. 介绍
+        javascript query, 其是一个轻量级的JS库, 是一个被封装好的JS文件, 提供了更为简便的元素操作方式
+        JQuery封装了DOM
+        jQuery核心理念: Write Less Do More
+        jQuery版本: 
+            jQuery 2.x 不再向下兼容IE6,7,8
+            jQuery 1.11.x
+    2. 使用JQuery
+        1) 引入JQuery文件
+            <script src="所在jquery文件"></script>
+            注意: 该文件的引入操作必须要放在其他JQuery操作之前
+        2) 使用JQuery
+    3. jQuery对象
+        1) 什么是jQuery对象
+            jQuery对象是由jQuery对页面元素进行封装后的一种体现
+            jQuery中所提供的所有操作都只针对jQuery对象其他对象(如:DOM对象)无法使用
+        2) 工厂函数 - $()
+            想要获取jQuery对象的话, 则必须使用工厂函数$()
+            在$()中允许传递一个选择器或DOM对象做为参数, $()能够将选择器和DOM对象全部封装成jQuery对象再进行返回
+            $("选择器")
+            示例
+                // 获取id为div_block的div
+                var obj = $("#div_block")
+        3) DOM对象和JQuery对象之间的转换
+            DOM对象: 不能使用jQuery提供的操作
+            jQuery对象: 不能使用DOM提供的操作
+            (1) 如何将DOM对象转换为jQuery对象
+                语法: 
+                    // 直接使用工厂函数将DOM对象转换为jQuery对象
+                    var 变量 = $(DOM对象);
+                    注意: 所有的jQuery对象在起名的时候, 最好在变量前加$, 主要用于和DOM对象的区分
+            (2) 将jQuery对象转换为DOM对象
+                获取的DOM对象一般都是一个数组, 需要使用序列值从中取值
+                从数组中取出来的东西都是DOM对象
+                1. var dom对象 = jQuery对象[0]
+                2. var dom对象 = jQuery对象.get(0)
+
+---------------------------------------
+
+jQuery选择器
+    1. 作用
+        获取页面上的元素们, 返回值都是由jQuery对象所组成的 数组
+        语法: $("选择器")
+    2. 常用选择器
+        1) 基本选择器
+            (1) id选择器
+                $("#id")
+                返回指定id名的元素
+            (2) 类选择器
+                $(".classname")
+                返回指定类名的所有元素
+            (3) 元素选择器
+                $("element")
+                返回页面中指定标签的所有元素
+            (4) 群组选择器/复合选择器
+                $("selector1, selector2, ...")
+                返回满足函数内所有选择器的元素们
+        2) 层级选择器
+            (1) $("selector1 selector2 ...")
+                后代选择器
+            (2) $("selector1>selector2")
+                子代选择器
+            (3) $("selector1+selector2")
+                相邻兄弟选择器
+                作用: 匹配紧紧跟在selector1后面且满足selector2选择器的元素
+            (4) $("selector1~selector2")
+                通用兄弟选择器
+                作用: 匹配selector1后面所有满足selector2选择器的元素
+        3) 基本过滤选择器
+            过滤选择器通常都会配合着其他的选择器一起使用
+            (1) :first
+                只匹配一组元素中的第一个元素
+                示例
+                    $("p:first")   // 匹配到第一个
+            (2) :last
+                只匹配一组元素中的最后一个元素
+            (3) :not("selector")
+                在一组元素中, 将满足selector选择器的元素排除出去
+            (4) :odd
+                匹配jQuery对象奇数下标的
+            (5) :even
+                匹配jQuery对象偶数下标的
+            (6) :eq(index)  - equal
+                匹配下标等于index的元素
+            (7) :gt(index)
+                匹配下标大于index的元素
+            (8) :lt(index)
+                匹配下标小于index的元素
+        4) 属性过滤选择器
+            依托于html元素的属性来进行元素过滤的
+            使用方括号进行过滤
+            (1) [attribute]
+                作用: 匹配包含指定属性的元素
+                示例
+                    div[id]  匹配具备id属性的div元素
+            (2) [attribute=value]
+                作用: 匹配attribute属性值为value的元素
+                示例
+                    input[type=text]  匹配到文本框   // 不用引号
+            (3) [attribute!=value]
+                作用: 匹配attribute属性值不是value的元素
+            (4) [attribute^=value]
+                作用: 匹配attribute属性值是以value字符开头的元素
+                示例
+                    p[class^=col]  匹配到属性class以col开头的p标签
+            (5) [attribute$=value]
+                作用: 匹配attribute属性值是以value字符结尾的元素
+            (6) [attribute*=value]
+                作用: 匹配attribute属性值中包含value字符的元素
+        5) 子元素过滤选择器
+            (1) :first-child
+                匹配属于其父元素中的首个子元素
+            (2) :last-child
+                匹配属于其父元素中的最后一个子元素
+            (3) :nth-child
+                匹配属于其父元素中第n个子元素
+
+---------------------------------------
+
+jQuery操作DOM
+    1. 基本操作
+        1) html()
+            作用: 获取或设置jQuery对象中的HTML内容
+            类似DOM的innerHTML属性
+            示例
+                $("div_block").html()
+                $("div_block").html("设置值")
+        2) text()
+            作用: 获取或设置jQuery对象中的text内容
+            类似DOM的innerText属性
+        3) val()
+            作用: 获取或设置jQuery对象中的value内容 
+            类似DOM的value属性
+        4) 属性操作
+            (1) attr()
+                作用: 读取或设置jQuery对象的属性值
+                示例
+                    $obj.attr("id")   // 获取$obj对象的id属性值
+                    $obj.attr("id", "block_name")   // 设置$obj对象的id属性值为block_name
+            (2) removeAttr("属性名")
+                作用: 删除jQuery对象的属性名指定属性
+                示例
+                    $obj.removeAttr("class")   // 删除$obj对象的class属性
+    2. 样式操作
+        1) attr()
+            示例
+                $obj.attr("class", "red_block")   // 设置$obj对象的类名
+        2) addClass("className")
+            作用: 将className添加到元素的class值后
+                  返回当前jQuery对象
+            示例
+                $obj.addClass("the_class")   // 向$obj中添加class属性
+        3) removeClass("className")
+            如果无参数, 则清空类选择器
+            如果有参数, 则删除对应的类
+            示例
+                $obj.removeClass()   // 清空$obj的所有类选择器
+                $obj.removeClass("the_class")   // 将the_class类选择器从$obj对象中移除
+        4) toggleClass("className")
+            切换样式
+                元素如果具备className选择器, 则删除
+                元素如果没有className选择器, 则添加
+        5) css("css样式名")
+            获取对应css样式名的值
+            示例
+                $obj.css("width")   // 获取$obj对象的width值
+        6) css("css样式名", "样式值")
+            设置对应css样式名的样式
+            示例
+                $obj.css("backgroud-color", "blue")   // 设置$obj对象的背景色为blue
+        7) css(Json对象)    
+            Json(JavaScript Object Notation)对象: 是一种约束了格式的对象表现形式
+            Json对象的表示方式
+                (1) Json对象值必须用{}括起来
+                (2) 使用键值对的方式来声明数据(表示属性和值)
+                (3) 所有属性在使用时必须使用""括起来, 值如果是字符串的话, 也必须使用""括起来
+                (4) 属性和值之间使用:连接
+                (5) 多对属性和值之间使用,隔开
+                示例
+                    $obj.css({"width": "200px", "height": "200px", "margin": "0 auto"})
+    3. 遍历节点
+        1) children() / children("selector")
+            获取某jQuery对象的所有子元素或带有指定选择器的子元素
+            注意: 只考虑子代元素, 不考虑后代元素
+        2) next() / next("selector")
+            获取某jQuery对象的下一个兄弟元素, 写入selector, 此兄弟元素得满足该选择器
+        3) prev() / prev("selector")
+            获取某jQuery对象的上一个兄弟元素, 写入selector, 此兄弟元素得满足该选择器
+        4) siblings() / siblings("selector")
+            获取某jQuery对象的所有兄弟元素, 写入selector, 这些兄弟元素得满足该选择器
+        5) find("selector")
+            查找满足selector选择器的所有后代元素
+        6) parent()
+            查找某jQuery对象的父元素
+    
+    4. 创建对象
+        语法: $("创建标记")
+        示例
+            var $new_div1 = $("<div></div>")   // 动态创建一对div
+            $new_div1.attr("class", "dynamic_div")   // 使用JQuery方法添加属性
+            var $new_div2 = $("<div class='dynamic_div'></div>")   // 动态创建一对具有属性的div
+    5. 插入元素
+        作用: 将创建好的元素插入到网页中
+        1) 内部插入
+            作为元素的子元素插入到网页中
+            (1) $obj.append($new_obj)   // 将$new_obj元素对象插入到$obj元素中的最后一个子元素位置处(追加)
+            (2) $obj.prepend($new_obj)   // 将$new_obj元素对象插入到$obj元素中第一个子元素位置处
+        2) 外部插入
+            作为元素的兄弟元素插入到网页中
+            (1) $obj.after($new_obj)   // 将$new_obj元素对象作为$obj的下一个兄弟元素插入
+            (2) $obj.before($new_obj)   // 将$new_obj元素对象作为$obj的上一个兄弟元素插入
+
+    6. 删除元素
+        $obj.remove()   // 删除所有$obj对象的对应的元素
+
+---------------------------------------
+
+JQuery中的事件处理
+    1. jQuery的页面加载后的执行
+        类似于window.onload 但不同于window.onload
+        window.onload在网页加载完毕后开始执行
+        jQuery加载后执行是在DOM树加载完毕的时候就开始执行
+        所以jQuery的加载执行比window.onload靠前
+        1) 
+            $(document).ready( function(){
+                // 页面的初始化操作
+                // DOM加载完成后就开始运行
+            } )
+        2) 
+            $().ready( function(){
+                // 页面的初始化操作
+                // DOM加载完成后就开始运行
+            } )
+        3) 
+            $( function(){
+                // 页面的初始化操作
+                // DOM加载完成后就开始运行
+            } )
+    2. jQuery的事件绑定
+        1) 方式1 - 通过bind()函数
+            $obj.bind("事件名称", 对应事件处理函数)
+            示例
+                $obj.bind("click", function(){
+                    // 事件的行为操作
+                    console.info("hello world.")
+                })
+        2) 方式2 - 直接使用事件名称
+            在jQuery中所有事件都被封装为对应函数
+            $obj.事件名称(事件处理函数)
+            示例
+                $obj.click( function(){
+                    // 通过this来触发该事件的DOM对象
+                })
+    3. 事件对象 - event
+        在绑定事件的时候, 允许传递event参数来表示事件对象
+        1)
+            $obj.bind("click", function(event){
+                // event表示当前时间的事件对象
+            })
+        2) 
+            $obj.click( function(event){
+                // event表示当前事件的事件对象
+            })
+        event的使用方式与原生JS事件中的event使用方式一致
+        如:
+            event.stopPropagation()   // 阻止事件冒泡
+            event.offsetX
+            event.offsetY
+            event.target   // 获取事件源

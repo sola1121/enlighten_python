@@ -1,0 +1,75 @@
+1. 什么是运维
+    服务器的运行维护
+2. 名词
+    1) IDC(互联网数据中心)
+        服务器租用, 服务器托管, 机柜租用
+        为了防止断电, 会配置如UPS等一些列的设备
+    2) 服务器的 虚拟化
+    3) 负载均衡
+    4) CDN
+        分发网络
+    5) 监控软件
+        常用的监控软件: nagios, zabbix
+        监控服务器各种状态
+3. 常用Linux操作系统
+    RedHat
+    CentOS
+    Ubuntu
+4. Linux常用命令
+    1) ifconfig
+        查看IP地址和MAC地址
+        # windows中是ipconfig
+    2) ping
+        测试网络连通性, 使用-c选项指定连接次数
+        格式
+            ping IP地址/域名 -c 次数
+    3) nslookup
+        解析域名对应的IP地址
+        示例
+            nslookup www.bilibili.com 
+    4) 重启网卡
+        示例
+            sudo /etc/init.d/networking restart
+    5) top
+        Linux下的任务管理器, 动态显示当前所有进程CPU及内存使用率, q退出
+    6) ps -aux
+        显示系统进程的命令(可用于寻找进程PID)
+        示例
+            ps -aux | grep "mysql"
+    7) kill
+        杀死某个进程
+        格式
+            sudo kill 进程PID号
+    8) ssh
+        远程连接到服务器
+        格式
+            ssh 用户名@IP地址
+    9) scp
+        远程赋值文件/目录
+        格式
+            scp 指定文件 用户名@IP地址:远程存放绝对路径
+    10) wc -l
+        统计文件的行数
+        示例
+            wc -l /etc/passwd
+    11) sort(排序)
+        对文件中的内容进行排序
+        格式
+            sort 指定文件
+    12) uniq -c
+        去除重复行(相邻的行), 并使用-c选项统计每行出现的次数
+        格式
+            sort 指定文件 | uniq -c
+    13) df -h
+        查看磁盘的使用情况
+    14) chmod
+        修改文件权限
+
+5. 运维工具
+    1) xshell(软件, 安装在windows)
+        安全终端模拟软件
+    2) xshell使用方法
+        文件->新建->输入服务器IP地址->输入用户名->输入密码->确认连接
+    3) windows <-> Linux
+        使用lrzsz
+            sudo apt-get install lrzsz

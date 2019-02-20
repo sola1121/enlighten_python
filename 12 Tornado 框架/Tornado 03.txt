@@ -1,0 +1,48 @@
+模板中, 块(block)用法
+    在不同的模块中会存在一些相同的标签或者内容, 为了避免每次都重复写这些相同的内容, 我们可以把他们提取到一个公共的模板中(the_basement.hmtl), 让不同的模板通过继承公共模板获得这些内容.
+    在公共模板中, 使用{% block 块名 %}{% end %}标识除不同的木块可能存在不同内容的地方.
+    不同的木块中在使用公共模板时, 一定把继承写在第一行{% extends the_basement.html %}
+
+模块(module)的使用
+    from tornado.web import UIModule
+    1) 创建一个文件夹存放模块文件. 该文件夹必须建立在模板文件夹下
+    2) 创建模块问价. (html文件) 
+    3) 关联模板文件和模块文件.
+        # 在模板中书写
+        {% module 自定义模块函数() %}
+    4) 进行配置. 在Application中增加参数
+        ui_modules = {"自定义模块函数名": 类名}    
+    5) 创建配置时对应的类, 必须继承自UIModule, 重写钩子方法render, 该方法必须返回一个字符串, 作为模板与模块关联内容. 
+       所以这里应该返回的是模块文件转成的字符串, 直接调用UIModule的render_string方法就可以完成
+       注意: 如果模块中有变量, 表达式等内容, 必须在render_string方法中对变量, 表达式进行相应的赋值.
+
+    UIModule中, request属性引用着HttpServerRequest类型的对象, 可以帮助我们完成一些预请求相关的操作. 比如, 获取请求参数
+    模块的意义
+        1) 模块是可以复用的. 利用已有的模块可以非常方便的拼出新的页面/模板
+        2) 可以进行协同开发
+        3) 通过模块看上去更加简洁
+
+    自我理解: module是交给模板调用的方法, 他在模板中注册, 会在模板在服务器生成时进行调用
+             当请求发送给服务器 RequestHandler基类 -- 通过render调用模板 --> 如果模板中有UIModule的方法, 将会执行 --> 生成最终页面
+             他的基类是UIModule, 从名称可以看出来其是定义UI的
+
+
+Tornado的转义
+    一种安全机制, 防止用户在页面中嵌入JavaScript代码, 这种安全机制是自动开启的, 可以通过设置进行关闭
+    给Application添加参数: autoescape=None
+
+
+HttpServerRequest对象的常用属性
+    method HTTP的请求方式，如GET或POST;
+    host 被请求的主机名；
+    uri 请求的完整资源标示，包括路径和查询字符串；
+    path 请求的路径部分；
+    query 请求的查询字符串部分；
+    version 使用的HTTP版本；
+    headers 请求的协议头，是类似字典的对象，支持关键字索引的方式获取特定协议头信息，例如：request.headers[“Content-Type”]，也可以用get的方式获取指定特定协议头信息；
+    body 请求体数据（二进制格式）；
+    remote_ip 客户端的IP地址；
+    files 用户上传的文件，为字典类型
+
+
+

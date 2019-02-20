@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form表单对象</title>
+</head>
+<body>
+    <form action="/05_form/" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            <p>{{ field.label }}: {{ field}}</p>
+        {% endfor %}
+        <input type="submit" value="confirm">
+    </form>
+    <hr>
+
+    <form>
+        {{ form.as_p }}
+        <p><input type="submit" value="confirm"></p>
+    </form>
+    <hr>
+
+    <form>
+        <ul>{{ form.as_ul }}</ul>
+        <li><input type="submit" value="confirm"></li>        
+    </form>
+</body>
+</html>

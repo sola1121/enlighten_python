@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="showTime()">格式化时间</button>
+    <script>
+        function zeroFormat(value){
+            if (value<10){
+                value = "0" + value
+            }
+            return value
+        }
+        
+        function showTime(){
+            var now = new Date()
+            var year = now.getFullYear()
+            var month = zeroFormat(now.getMonth() + 1)
+            var date = zeroFormat(now.getDate())
+            var day = now.getDay()
+            var hour = zeroFormat(now.getHours())
+            var minute = zeroFormat(now.getMinutes())
+            var second = zeroFormat(now.getSeconds())
+            var day_arr = ["日", "一", "二", "三", "四", "五", "六"]
+            day = day_arr[day]
+            var time_msg = year + "年" + month + "月" + date + "日" + "  " + hour + ":" + minute + ":" + second + "  星期" + day
+            console.info(time_msg)
+        }
+    </script>
+</body>
+</html>

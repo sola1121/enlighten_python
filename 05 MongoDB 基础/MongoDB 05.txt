@@ -1,0 +1,59 @@
+固定集合
+
+Mongo中可以创建大小固定的集合, 称之为固定集合, 固定集合的性能出色, 适用于很多场景
+特点: 插入速度快, 顺序查询速度快, 能够淘汰早起数据, 可以控制结合空间
+应用: 日志处理, 临时缓存
+
+创建
+    db.createCollection(collectionName, {capped: true, size: ★, max: ★})
+        size: 设置固定集合的大小, 单位kb
+        max: 最多能容纳多少文档
+        注: size和max都可以单独写
+    示例: 
+        db.createCollection("log", {capped: true, size: 10, max: 3})  # 创建一个最多包含三条文档的集合
+
+
+文件存储
+
+数据库存储文件的方式
+    1. 在数据库中以字符串的方式存储文件在本地的路径
+        优点: 节省数据库空间
+        缺点: 当数据库或者文件位置发生变化即需要相应修改数据库内容
+    
+    2. 将文件已二进制数据的方式存放在数据库里
+        优点: 文件存入数据库, 数据库在, 文件即不会丢失
+        缺点: 当文件较大时, 数据空间占用大, 提取困难
+
+mongo中 使用GridFS方法进行大文件存储
+
+    GridFS: 是mongodb中大文件存储的一种方案, mongo中认为大于16M的文件为大文件
+
+    方案解释: 
+        在mongodb中创建两个集合, 共同完成对文件的存储
+        fs.files: 存储文件的相关信息, 比如文件名, 文件类型等
+        fs.chunks: 实际存储文件内容, 以二进制方式分块存储. 将大文件分为多个小块, 每块占一个空间
+        注:统一文件信息在fs.files中的id与fs.chunks中id相同, 这是将两者对应起来的纽带
+
+    mongofiles -d dbname put filename   # 使用mongo命令将文件放入数据库中
+        dbname, 要保存在哪个数据库; filename, 要存储的文件
+        注: 如果数据库不存在则自动创建
+    
+    mongofiles -d dbname get filename   # 使用mongo命令获取文件
+        优点: 存储方便, 方便数据库移植, 对文件个数没有太傅哦限制
+        缺点: 读写效率低
+
+
+游标
+
+为什么使用游标
+1. 防止网络拥塞, 造成数据传输慢
+2. 提高用户解析体验, 可以后端解析
+
+mongo中支持js
+use stu
+var cursor = db.vtuber.find()
+cursor.hasNext()
+cursor.next()
+
+
+

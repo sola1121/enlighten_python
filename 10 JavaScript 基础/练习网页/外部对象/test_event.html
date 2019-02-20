@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        window.document.body.onload = create
+        function create(){
+            var new_div = document.createElement("div")
+            new_div.style.width="200px"
+            new_div.style.height="200px"
+            new_div.style.border="solid 5px red"
+            new_div.style.backgroundColor="black"
+            document.body.appendChild(new_div)
+            console.info(this)
+        }
+    </script>
+</body>
+</html>

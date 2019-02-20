@@ -1,0 +1,223 @@
+数据库 --> 集合 --> 文档 -->键值对
+
+---------------------------------------
+
+数据库
+
+    创建数据库
+    use databasename
+        注: use实际功能时表示选择使用哪个数据库, 当这个数据库不存在时即表示创建该数据库
+            使用use后数据库并不会马上创建, 而是需要插入数据后数据库才会创建
+        示例: 
+        创建一个叫stu的数据库 use stu
+
+    查看数据库:
+        show dbs
+
+    数据库名称规则
+        1. 原则上是任意满足以下几条的utf-8字符
+        2. 不能是空字符, 不能含有 空格 点 '/' '\' '\0'
+        3. 习惯上使用英文小写
+        4. 长度不超过64字节
+        5. 不能使用 admin, local, config
+            admin: 存储用户
+            local: 存储本地数据
+            config: 存储分片配置信息
+
+    mongo系统全局变量: db
+        代表当前正在使用的数据库, 默认为test, 如果插入数据即创建test数据库
+
+    删除数据库
+    db.dropDatabase()
+    删除db所代表的的当前数据库
+
+
+数据库备份和恢复 -- 使用mongo命令集
+    备份: mongodump -h dbhost -d dbname -o dbdir
+    示例:
+        mongodump -h 127.0.0.1 -d stu -o student
+        将本机下stu数据库备份到当前目录的student文件夹中
+        会在student文件夹中自动生成一个stu文件则为备份文件
+
+    恢复: mongorestore -h <dbhost>:<port> -d dbname <path>
+    示例: mongorestore -h 127.0.0.1:27017 -d test student/stu
+        将studnet文件夹的备份文件stu恢复到本机的test数据库
+
+数据库的检测命令
+    mogostat
+    每列即含义
+        insert query update delete : 代表每秒增查改删的次数
+        getmore command : 每秒运行命令的次数
+        dirty used flushes : 每秒操作磁盘的次数
+        vsize res : 使用虚拟内存和物理内存
+        qrw arw net_in net_out conn
+
+    mogotop
+    检测每个数据库的读写时长
+        ns         total      read     write
+        数据集合    总时长    读时长    写时长
+
+---------------------------------------
+
+在这里collectionName表示集合的名字
+
+
+集合
+
+    创建集合
+    db.createCollection("集合名")
+    在db表示的当前数据库中创建集合
+
+    查看创建的集合
+    show tables
+    show collections
+        返回当前数据库中集合
+
+    集合的命名规则
+        1. 不能为空字符串, 不能有'\0'
+        2. 不能以system.开头, 这是系统集合的保留前缀
+        3. 不能和保留字重复
+
+    获取集合对象
+    db.getCollection("collectionName")
+    等同于db.collectionName表示的集合对象
+
+    自动创建集合的情况
+    db.collectionName.insert()
+    当向一个集合中插入文档时, 如果该集合不存在则自动创建
+    示例:
+        db.vtuber.insert({name: "yomemi"})
+        如果vtuber不存在则会创建vtuber集合并插入该数据
+
+    删除集合
+    db.collectionName.drop()
+    示例:
+        db.vtuber.drop()
+        将会删除当前数据库vtuber集合
+    
+    集合重命名
+    db.collectionName.renameCollection("新集合名")
+    示例:
+        db.class1.renameCollection("vtuber")
+        将class1重命名为vtuber
+
+    集合内容查看
+    db.collectionName.find()
+    示例:
+        db.vtuber.find()
+        显示当前数据库中集合vtuber的所有数据
+
+---------------------------------------
+
+文档
+
+    mongodb中文档的组织形式
+
+        键值对组成文档 bson ---> 类似python中的字典
+        mongodb中文档的组织形式为bson, 类似python的字典, 也是由键值对构成, 更接近于json
+
+    文档中键的命名规则
+        1. utf-8格式字符串
+        2. 不能有'\0', 习惯上不用 '.' 和 '$' 字符
+        3. 以 '_' 开头的多为保留键, 自定义时一般不以 '_' 开头
+    注意: 文档键值对是有序的, 不同于python是无序
+          mongodb中严格区分大小写
+    值: mongodb的支持数据类型
+
+    mongodb中支持的数据类型
+    --------------------------
+      类型            值
+    --------------------------
+    整型             整数
+    布尔类型       true/false
+    浮点型           小数
+    Arrays         数组类型[1, 2, 3]
+    Timestamp       时间戳
+    Date            时间日期
+    Object          内部文档
+    Null            空值
+    Symbol          特殊字符
+    String          字符串
+    Binary data     二进制字串
+    Code            代码
+    regex           正则表达式
+    ObjectId        ObjectId字串
+
+    ObjectId: 系统自动为每个文档生成的不重复的主键
+              键名称: _id
+              值: ObjectId("5b03b86ea7ab110dc4db1297")
+    24位16进制数
+    前8位为文档创建时间  前中6位为机器ID  后中4未为进程ID   最后6位为计数器
+
+    文档中的键 ---> 域/字段
+    文档 ---------> 记录
+
+    集合中文档的特点
+        1. 集合中的文档域不一定相同 --> 不保证数据一致性
+        2. 集合中的文档结构不一定相同
+        总: 数据不一定统一, 结构还不一定一样 
+    
+    集合的设计原则
+        1. 集合中的文档尽可能描述的数据类似
+        2. 同一类文档放在相同的集合, 不同的文档分集合存放
+        3. 层次包裹不宜太多
+
+---------------------------------------
+
+插入文档
+    db.collectionName.insert({...})
+    示例:
+        db.vtuber.insert({"name": "tanaka", "age": 0, "gender": "F"})
+        当作为文档插入时键可以不加引号
+
+        查看插入结果
+        db.vtuber.find()
+
+插入多条文档
+    db.collectionName.insert([{},{}...])
+    示例:
+        db.vtuber.insert([{"name": "nea", "age": 0, "gender": "F"},{"name": "moemi", "age": 3},{"_id": 7, "name": "nora_cat", "gender": "F"}])
+
+    注: _id为系统自动添加主键, 如果自己写_id域则会使用自己写的值. 但是该值不允许重复.
+
+    save 插入数据, 修改数据
+    db.collectionName.save({})
+    示例:
+        db.vtuber.save({"name": "sora"})
+        在不加_id时其使用和insert相同
+        使用save在插入时加了_id, 如果_id值不存在则正常插入, 如果该值存在, 则修改原来内容
+        不能保存多条记录
+
+---------------------------------------
+
+删除文档
+    db.collectionName.remove(query, justOne)   类比于   delete from tableName where ...
+        功能: 删除指定的文档
+        参数: query, 筛选要删除的文档, 类似where子句
+              justOne, bool值, 默认为false 表示删除所有筛选数据, 如果为true 则表示值删除第一条符合的文档
+    示例:
+        db.vtuber.remove({$or: [{name: {$exists: false}}, {age: {$gt: 20}}]})   # 删除name不存在或者age大于20的所有文档
+        db.vtuber.remove({gender: {$exists: false}}, true)   # 删除gender不存在的文档
+        db.vtuber.remove({})   # 删除集合所有文档
+
+---------------------------------------
+
+目录01-02:
+    数据库创建删除: use 数据库名称规则
+                   db.dropDatabase()
+
+    集合的创建和删除: db.createCollection("name")
+                     db.collectionName.insert()
+                     db.collectionName.drop()
+                     db.collectionName.renameCollection()
+
+    数据库的备份和恢复: mongodump    mongorestore
+
+    数据库的监测: mongostat       mongotop
+
+    数据库配置: mongod --dbpath path --port 27017
+
+    数据的插入: db.collectionName.insert()
+               db.collectionName.save()
+
+    删除文档   remove(query, justOne)

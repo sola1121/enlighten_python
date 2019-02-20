@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="array_change()">改变数组</button>
+    <button onclick="show_array()">显示数组</button>
+    <button onclick="extend_array()">下标越界不存在的</button>
+    <script>
+        var names = new Array("kizuna_ai", "luna", "akari", "siro", "hinata")
+        var names2 = ["noja", "sora", "yua", "mito", "nora"]
+        console.info(names)
+        console.info(names2)
+        function array_change(names){
+            names2[2] = "tanaka"
+            console.info("更改后", names2)   // 源数组也会改变
+            console.info("names2+yua", names2 + "yua")   // 会与最后一个元素相加
+        }
+        function show_array(){
+            console.info("在array_change之后", names2)
+        }
+        function extend_array(){
+            names2[10] = "yua"
+            console.info("使用names2[10]越界赋值", names2)   // 赋值成功, 多出来的位用empty占位 
+        }
+    </script>
+</body>
+</html>

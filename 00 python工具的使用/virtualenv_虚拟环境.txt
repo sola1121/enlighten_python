@@ -1,0 +1,16 @@
+为项目创建单独的环境避免干扰, 保持主python的纯净
+    virtualenv 新建环境名
+运行虚拟环境
+    source 新建环境名/bin/activate
+
+激活虚拟环境 
+    activate venv
+
+停止虚拟环境、退出虚拟环境
+    deactivate
+
+删除虚拟环境
+    直接删除目录即可.
+    rmvirtualenv venv　
+
+ 	

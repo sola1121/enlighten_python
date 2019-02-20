@@ -1,0 +1,215 @@
+Django中的模板(Template)
+    1. 什么是模板
+        要动态的给用户呈现的网页内容
+        实质是一个前后端结合的网页
+    2. 模板的设置
+        在主目录settings.py中TEMPLATES变量
+            TEMPLATES = [
+                {
+                    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                    'DIRS': [],
+                    'APP_DIRS': True,
+                    'OPTIONS': {
+                        'context_processors': [
+                            'django.template.context_processors.debug',
+                            'django.template.context_processors.request',
+                            'django.contrib.auth.context_processors.auth',
+                            'django.contrib.messages.context_processors.messages',
+                        ],
+                    },
+                },
+            ]
+        1) BACKEND : 指定模板的搜索引擎, 无特殊需求不用更改
+        2) DIRS : 指定模板所存放的目录们
+            如: DIRS=['index.temp','music.temp']
+            但是, 如果DIRS中为空的话, 那么Django会自动到每个应用中去搜索一个叫templates的目录来作为模板的管理目录
+            推荐:
+                (1) DIRS保持为空
+                (2) 在每个应用中, 都创建一个templates目录
+        3) APP_DIRS
+            True : 首先从DIRS中指定的目录中查找模板, 如果没有找到的话, 再搜索templates目录
+    3. 模板的加载方式
+        1) 使用loader获取模板, 并通过 HttpResponse 进行响应
+            from django.template import loader
+            (1) 通过 loader 加载模板
+                te = loader.get_template("模板名称")
+            (2) 通过返回的模板对象te, 将模板渲染为字符串
+                html_text = te.render()
+            (3) 通过HttpResponse将html_text响应给客户端
+                return HttpResponse(html_text)
+        2) 使用 render 直接加载模板并返回
+            render是loader的快捷封装
+            from django.shortcuts import render
+            在视图中可以直接
+                return render(request, "模板名称", [传递的变量])
+    4. 模板的语法
+        1) 变量
+            作用: 允许将后端的数据传递给模板, 在模板中, 会根据变量的值进行显示
+            (1) 在Django 允许传递给模板做变量的数据类型
+                数字, 字符串, 列表, 元组, 字典, 函数, 对象
+            (2) 变量的语法
+                1. loader
+                    dic = {
+                        "变量名1": "值1",
+                        "变量名2": "值2",
+                        ...
+                    }
+                    示例:
+                        te = loader.get_template("xxx.html")
+                        html_text = te.render(dic)   // 传入字典形式的变量
+                        return HttpResponse(html_text)
+                    在模板中显示变量
+                        {{ 变量名 }}
+                        在模板中, 如字典, 元组, 字典这类数据类型, 若需要获取某一个元素, 要使用.运算符代替[]
+                                lst[3]  --> {{ lst.3 }}
+                                dic["name"]  -->  {{ dic.name }}
+                2. render
+                    return render(request, "模板名称", dic)
+                注: 巧用python内置locals()函数, 将所在域中的局部变量以变量名为key, 绑定值为value变为字典返回 
+        2) 标签
+            (1) 什么是标签
+                允许将服务器端的一些功能嵌入到模板中
+            (2) 语法
+                {% 标签名 %} ... {% 结束标签 %}
+            (3) 常用标签
+                1. for
+                    {% for in 变量 in 雷鸟/元组/字典 %}
+                        ...
+                    {% endfor %}
+                    允许使用 for 提供的内置变量 - forloop
+                        ● forloop.counter 
+                            记录当前循环的次数，从1开始
+                        ● forloop.first
+                            是否是第一次循环(第一项)
+                        ● forloop.last
+                            是否是最后一次循环(最后一项)
+                        ...
+                2. if
+                    1)
+                        {% if 条件 %}
+                            满足条件要运行的内容
+                        {% endif %}
+                        条件中允许使用比较运算符(>, <, >=, <=, ==, !=), 逻辑运算符(not, and, or)
+                        注意: and 和 or 不能同时出现
+                    2)
+                        {% if 条件 %}
+                            满足条件运行的内容
+                        {% else %}
+                            不满足条件运行的内容
+                        {% endif %}
+					3)
+						{% if 条件1 %}
+							满足条件1运行的内容
+						{% elif 条件2 %}
+							满足条件2运行的内容
+						{% elif 条件3 %}
+							满足条件3运行的内容
+						{% else %}
+							以上条件都不满足的时候运行的内容
+						{% endif %}
+        3) 过滤器
+            (2) 作用
+                    过滤数据
+                    在显示变量的数据之前, 允许对数据进行筛选或改变
+            (2) 语法
+                {{变量|过滤器:参数}}
+            (3) 简单的过滤器
+                1. {{value|upper}}
+                    将value变为大写字符
+                2. {{value|lower}}
+                    将value编写小写字符
+                3. {{value|add:num}}
+                    将num累加到value之后
+                4. {{value|floatformat:n}}
+                    将value四舍五入到n位小数
+                5. {{value|truncatechars:n}}
+                    将字符串截取到n位(包含...)
+                    使用CSS实现截取功能
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                ...
+
+模板
+    1. 静态文件
+        1) 什么是静态文件
+            不需要服务器端内容的文件, 一律都是静态文件,
+            如: 图片, CSS, JS, html 都是静态文件
+        2) Django中静态文件的处理
+            需要在setting.py中设置静态文件的访问路径和存储路径
+            (1) 指定静态文件的访问路径
+                STATIC_URL = '/static/'   # 这是默认的, 如有有需要就可以更改
+                # 访问的路径是
+                http://localhost:8000/static/***
+                作用:
+                    当访问路径是
+                    http://localhost:8000/static/***
+                    一律到静态文件存储路径中去搜索静态文件
+            (2) 定义静态文件的存储路径
+                STATICFILES_DIRS
+
+                STATICFILES_DIRS = (BASE_DIR, 目录名)
+                允许在项目中以及所有的应用中都创建对应名称的目录
+
+                STATICFILES_DIRS = (BASE_DIR, 'static')
+                在项目中的static目录中以及所有应用中的static目录中存放的都是静态文件
+
+            自我理解
+                静态目录的默认位置和templates同级, 都是在应用目录下, 是需要手动创建的 
+                templates可以在DIR列表中自定义设置, 其相关的静态文件存储位置在STATICFILES_DIRS中设置
+                STATIC_URL是指定网页中连接的指向的网页的静态文件的请求地址, STATICFILES_DIRS指定的是该地址绑定的服务器上的文件的存储位置
+            
+        3) 访问静态文件
+            1. 直接使用 http://localhost:8000/static/***/***
+                如: <img src="/static/img/index.jpg">
+            2. 使用{% static %}标签 访问静态资源
+                在模板顶增加
+                    {% load static %}
+                在使用用静态文件时
+                    {% static %}表示的就是静态文件的访问路径
+                    如: <img src={% static "img/index.jpg" %}
+
+    2. 模板的继承
+        1) 什么是模板的继承
+            当多个模板(网页)具备大部分相同的内容时, 就可以使用继承的方式, 将相同的东西继承过来, 再增加/修改属于自己的内容即可
+        2) 模板继承的语法
+            (1)在父模板中
+                必须要标识出来哪些内容时允许被修改的
+                标签: 
+                    {% block 自定名称 %} 
+                        父模板中正常显示的东西 
+                    {% endblock %}
+
+                block的作用:
+                    定义在子模板中允许被修改的地方
+                    ● 在父模板中, 正常显示
+                    ● 在子模板中, 如果不修改block内容的话, 则按照父模板中的内容正常显示
+            (2) 在子模板中
+                在顶层增加一句话
+                    {% extends '父模板的名称' %}
+                    注意: 必须添加到子模板最顶层
+                增加block标签, 改写属于自己的内容
+                    {% block 名称 %}
+                        子模板中的内容
+                    {% endblock %}
+
+                    ● 子模板中的block会覆盖父模板中同名的block内容
+
+    3. URL()的name参数
+        url(regex, views, kwargs=None, name=None)
+            name: 允许为当前的url设置别名, 在Template中允许使用别名找到对应的url
+        语法:
+            url(regex, views, name="别名")
+        在模板中使用url的别名
+            {% url '别名' %}
+        示例
+            # 在urls.py中
+            url(r"^bilibili/$", bilibili_views, name="bili")
+            # 在template/html中
+            <a href="{% url 'bili' %}>B站</a>
+        别名传参
+            <a href="{% url 'bili' 'av125673' %}>B站</a>
+            使用空格在跟在别名后
+            如同
+            <a href="{% static 'bilibili/av125673' %}>B站</a>
+
+            

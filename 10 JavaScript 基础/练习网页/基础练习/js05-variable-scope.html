@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function f1(){
+            var s = "这是声明在f1中的变量"
+            console.info(s)
+        }
+
+        function f2() {
+            console.info(s)   // 没有全局变量s, 这样就会报错
+        }
+    </script>
+</body>
+</html>

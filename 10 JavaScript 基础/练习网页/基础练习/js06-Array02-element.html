@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="main()">点击追加元素</button>
+    <script>
+        function main(){
+            var arr = new Array()
+            while (true){
+                var input = window.prompt("输入一个元素(e to exit): ")
+                if (input == "e" || input == "exit")
+                    break
+                arr[arr.length] = input   // 向最后添加元素
+            }
+            window.alert(arr)
+        }
+    </script>
+</body>
+</html>

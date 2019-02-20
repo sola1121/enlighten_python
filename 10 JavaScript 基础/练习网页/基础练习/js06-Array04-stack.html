@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="pushStack()">push新书</button>
+    <button onclick="popStack()">pop书</button>
+    <button onclick="removeStack()">remove指定书</button>
+    <script>
+        var books = ["python_programming", "sql_primary&escape", "how_to_find_wife"]
+        function pushStack(){
+            var new_name = window.prompt("新书名字")
+            books.push(new_name)
+            console.info(books.join(", "))
+        }
+        function popStack(){
+            var rbook = books.pop()
+            console.info("remove: ", rbook) 
+            console.info("现有书籍", books.join(", "))
+        }
+        function removeStack(){
+            var rbook = window.prompt("移除书籍名")
+            var flag = -1
+            for (var i=0; i<books.length; i++){
+                if (rbook == books[i]) {
+                    flag = i
+                }
+            }
+            if (flag == -1){
+                window.alert("查无此书.")
+            } else {
+                console.info("删除:", books[flag])
+                for (var i=flag; i<books.length-1; i++){
+                    // 依次赋值后一个元素
+                    books[i] = books[i+1]
+                }
+                // 移除最后一个空元素
+                books.pop()
+                console.info("现在:", books.length, books.join(", "))
+            }
+        }
+    </script>    
+</body>
+</html>

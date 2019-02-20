@@ -1,0 +1,318 @@
+查找操作
+
+db.collectionName.find()   类比于   select * from tableName;
+db.collectionName.find({❶}, {❷})   类比于   select ❷ from tableName where ❶;
+
+find(query, field)
+    功能: 查找所有符合条件的文档
+    参数: query, 筛选条件, 相当于where子句
+          field, 展示的域, 相当于select的展示部分
+    返回: 返回所有查找到的内容
+
+findOne(query, field)
+    功能参数和find完全相同, 只是返回第一条查找到的文档
+    示例: db.vtuber.findOne({age:5}, {name: 1})
+
+
+field参数, 选择要展示的域, 传一组键值对, 类比于column
+    键表示域名
+    值表示是否显示该域 0表示不显示, 1表示显示
+
+如果某个域给定0, 则表示不显示该域, 其他的域均显示
+如果某个域给定1, 则表示显示该域, 不显示其他的域
+_id永远默认为显示, 除非设置为0
+除_id外其他域, 必须拥有相同的设置, 全为0或者全为1
+如果不写该参数则表示显示所有内容
+
+示例:
+    db.collectionName.({}, {name: 1})   # 仅显示所有name键值
+    db.collectionName.({}, {_id: 0, gender: 0})   # 显示除_id和gender的所有键值
+    db.collectionName.({}, {_id: 0, name: 1, age: 1})   # 不显示_id, 显示name和age的所有键值
+    db.collectionName.({age: 5}, {_id: 0, name: 1, gender: 1})   # 显示age为5的name, gender的所有键值
+
+
+query的更多用法
+    操作符: 使用$符号注明一个特殊字符串, 表示一定的含义
+    示例: $lt 表示小于
+
+比较操作符:
+    $eq 等于
+        示例: db.vtuber.find({age: {$eq: 2}}, {name: 1}) 等价 db.vtuber.find({age: 2}, {name: 1})   # 显示age为2的name
+
+    $lt 小于
+        示例: db.vtuber.find({age: {$lt: 10}}, {_id: 0})   # 显示age小于10的
+    mongo中字符串也可以比较大小
+
+    $gt 大于
+        示例: db.vtuber.find({age: {$gt: 5}}, {_id: 0, name: 1})
+
+    $lte 小于等于
+
+    $gte 大于等于
+    
+    $ne 不等于
+        示例: db.vtuber.find({age: {$ne: 2}}, {_id: 0})
+    如果一个文档没有这个age域则显示为不等于
+
+    $in 包含
+        示例: db.vtuber.find({age: {$in[1, 2, 3]}}, {_id: 0})
+    
+    $nin 不包含
+        示例: db.vtuber.find({age: {$nin[1, 2, 3]}}, {_id: 0})
+
+逻辑操作符:
+    $and 逻辑与
+    db.vtuber.find({$and: [{age: {$lt: 5}}, {_id: {$lt: 4}}]})   # age小于5和_id小于4
+    db.vtuber.find({$and: [{age: {$lt: 5}}, {gender: "F"}]}, {})   # age小于5和gender为"F"
+
+    $or 逻辑或
+    db.vtuber.find({$or: [{age: {$lt: 5}}, {gender: "F"}]})   # 小于5或gender为"F"
+    db.vtuber.find({$or: [{age: {$gte: 5}}, {gender: "F/M"}]}, {})   # age大于等于5或gender"F/M"
+
+    $not 逻辑非
+    db.vtuber.find({age: {$not: {$eq: 1}}}, {name: 1})   # age不等于1, 显示name
+
+    $nor 既不也不
+    db.vtuber.find({$nor: [{age: {$gt: 5}}, {gender: {$eq: "F/M"}}]})   # age既不大于5, gender也不等于"F/M"
+
+    使用建议, 可以先将逻辑关系框架写好 如: find({$and: [{内容1}, {内容2}]}), 内容1和内容2就是需要and的另外筛选条件
+
+条件混合
+    age小于5或者姓名为"akari", 并且gender为"F"
+    框架: db.vtuber.find({$and: [{$or: [{}, {}]}, {}]})
+    db.vtuber.find({$and: [{$or: [{age: {$lt: 5}}, {name: "akari"}]}, {gender: "F"}]})
+
+
+数组查找
+    db.vtuber.insert({other: ["nea", "yua", "tama"]})
+
+    查看数组中包含某一项的文档
+    db.vtuber.find({other: "yua"})
+
+    $all
+        查找一个数组中同时包含多项的文档
+        示例:
+            db.vtuber.find({other: {$all: ['nea', 'tama']}}, {_id: 0})
+
+    $size
+        查找数组元素个数为指定个数的文档
+        示例:
+            db.vtuber.find({other: {$size :3}}, {_id: 0})   # 查找hobby数组中具有三个元素的文档
+
+    数组切片显示
+
+    $slice
+        对数组切片显示
+        示例:
+            db.vtuber.find({other: {$size: 3}}, {_id: 0, other: {$slice: 2}})   # 显示具有3个元素的数组的前两项
+            db.vtuber.find({other: {$size: 3}}, {_id: 0, other: {$slice: [1,2]}})   # 显示具有3个元素的数组的1到2项
+
+
+其他查找方法
+    $exists
+        判断一个域是否存在
+        示例:
+            db.vtuber.find({gender: {$exists: true}}, {_id})   # 查找存在gender域的文档
+            db.vtuber.find({gender: {$exists: false}}, {_id})   # 查找不存在gender域的文档
+            
+    $mod
+        做除数余数查找
+        示例:
+            db.vtuber.find({age: {$mod: [2:1]}}, {_id: 0})   # age除2余1, 即显示奇数age
+        
+    $type
+        查找指定数据类型的文档
+        查找other中包含数据类型为2的数据文档
+        db.vtuber.find({other: {$type: 2}}, {_id: 0})
+
+
+Each BSON type has both integer and string identifiers as listed in the following table:
+--------------------------------------------------
+  Type           Number     Alias        Notes
+--------------------------------------------------
+Double             1       “double”	 
+String             2       “string”	 
+Object             3       “object”	 
+Array	           4       “array”	 
+Binary data        5       “binData”	 
+Undefined	       6      “undefined”    Deprecated.
+ObjectId           7       “objectId”	 
+Boolean            8        “bool”	 
+Date               9        “date”	 
+Null               10       “null”	 
+Regular Expression 11       “regex”	 
+DBPointer	       12	   “dbPointer”   Deprecated.
+JavaScript	       13      “javascript”	 
+Symbol             14        “symbol”    Deprecated.
+JavaScript 
+(with scope)	   15      “javascriptWithScope”	 
+32-bit integer     16         “int”	 
+Timestamp          17       “timestamp”	 
+64-bit integer     18        “long”	 
+Decimal128         19       “decimal”     New in version 3.4.
+Min key            -1        “minKey”
+Max key            127       “maxKey”
+
+---------------------------------------
+
+进一步信息筛选
+
+distinct
+    功能: 查看一个集合中某个域值的覆盖范围
+    示例: 
+        查看集合中age域的值都有哪些
+        db.vtuber.distinct("age")
+
+pretty
+    功能: 将查询结果格式化显示
+    示例:
+        db.vtuber.find().pretty()
+
+limit(n)
+    功能: 查询结果显示前n条
+    示例:
+        db.vtuber.find().limit(3)   # 查询结果显示前3个
+
+skip(n)
+    功能: 显示时跳过前n条
+    示例:
+        db.vtuber.find().skip(3)   # 查询结果跳过前3个
+
+count()
+    功能: 对查找结果计数统计
+    示例:
+        db.vtuber.find({gender: "F"}).count()   # gender为"F"的有多少
+
+sort({键: 1/-1})
+    功能: 对查找结果排序
+          1表示按照升序排列(小到大)
+          -1表示按照降序排列(大到小)
+    示例:
+        db.vtuber.find({age: {$exists: true}}).sort({age: -1})   # 按照存在age降序排列
+
+    复合排序: 当第一排序项相同的时候, 按照第二排序项排序, 依次类推
+    示例:
+        db.vtuber.find({age: {$exists: true}}, {_id: 0}).sort({age: 1, name: -1})
+
+函数的连续使用
+    获取集合中年龄最小的三个文档
+    db.vtuber.find({age: {$exists: true}}).sort({age: 1}).limit(3)
+
+---------------------------------------
+
+修改数据
+
+    db.collectionName.update(❶, ❷, ❸, ❹) 类比于 update tableName set ❷ where ❶
+    upsert: 更新插入
+    multi: 个数限定
+
+    db.collectionName.update(query, update, upsert, multi)
+        功能: 修改一个文档
+        参数: query, 筛选要修改的文档, 相当于where子句
+              update, 将数据更新为什么内容, 相当于set操作, 需要使用修改器操作符
+              upsert, bool值, 默认为false 表示如果query不存在则无法修改, 设置为true 表示如果query的文档不存在, 则根据query和update参数插入新的文档
+              multi, bool值, 默认为false 如果有多条符合的筛选条件的文档则只修改第一条, 设置为true 表示修改所有符合条件的文档
+
+    示例:
+        db.vtuber.update({name: "nora_cat"}, {$set: {gender: "F"}})   # 将noro_cat的gender改为"F"
+        db.vtuber.update({name: "tanaka"}, {$set: {age: 1, gender: "F"}}, true)   # upsert参数设为true, 如果没有匹配到name, 就插入所有信息
+        db.vtuber.update({age: {$gt: 10}}, {$set: {age: 2}}, false, true)   # multi参数设为true, 所有age大于10的, 都将age设为2
+
+修改器操作符
+
+    $set
+    修改一个域的值
+    增加一个域
+        db.vtuber.update({other: {$all: ["nea"]}}, {$set: {info: "small vtuber"}})
+
+    $unset
+    删除一个域
+        db.vtuber.update({name: "nora_cat"}, {$unset: {age: 0, gender: 1}})
+    注: 要删除的域上通常写0或1, 这些都表示要删除
+
+    $rename
+    更改域名, 即键值
+        db.vtuber.update({}, {$rename: {gender: "sex"}}, false, true)   # 修改所有gender域为sex
+    
+    $setOnInsert
+    如果update操作插入新的文档, 则补充插入内容
+        db.vtuber.update({name: "nora_cat", gender: "F/M"}, {$setOnInsert: {age: 1, address: "youtube"}}, true)   
+    如果使用了update的插入数据, 则同时插入age和address域内容
+
+    $inc
+    加减修改器
+        db.vtuber.update({age: {$gt: 10}}, {$inc: {age: -2}}, false, true)   # 将所有age大于10的增加-2
+    可加上正数, 负数, 小数都可以
+
+    $mul
+    乘除修改器
+        db.vtuber.update({age: {$lt: 10}}, {$mul: {age: 2}}, false, true)   # 将所有age小于10的乘以2
+    可乘以正数, 负数, 小数都可以
+
+    $min
+    设置最小值, 如果筛选文档指定的域值小于min值则不修改,如果大于min值则改为min值
+    db.vtuber.update({}, {$min: {age: 5}}, false, true)
+
+    $max
+    设置最大值, 如果筛选的文档指定值大于max值则不变, 如果小于max则修改为max值
+    db.vtuber.update({}, {$max: {age: 5}}, false, true)
+
+数组修改器
+    $push
+    向数组中添加一项
+        db.vtuber.update({info: "vtuber family"}, {$push: {other: "sora"}})
+
+    $pushAll
+    向数组中添加多项
+        db.vtuber.update({info: "vtuber family"}, {$pushall: {other: ["sora", "huni"]}})
+    
+    $each
+    逐个操作
+        db.vtuber.update({info: "vtuber family"}, {$push: {other: {$each: ["sora", "huni"]}}})   # 利用each添加多项
+
+    $position
+    选择数据位置进行操作, 必须和each合用
+        db.vtuber.update({info: "vtuber family"}, {$push: {other: {$each: ["sora", "huni"], $position: 1}}})   # 将["sora", "huni"]加入到other数组的第1位
+
+    $sort
+    对数组进行排序, 必须和each合用
+        db.vtuber.update({info: "vtuber family"}, {$push: {other: {$each: [], $sort: 1}}})   # 对数组中内容进行升序排序
+
+    $pull
+    从数组中删除一个元素
+        db.vtuber.update({info: "vtuber family"}, {$pull: {other: "nea"}})
+    注: 会将数组中所有和条件的删除
+
+    $pullAll
+    从数组中删除多个元素
+        db.vtuber.update({info: "vtuber family"}, {$pullAll: {other: ["sora", "huni"]}})
+
+    $pop
+    弹出数组中第一项或者最后一项, 1表示第一项, -1表示最后一项
+        db.vtuber.update({info: "vtuber family"}, {$pop: {other: 1}})
+        
+    $addToSet
+    向数组中插入一个元素, 但该元素不能和其他元素重复
+        db.vtuber.update({info: "vtuber family"}, {$addToSet: {other: "aoi"}})   # 如果other数组中已经存在"aoi"则无法插入, 不存在则插入
+
+---------------------------------------
+
+目录03
+
+查找文档   find(query, field)
+          findOne(query, field)
+
+    操作符  比较: $lt   $lte  $gt   $gte   $eq   $ne   $in   $nin
+            逻辑: $and   $or   $not   $nor
+            数组: $all   $size
+            其他: $exists   $type   $mod
+
+查找函数   limit()   skip()   sort()   count()   pretty()
+
+其他函数   distinct()   getCollection()
+
+修改文档   db.collectionName.update(query, update, uppsert, multi)
+
+    修改器  一般修改: $set   $unset   $rename   $setOnInsert   $inc   $mul   $min   $max
+            数组修改器: $push   $pushAll   $each   $pull   $pullAll   $position   $pop   $addToSet   $sort
+

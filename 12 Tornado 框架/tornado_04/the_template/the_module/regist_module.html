@@ -1,0 +1,47 @@
+<form id="regist" action="/regist" method="post" enctype="multipart/form-data">
+<p>用户名: <input type="text" name="username"></p>
+<p>密码: <input type="password" name="password"></p>
+<p>确认密码: <input type="password" name="confirm"></p>
+<p><input type="file" name="userfile"></p>
+<p>城市:
+    <select name="usercity">
+        {% for city in cities %}
+        <option value="{{ city[0] }}">{{ city[0] }}</option>
+        {% end %}
+    </select></p>
+<p id="fail_hint" style="display: none; color: brown;">{% if msg %}{{msg}}{% else %}None{% end %}</p>
+<p><input type="submit" value="确认注册"><input type="reset" value="重置"></p>
+</form>
+<script>
+    function $get_name(name){
+        return document.getElementsByName(name)
+    }
+
+    function $get_id(id){
+        return document.getElementById(id)
+    }
+
+    window.onload = function(){
+        $get_id("regist").onsubmit = verify_password
+    }
+
+    if ($get_id("fail_hint").innerText == "None"){
+        $get_id("fail_hint").style.display = "none"
+    } else {
+        $get_id("fail_hint").style.display = "block"
+    }
+
+    function verify_password(){
+        if ($get_name("password").value == $get_name("confirm").value){
+            if ($get_name("password").value.length >=3){
+                return true
+            } else {
+                alert("密码过短")
+                return false
+            }
+        } else {
+            alert("密码不一")
+            return false
+        }
+    }
+</script>

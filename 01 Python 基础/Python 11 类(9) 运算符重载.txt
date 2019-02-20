@@ -1,0 +1,281 @@
+方法重载: 是在一个类里面,方法名相同,而参数不同,用于实现动态
+
+------------------运算符重载------------------
+
+运算符重载
+    什么是运算符重载
+    让自定义的类生成的对象(实例)能够使用运算符进行操作
+作用:
+    让实例像数学表达式一样进行运算操作
+    让程序简洁易读
+说明:
+    运算符重载方法的参数已经有固定的含义, 不建议改变原有的含义
+
+----------------二元运算符-------------
+
+算数运算符:
+方法                      运算符 
+__add__(self, other)        +
+__sub__(self, other)        -
+__mul__(self, other)        *
+__truediv__(self, other)    /
+__floordiv__(self, other)   //
+__mod__(self, other)        %
+__pow__(self, other)        **
+
+二元运算符的重载格式:
+def __xxx__(self, other):
+    ...
+注: 二元运算符的重载方法参数列表中只能有两个参数
+
+
+示例:
+class MyNumber:
+    def __init__(self, val):
+        self.data = val
+
+    def __repr__(self):
+        return "MyNumber(%d)" & self.data
+    
+    def add(self, that):   # 自定义的add方法
+        return MyNumber(self.data + that.data)
+
+    def __add__(self, other):   # 重载加法+
+        return MyNumber(self.data + other.data)
+
+n1 = MyNumber(100)
+print("n1 = ", n1)
+n2 = MyNumber(20)
+print("n2 = ", n2)
+n3 = n1.add(n2)
+n4 = n1.__add__(n2)
+n5 = n1 + n2    # 同n4的调用方式
+
+
+
+反向算数运算符的重载
+
+方法        运算符                      操作方式
+__radd__(self, lhs)        +          lhs + self
+__rsub__(self, lhs)        -          lhs - self
+__rmul__(self, lhs)        *          lhs * self
+__rtruediv__(self, lhs)    /          lhs / self   
+__rfloordiv__(self, lhs)   //         lhs // self  
+__rmod__(self, lhs)        %          lhs % self  
+__rpow__(self, lhs)        **         lhs ** self    
+
+注: 
+    这里了的self与lhs都只是参数名,可以替换为任何名字
+    lhs(left hand side) 左手边
+    rhs(right hand side) 右手边  通常的使用的右手边(即符号后)
+
+说明: 当正常的运算符错误后,会去寻找反向运算符.
+      通常这样的错误都是由运算排列的顺序造成的,原因就是找不到相对应的变量方法
+
+示例:
+class MyNumber2(MyNumber):
+    def __init__(self, num):
+        super().__init__(num)   # super(MyNumber2, self).__init__(num)
+    def __radd__(self, lhs):   # 这里的self与lhs都是变量名,可以替换
+        return MyNumber2(lhs + self.val)
+
+n6 = 90 + MyNumber2(20)
+print(n6)
+
+
+
+复合赋值运算符的重载:
+
+方法                      运算符 
+__iadd__(self, other)        +=
+__isub__(self, other)        -=
+__imul__(self, other)        *=
+__itruediv__(self, other)    /=
+__ifloordiv__(self, other)   //=
+__imod__(self, other)        %=
+__ipow__(self, other)        **=
+
+示例:
+class MyNumber3(MyNumber2):
+    def __init__(num):
+        super().__init__(num)
+    def __iadd__(self, other):
+        self.val += other
+        return self.val
+
+n7 = MyNumber3(500) 
+n7 += 200
+print(n7)
+
+
+
+比较运算符重载
+方法              运算符
+__lt__             <      (little than)
+__le__             <=     (little equal)
+__gt__             >      (great than)
+__ge__             >=     (great equal)
+__eq__             ==     (equal)
+__ne__             !=     (not equal)
+
+注: 实现了==的类,在实现<=, >=时可以不用再实现==, 在实现了<, =时, 也可以不再实现>, !=
+
+
+
+位运算符
+
+方法              运算符
+__and__            &   位与(交集)
+__or__             |   位或(并集)
+__xor__            ^   位异或(对称补集)
+__lshift__         <<  左移
+__rshift__         >>  右移
+
+
+
+反向位运算符重载
+
+方法               运算符
+__rand__            &
+__ror__             |
+__rxor__            ^
+__rlshift__         <<
+__rrshift__         >>
+
+
+
+复合赋值位运算符重载
+
+方法               运算符
+__iand__            &
+__ior__             |
+__ixor__            ^
+__ilshift__         <<
+__irshift__         >>
+
+----------------一元运算符-------------
+
+一元运算符的重载:
+
+方法              运算符
+__neg__             -(负号)
+__pos__             +(正号)
+__invert__          ~(取反)
+
+一元运算符的重载语法
+def __xxx__(self):
+    ...
+
+示例:
+# 自定义列表类, 用于示意一元运算符的重载
+class MyList:
+    def __init__(self, iterable):
+        """self对添加一个data属性用于绑定保存瞬狙的列表"""
+        self.data = list(iterable)
+    def __repr__(self):
+        return "MyList(%s)" % self.data 
+    def __neg__(self):
+    """负号运算符定义"""
+        return MyList([-x for x in self.data])
+
+ls1 = MyList(range(10))
+print(ls1)
+
+ls2 = -MyList(range(10))   # 这里需要转为负数,要使用负号重载
+print(ls2)
+
+---------------------------------------
+
+in / not in 运算符重载
+
+格式:
+    def __contains__(self):
+        ...
+注: 重载了in后not in同样可用, 毕竟只是取反
+
+示例:
+class MyList2(MyList):
+    def __init__(self, iterable):
+        super().__init__(iterable)
+    def __contains__(self, val):
+    """相当于val in self"""
+        return val in self.data
+
+ls3 = MyList2([-1, -2, 3, 4, -5])
+
+if 3 in ls3:   # 自定义对象使用in运算符
+    print("3 in ls3.")
+else: 
+    print("3 not in ls3.")
+
+if 3 not in ls3:
+    print("4 not in ls3.")
+
+---------------------------------------
+
+索引和切片运算符的重载
+运算符:
+    []   字典, 字符串, 列表, 元素
+
+重载方法
+__getitem__   用索引获得的索引值   # __getitem__(self, i)
+__setitem__   用索引设置的索引值   # __setitem__(self, i)
+__delitem__   用del删除的索引值   # __delitem__(self, i)
+
+class MyList3(MyList2):
+    def __init__(self, iterable):
+        super().__init__(self, iterable)
+    def __getitem__(self, i):
+        """自定义类支持索引取值"""
+        return self.data[i]
+    def __setitem__(self, i, val):
+        """自定义类支持索引赋值"""
+        self.data[1] =  val
+
+
+
+切片   slice类
+
+ls = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+ls[::2]   # 等同于 ls[slice(None, None, 2)]
+
+class MyList4(MyList2):
+    def __init__(self, iterable):
+        super().__init__(self, iterable)
+    def __getitem__(self, i):
+        """自定义类支持索引取值"""
+        if type(i) is int:
+            print("是在用索引用于取值.")
+        elif type(i) is slice:
+            print("是在用索引进行取值.")
+            return self.data[i]
+        else: 
+            print("是在用其他类型进行取值 i=", i)
+            return "hello"
+    def __setitem__(self, i, val):
+        """自定义类支持索引赋值"""
+        self.data[1] =  val
+
+
+
+重载__call__
+
+要让类像函数一样被调用, 使用call
+
+示例:
+# 此程序用于示意函数调用运算符的重载
+class MySum():
+    def __init__(self, v=0):
+        self.data = v
+    def __repr__(self):
+        return "MySum%s" % self.data
+    def __call__(self, a, b, *args):
+        print("__call__调用")
+        s = a + b
+        s += sum(args)
+        return s
+
+myadd = MySum
+temp = myadd()   # myadd要想函数一样被调用,需要重载__call__
+print(temp)
+

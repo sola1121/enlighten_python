@@ -1,0 +1,124 @@
+使用后台管理 Models
+    1. 后台配置
+        登录地址: http://localhost:8000/admin/
+
+        创建后台管理员
+            ./manage.py createsuperuser
+        要求输入
+            Username: 输入用户名
+            Email Address: 电子邮件
+            Password: 密码
+            Password(again): 重复密码
+
+    2. 基本管理
+        1) 在应用中的admin.py中注册要管理的实体类
+            (1) admin.py
+                作用: 注册需要管理的models, 只有在此注册的Models才能允许被管理
+            (2) 注册Models
+                from .models import *
+
+                admin.site.register(Entry)
+        2) 修改models.py处理显示内容
+            不做任何处理的models.py在注册入admin中后, 显示方式和在终端中的一样
+            直接以类名显示其对应的数据库, 以QuerySet中的对象的__str__()的描述显示具体名称, 并将其转为超链接
+            如: 
+                <QuerySet [<Entry: Entry object>, <Entry: Entry object>]
+                其属于的数据库将在网页中显示为对应的类的名字Entry
+                其具体对象在网页中将显示为Entry object
+            (1) 在models.py中为各个class中重写__str__
+                def __str__(self):
+                    return self.属性
+                用于更改对应的模型类返回的描述
+            (2) 通过Models类的内部类Meta定义每个类的展现形式
+                class Entry(models.Model):
+                    ...
+                    class Meta:
+                        # Meta中常用设置数据库的属性, 用于更改对应的模型类
+                        1. db_table
+                            指定该实体类对应到的表的名称, 即自定义数据库中表的名称, 会更改数据库, 所以设置后需要migrate
+                        2. verbose_name
+                            定义当前实体类在后台管理的列表页中的名称(单数形式)
+                        3. verbose_name_plural
+                            效果同上, 但是是复数形式
+                        4. ordering
+                            指定实体数据列表页中的排序规则
+                            取值是一个列表, 默认按升序排序, 降序则需要添加负号
+                        注: 
+                            verbose_name_plural是verbose_name的复数形式, 默认就直接在描述后面加's', 非英文需要更改, 通常 verbose_name_plural = verbose_name
+                            db_table是会更改数据库的, 而其他的只是改变在管理网页中的显示
+                        
+                示例
+                    # models.py中
+                    class Book(models.Model):
+                        title = models.CharField(max_length=50, verbose_name="书名")
+                        publicate_date = models.DateField(verbose_name="出版时间")
+                        def __str__(self):
+                            return self.title
+
+                        class Meta:
+                            db_table = "book"
+                            verbose_name = "书籍"
+                            verbose_name_plural = verbose_name
+                            ordering = ["-publicate_date"]
+
+
+高级管理
+    1. 在admin.py中创建高级管理类
+        1) 定义 EntryAdmin, 继承自admin.ModelAdmin
+            示例
+                # 在admin.py中
+                class BookAdmin(admin.ModelAdmin):
+                    pass
+        2) 注册高级管理类
+            admin.site.register(Entry, EntryAdmin)
+            将定义的高级管理类注册到对应的所在类的注册中
+                示例
+                    # 在admin.py中
+                    admin.site.register(Book, BookAdmin)
+    2. 定制高级管理信息
+        1) list_display
+            作用: 指定在列表页中能够显示的字段们
+            取值: 由属性名称组成的元组或列表
+        2) list_display_links
+            作用: 指定在列表页中也能链接到详情页的字段们
+            取值: 由属性名称组成的元组或列表
+            注意: 取值必须出现在list_display的取值中, 因为list_display规定了什么显示在页面上, 而该属性是在此基础上指定哪些可以点击
+        3) list_editable
+            作用: 指定在列表页中就允许被编辑的字段们
+            取值: 由属性名称组成的元组或列表
+            注意: 取值不能出现在list_display_links, 但必须出现在list_display中
+        4) search_fields
+            作用: 添加允许被搜索的字段们
+            取值: 由属性名称组成的元组或列表
+        5) list_filter
+            作用: 在列表页的右侧增加过滤器实现快速筛选功能, 一般用于数据重复性较大的, 如时间, 类别等
+            取值: 由属性名称组成的元组或列表
+        6) date_hierarchy
+            作用: 在列表页的顶端增加一个时间选择器
+            取值: 必须是DateFiled或DateTimeField的值
+        7) fields
+            作用: 在详情页面中, 指定显示哪些字段并按照什么样的顺序显示
+            取值: 由属性名称组成的元组或列表
+        8) fieldsets
+            作用: 在详情页中, 对字段们进行分组显示
+            注意: fieldsets 与 fields 不能共存
+            语法
+                fieldsets = (
+                    # 分组1
+                    (
+                        "分组名称", {
+                            "fields": ("属性1", "属性2", ...),
+                            "classes": ("collapse",),   # collapse指定该组可以折叠, 不需要的话该行就不需要
+                        }
+                    ),
+                    # 分组2
+                    (...), 
+                )
+
+        作用区分: 
+            一般来说, 属性名以list开头的都对应的是列表页, 即显示单个对象集的页面
+            fields对应的都是点击对象可以进入的详情页, 详情页的点击需要使用list_editable来设置
+
+
+
+

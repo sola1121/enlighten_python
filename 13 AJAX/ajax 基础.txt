@@ -1,0 +1,33 @@
+AJAX
+    A: Asynchronous  异步
+    J: JavaScript    JS
+    A: and           和
+    X: XML           XML(Extensive markup language, 可扩展标记语言)
+
+XML作用类似于Json, 是用来存储传输用户自定义数据
+
+AJAX 是纯前端技术(浏览器使用)
+    浏览器中内嵌了一个XMLRequest对象
+    通过该对象也能发起一个请求, 并等待服务器的响应, 处理响应
+
+使用AJAX的步骤
+    标准JS
+        1) 获得XMLRequest对象
+        2) 进行配置, 包括请求路径, 发送的数据, 如何处理收到的响应
+        3) 发送请求
+
+    jQuery
+        对标准JS进行了简单封装
+        $.ajax(配置参数)
+            配置参数是以JS对象的形式传入:
+                url: "/xxx", 请求提交的路径
+                data: {"k1": "v1", "k2": "v2", ...},  ajax请求提交的参数
+                type: "post",  ajax请求提交的方式
+                datatype: "json", 可接受的服务器响应内容的格式
+                success: function(back_data){
+                    //当服务器正常响应后, 被回调的函数,. 服务器响应内容以参数形式传入调回函数.
+                }
+                error: function(back_err){
+                    // 当服务器无法正常响应请求
+                }
+

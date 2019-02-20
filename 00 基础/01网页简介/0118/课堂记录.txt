@@ -1,0 +1,7 @@
+sublime新建文件的及使用!+tab的方式
+
+新建文件 Ctrl+n
+保存 Ctrl+s
+删除刚刚的命名, 然后在输入一个英文状态下的'!', 在点tab键
+
+sublime 干什么按一个tab键有奇效. lorem 软文

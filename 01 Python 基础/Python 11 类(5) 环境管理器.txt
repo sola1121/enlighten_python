@@ -1,0 +1,101 @@
+异常(高级)
+
+回顾:
+    raise 语句
+    assert 语句
+    try-except 语句
+    try-finally 语句
+
+
+with 语句
+语法:
+    with 表达式1 [as 变量1], 表达式2 [as 变量2], ...
+说明:
+    执行表达式,用as子句中的变量绑定对象,在执行内部操作
+作用:
+    使用于对资源访问的场合,确保使用过程中不管是否发生异常都会执行必要的"清理操作",并释放资源
+
+注:在使用中,经常用于执行异常管理
+
+打开文件一定要关闭文件
+用处:
+    1)文件的打开和关闭
+    2)线程中锁的自动获取和释放
+
+示例:
+# 打开文件一定要关闭文件
+# 使用try-finally语句来处理异常,关闭文件
+try:   # 此try语句用来捕获异常
+    file1 = open("test.txt", 'r')
+    try:   #　此语句用来确保能关闭文件
+        while True:
+            s = file1.readline()
+            if not s:
+                break
+            print(s)
+            i = int(input("0 to read next line: "))
+    finally:
+        file1.close()
+except IOError:
+    print("Fail to open file.")
+except:
+    print("Unknown Error.")
+        
+# 使用with语句来打开和关闭文件
+try:
+    with open("test.txt", 'r') as file2:
+        while True:
+            s = file2.readline()
+            if not s:
+                break
+            print(s)
+except IOError:
+    print("Fail to open file.")
+except:
+    print("Unknown Error.")
+
+注: with语句与try-finally语句类似,它并不会改变程序的异常状态
+
+
+环境管理器
+1)由__enter__方法和__exit__方法的类所生成的对象叫做环境管理器
+2)能够用with语句进行管理的对象必须是环境管理器
+3)__enter__将在进入with语句时被调用,且可以用参数来判断离开with语句时是否有异常发生并做相应的处理
+4)__exit__方法将在离开with语句时被调用,且可以用参数来判断离开with语句时是否有异常发生并做相应的处理
+
+示例
+class Cooker:
+    def doworks(self):
+        print("is cooking cookies.")
+    def open_gas(self):
+        print("is opening gas.")
+    def close_gas(self):
+        print("is closing gas.")
+    def __enter__(self):
+        self.open_gas()
+        return self
+    def __exit__(self, exc_type, exc_value, exc_tb):
+    """当退出with语句时,将调用此方法
+    当出现异常时:
+        exc_type绑定异常类型,
+        exc_value绑定异常对象,
+    当没有异常时:
+        exc_type绑定None
+    """
+        self.close_gas()
+        if exc_type is None:
+            print("没有异常发生")
+        else:
+            print("有异常发生时才退出with")
+            print("异常类型为:", exc_type)
+            print("异常对象为:", exc_value)
+
+c = Cooker()
+c.open_gas()
+c.doworks()
+c.close_gas
+
+with Cooker as c:
+    c.doworks()
+    # 3 / 0   # ZeroDevisionError
+

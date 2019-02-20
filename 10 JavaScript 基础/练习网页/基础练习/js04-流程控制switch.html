@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var num = parseInt(window.prompt("输入星期: "))
+        switch (num){
+            case 1:
+                console.info("周一, 今天吃皮皮虾")
+                break
+            case 2:
+                console.info("周六, 今天吃砂锅炖鸡")
+                break
+            case 3:
+                console.info("周三, 今天吃红烧猪肘, 潘阳湖大闸蟹")
+                break
+            case 4:
+                console.info("周四, 今天吃清蒸羊肚")
+                break
+            case 5:
+                console.info("周五, 今天吃小笼包")
+                break
+            case 6:   // 6, 7是相同的处理方式
+            case 7:
+                console.info("放假了, 今天吃哈士奇")
+                break
+            default:
+                console.warn("可以, 你很皮, 今天不吃饭")
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>一对多的书籍出版社查询</title>
+</head>
+<body>
+    <h2>Book的信息:</h2>
+    <h4>书名: {{ book.title }}</h4>
+    <h4>出版时间: {{ book.publicate_date }}</h4>
+    <h2>Publisher的信息:</h2>
+    <h4>出版社: {{ publisher.name }}</h4>
+    <h4>地址: {{ publisher.address }}</h4>
+    <h4>网址:
+        <a href="{{ publisher.website }}">{{ publisher.website }}</a>
+        {% for book in books%}
+            <h4>书名: {{ book.title }}</h4>
+            <h4>出版时间: {{ book.publicate_date }}</h4>
+        {% endfor %}
+    </h4>
+</body>
+</html>

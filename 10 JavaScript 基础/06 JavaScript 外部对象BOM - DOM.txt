@@ -1,0 +1,157 @@
+外部对象
+    BOM 和 DOM
+    BOM : Browser Object Model
+        浏览器对象模型
+        将浏览器比拟成一个对象 - window(网页初始化时会自动创建), 可以通过该对象灵活的操作浏览器
+    DOM : Document Object Model
+        文档对象模型
+        将HTML文档比拟成一个对象 - document, 可以灵活的操作网页上的内容
+    
+    window对象(BOM模型)
+        1. 作用
+            在JS中表示浏览器窗口
+            window下的属性和方法在使用的过程中, 可以省略"window." , 而直接使用属性方法
+                window.alert()  ->  alert()
+                window.document  ->  document()
+                window.history  ->  hostory
+        2. window中的对话框
+            1) 警告框
+                window.alert() / alert()
+            2) 输入框
+                window.prompt() / prompt()
+            3) 确认框
+                window.confirm() / confirm()
+                点击其确定按钮, 返回true
+                其余的一律操作都返回false
+        3. window中的定时器
+            1) 周期性定时器
+                特点
+                    每间隔一段时间就执行一遍程序, 反复执行
+                声明定时器
+                    var timer = setInterval(func, duration)
+                        func : 要周期性执行的操作, 可以是匿名函数, 是一个函数名string
+                        duration : 要间隔的时间周期, 以ms为单位
+                        返回值 : 返回已经创建好的定时器对象(清除定时器时使用)
+                    示例
+                        window.setInterval("show_time()", 1000)
+                清除定时器
+                    clearInterval(timer)
+                        timer : 要清除的定时器对象
+            2) 一次性定时器
+                特点
+                    在指定的时间间隔后, 只执行一次操作
+                声明一次性定时器
+                    var oneTime = setTimeout(function, time)
+                        function : 等待一定时间后执行的操作
+                        time : 要等待的时长
+                        返回值 : 已启动的定时器对象
+        4. window中的属性
+            1) screen属性
+                作用: 获取客户端显示器的相关信息
+                属性 
+                    width / height
+                    availWidth / availHeight
+            2) history属性
+                作用: 包含当前窗口所访问过的url数量
+                属性 & 方法
+                    属性
+                        length: 所访问过的url数量
+                    方法
+                        (1) back()  后退
+                        (2) forward()  前进
+                        (3) go(num)
+                            在当前网页的基础上前进或后退几步
+                            num: 取值为正数, 前进
+                            num: 取值为负数, 后退
+                        示例
+                            history.back();
+                            history.go(1);
+            3) location属性
+                作用: 表示浏览器上地址栏的信息
+                属性 & 方法
+                    属性: href
+                        表示当前窗口中正在浏览的网页的地址
+                        如果为href赋值, 相当于实现网页跳转功能
+                    方法: reload
+                        重新加载当前网页, 相当于刷新
+                        
+            4) navigator属性
+                作用: 包含浏览器的相关信息
+                属性
+                    userAgent  显示浏览器信息
+    
+    document对象(DOM模型)
+        1. document的概述
+            document对象, 是DOM模型中的顶层对象(文档树的树梢), 封装了所有和HTML元素相关的属性, 方法以及事件
+
+            ● 网页在加载的时候, 会在内存中生成一棵节点树(DOM树). DOM树会封装网页上所有的内容.
+            ● 网页上的每一个元素, 每一个属性, 每一段文本(包括注释), 都会被封装成DOM树上的一个单独的节点.
+
+            节点分为以下类型
+                1) 元素节点 - 表示网页中的一个元素
+                2) 属性节点 - 表示元素中的一个属性
+                3) 文本节点 - 表示元素中的文本内容
+                4) 注释节点 - 表示网页中的注释内容
+                5) 文档节点 - 表示整个HTML文档
+            DOM中所提供的操作
+                1) 查找节点
+                2) 读取节点信息
+                3) 修改节点信息
+                4) 删除节点
+                5) 创建节点
+        2. 查找节点
+            1) 通过元素的id去查找节点
+                前提: 元素一定要具备id属性, 否则无法查找
+                var elem = document.getElementById("元素id")
+                    elem: 对应的元素在JS中表现 - DOM对象/DOM元素
+                DOM属性
+                    innerHTML
+                        修改/获取/设置当前DOM对象的HTML文本
+                    innerText
+                        修改/获取/设置当前DOM对象的普通文本
+                    value
+                        该属性值针对表单控件, 允许获取或者设置表单(form)控件的值
+        3. 读取节点信息
+            1) 节点类型
+                属性: nodeType
+                值: 
+                    返回1: 元素节点
+                    返回2: 属性节点
+                    返回3: 文本节点
+                    返回8: 注释节点
+                    返回9: 文档节点
+            2) 节点名称
+                属性: nodeName
+                值: 
+                    元素节点 & 属性节点 返回: 元素名或属性名
+                    文本节点 返回: #text
+                    文档节点 返回: #document
+                    注释节点 返回: #comment
+        4. 获取或设置元素节点的属性值
+            1) getAttribute(attrName)
+                作用: 获取指定属性的值
+                返回值: attrName属性对应的值
+            2) setAttribute(attrName, attrValue)
+                作用: 修改或设置指定属性的值
+                    attrName: 要修改或设置的属性名
+                    attrValue: 要修改或设置的值
+            3) removeAttribute(attrName)
+                作用: 将attrName属性从节点中移除出去
+            4) 通过 DOM对象.属性名 获取或设置属性值
+                注意: class属性不适用于该方式
+        5. 元素的样式(CSS)
+            1) 使用 setAttribute 设置class属性的值
+                elem.setAttribute("class", "指定类选择器")   // 不能直接elem.class, class 在JS中是一个关键字
+            2) 使用元素的className属性修改class值
+                var div = document.getElementById("div_class");
+                div.className = "指定类选择器";
+            3) 使用内联方式设置属性值
+                内联方式就是直接在html页面中的标签中写style, 该样式优先级最高
+                elem.style.css属性名 = 值;
+                注意: 如果css属性名中包含"-", 那么"-"要取消, 并且后面单词的第一个字母要变大写
+                示例
+                    elem.style.fontSize = "2em";
+
+
+
+

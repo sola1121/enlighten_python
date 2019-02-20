@@ -1,0 +1,214 @@
+1. 索引分类
+    普通索引    唯一索引    主键索引    外键索引
+
+2. 普通索引
+    1) 使用规则:
+        一个表中可以有多个index字段
+        字段的值可以有重复, 也可以为null值
+        经常把做查询条件的字段设置为index字段
+        index字段的key标志为: MUL
+    2) 创建一个普通索引
+        (1) 在创建表时创建普通索引
+            create table t1(
+                ... ...,
+                ... ...,
+                index(字段名1),
+                index(字段名2),
+                ...
+            );
+        (2) 在已创建的表上添加普通索引
+            create index 索引名 on 表名(字段名);
+            # 索引名一般和字段名一样
+    3) 查看普通索引
+        desc 表名;   -->查看KEY标志为MUL
+        show index from 表名;   -- 可以在表名后加上\G, 改变显示方式
+    4) 删除普通索引
+        drop index 索引名 on 表名;
+        注意: 删除普通索引只能一个一个删除
+
+3. 唯一索引(unique)
+    1) 使用规则
+        一个表中可以有多个unique字段
+        unique字段的值不允许重复, 可以为空值null
+        unique的KEY标志为: UNI
+    2) 创建一个唯一索引
+        (1) 创建表时创建
+            create table t2(
+                ... ...,
+                字段名 字段类型 unique,
+            );
+            create table t2(
+                ... ...
+                unique(字段名1),
+                unique(字段名2),
+                ...
+            );
+        (2) 在已有表中创建
+            create unique index 索引名 on 表名(字段名);
+    3) 查看唯一索引
+        desc 表名;   -->查看KEY标志为UNI
+        show index from 表名;   -- 可以在表名后加上\G, 改变显示方式
+    4) 删除唯一索引
+        drop index 索引名 on 表名;
+
+4. 主键索引 (primary key) && 自增长属性(auto_increment)
+    1) 使用规则
+        一个表中只能有一个主键字段
+        对应字段的值不允许重复且不能为空值null
+        主键字段的key标志为: PRI
+        把表中能够唯一标识一条记录的字段设置为主键, 通常把表中记录编号的字段设置为主键
+    2) 创建主键(PRI)
+        # 自增长是可以省略的, 默认起始值为1, 增量为1, 在插入数据时使用自增长, 在有自增长的字段插入null即可
+        (1) 在创建表时创建主键
+            create table t3(
+                ... ...,
+                字段名 数据类型 primary key auto_increment
+            );
+            create table t3(
+                ... ...,
+                字段名1 int auto_increment,
+                primary key(字段名1, ...)   # 这样可以创建复合主键
+            ) auto_increment=10;   -- 设置自增长起始值, 可以省略, 默认为1
+        (2) 在已有表中创建主键
+            alter table 表名 add primary key(字段名);
+    3) 删除主键
+        (1) 先删除自增长属性 # 使用modify
+            alter table 表名 modify id int;
+        (2) 删除主键
+            alter table 表名 drop primary key;
+
+5. 外键索引
+    定义:
+        让当前表字段的值在另一个表的范围内选择
+    1) 创建外键
+        语法格式:
+            constraint 外建名   -- 可以省略
+            foreign key(参考字段名) references 被参考表名(被参考字段名) 
+            on delete 级联动作   -- 删除同步
+            on update 级联动作   -- 更新同步
+        级联动作
+            (1) cascade : 数据级联更新
+                当主表删除记录或者更新被参考字段的值时,从表会级联更新
+            (2) restrict : 限制删除 (默认)
+                当删除主表记录时, 如果从表中有相关联记录则不允许主表删除
+                更新同理
+            (3) set null : 主表操作后设置为null
+                当主表删除记录时,从表中相关联记录的参考字段值自动设为null
+                更新同理
+        在已有表中创建外键
+            # 会受到表中原有数据的限制
+            alter table 表名 add foreign key(参考字段名) references 被参考表名(被参考字段名)
+            on delete 级联动作
+            on update 级联动作
+    2) 删除外键 
+        alter table 表名 drop foreign key 外建名;
+        # 外建名的查看方式
+            show create table 表名;
+    3) 外键使用规则
+        两张表被参考字段和参考字段数据类型要一致
+        被参考字段必须是key的一种, 通常是primary key
+
+6. 数据的导入
+    作用: 把文件系统的内容导入到数据库中
+    语法:
+        load data infile "文件名"      -- 确认导入文件
+        into table 表名                -- 确认导入到的表  
+        fields terminated by "分隔符"  -- 数据件是以什么分隔开的, 确认字段
+        lines terminated by "\n"       -- 确认每行
+    示例:
+        把 /etc/passwd 文件中的内容导入到数据库中
+        $ cat /etc/passwd | grep tarena
+        $ tarena:x:1000:1000:tarena,,,:/home/tarena:/bin/bash
+          用户名:密码:UID:GID:用户描述:用户主目录:登录权限
+        (1) 创建对应的数据库表
+            create table etc_passwd(
+            	username varchar(20),
+                passwd char(1),
+                UID int,
+                GID int,
+                user_detail varchar(50),
+                user_index varchar(100),
+                user_shell varchar(50)
+            );
+        (2) 将要导入的文件拷贝到数据库默认的搜索路径中
+            查看数据库的默认搜索路径
+                show variables like "%secure%";   -- secure_file_priv 就是
+                sudo cp /etc/passwd /var/lib/mysql-files/passwd   -- 拷贝要导入的文件, /var/lib/mysql-files 就是指定的导入目录
+        (3) 执行导入
+            load data infile "/var/lib/mysql-files/passwd"
+            into table etc_passwd
+            fields terminated by ":"
+            lines terminated by "\n";
+
+7. 数据导出
+    作用: 将数据库中的记录保存到系统文件里
+    语法格式:
+        select .. from 表名             -- 导出的内容
+        into outfile "文件名"           -- 导出到的文件
+        fields terminated by '分隔符'   -- 导出的数据字段间以什么分隔
+        lines terminated by '\n'        -- 以什么表示换行
+    示例:
+        select username, UID, GID from etc_passwd
+        into outfile "/var/lib/mysql-files/user.txt"
+        fields terminated by ','
+        lines terminated by '\n';
+    注意:
+        导出的内容由SQL查询语句决定
+        执行导出命令时路径必须制定对应的数据库搜索路径
+
+8. 表的复制
+    语法格式
+        create table 复制表名 select 查询命令;
+        # select命令决定了要复制什么, 复制不仅有表结构, 还有其中的数据
+        只复制表结构
+        create table 复制表名 select 字段名 from 被复制的表 where false;
+    注意:
+        在复制表的时候不会把原有表的key属性复制过来
+
+9. 嵌套查询(子查询)
+    定义:
+        把内层的查询结果作为外层的查询条件
+    示例:
+    select * from etc_passwd where UID < (select UID from etc_passwd where username='mysql');
+
+10. 连接查询
+    1) 内连接
+        定义:
+            从列表中删除与其他被连接的表中没有匹配到的行 
+        语法格式:
+            select 字段名列表 from 表1   -- inner 可省
+            inner join 表2 on 条件
+            inner join 表3 on 条件
+            ...;
+        示例:
+            select s.s_name, c.c_name from sheng s
+            inner join city c on c.cfather_id = s.s_id;
+    2) 外连接
+        (1) 左连接
+            定义:
+                以左表为主显示查询结果
+            语法格式:
+                select 字段名列表 from 表1
+                left join 表2 on 条件;
+            示例:
+                # 以省表为主显示省市详细信息
+                select s.s_name, c.name from sheng s
+                left join city c on s.s_id = c.cfather_id;   -- 将会将sheng表全部显示, 对应的city无信息使用null填充 
+        (2) 右连接
+            定义:
+                以右表为主显示查询结果
+            语法格式:
+                select 字段名列表 from 表1
+                right join 表2 on 条件;
+            示例:
+                # 以城市表为主显示省市详细信息
+                select s.s_name, c.c_name from sheng s
+                right join city c on s.s_id = c.cfather_id;   -- 将会将city表全部显示, 对应的sheng无信息使用null填充
+
+11. 多表查询
+    笛卡尔积
+        select 字段名列表 from 表1, 表2, ...;
+        # 将会让表1和表2中的数据依次组合, 生成一个穷举集
+    1) select 字段名列表 from 表名列表;   -- 生成笛卡尔积
+    2) select 字段名列表 from 表名列表 where 条件;   -- 相当于inner join
+

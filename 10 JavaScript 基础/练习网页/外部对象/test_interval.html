@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        window.setInterval("show_time()", 1000)
+        window.onload = function(){
+            show_time_div()
+        }
+        
+        function $useId(ID){
+            return document.getElementById(ID)
+        }
+
+        function show_time_div(){
+            var new_div = document.createElement("div")
+            new_div.setAttribute("id", "time_block")
+            new_div.style.backgroundColor = "black"
+            new_div.style.color = "white"
+            new_div.style.width = "200px"
+            new_div.style.height = "200px"
+            new_div.style.textAlign = "center"
+            document.body.appendChild(new_div)
+        }
+        
+        function show_time(){
+            var now = new Date()
+            var year = now.getFullYear()
+            var month = now.getMonth() + 1
+            var date = now.getDate()
+            var hours = now.getHours()
+            var minute = now.getMinutes()
+            var second = now.getSeconds()
+            var day = now.getDay()
+            $useId("time_block").innerText = year + "-" + month + "-" + date + "   " + hours +":"+ minute + ":" + second + " 星期" + day
+            // console.info(now)
+        }
+    </script>
+</body>
+</html>

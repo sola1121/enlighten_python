@@ -1,0 +1,133 @@
+线程
+    线程也是多任务编程的一种方法, 可以使用计算机多核资源. 是计算机核心分配的最小单位
+    线程又称为轻量级的进程, 在创建和删除时消耗的计算机资源小
+
+线程和进程的关系
+    一个进程中可以包含多个线程
+    进程中的所有线程共享进程的空间资源 (空间, 全局变量, 分配的内存等)
+    线程也有自己的特有属性, 比如, 指令集, TID等
+
+threading模块创建线程 (python标准库)
+
+    创建线程对象
+        threading.Thread(group=None, target=None, name=None, args=(), kwargs={}, *, daemon=None) 类
+            功能: 创建线程
+            参数: target, 线程函数
+                  args, 函数的位置传参
+                  kwargs, 函数的关键字传参
+                  name, 线程名字 (默认Thread-1)
+            返回: 线程对象
+
+        th.start()   启动线程
+        
+        th.join([timeout])  回收线程
+
+        th.is_alive()   查看线程状态
+
+        th.name   查看线程名称
+
+        th.setName(name)   为线程设置名字
+
+        threading.currentThread()   得到线程对象
+
+        th.daemon 属性, 默认为False, 表示主线程执行完毕不会影响分支线程的执行, 如果设置为True, 则主线程执行完毕其他线程也会终止
+            th.isDaemon() : 判断daemon属性是True还是False
+
+            设置方法:
+                th.daemon = True
+                th.setDaemon(True)
+                注: 只能在还未运行线程的时候(start前)才能设置
+
+threading 的历史比较古老, 兼容了python2中的thread和threading两个模块, 其中的一些函数命名可能没有遵循PEP8标准, 采用驼峰式
+
+--------------------------------------
+
+# 自定义线程类
+1) 继承Thread
+2) 重写run方法, run方法代表线程的活动
+
+import time
+from threading import Thread
+
+class MyThread(Thread):
+
+    def __init__(self, func, args, name="MTh"):
+        Thread.__init__(self)   # super().__init__(self);  super(MyThread, self).__init__
+        self.func = func
+        self.args = args
+        self.name = name
+
+    def run(self):   # 调用start会自动运行, 专门留下来的重写接口
+        self.func(*self.args)
+
+def player(file, sec):
+    for _ in range(2):
+        print("playing %s : %s" % (file, time.ctime()))
+        time.sleep(3)
+
+mt = MyThread(player, ('music.mp3', 3))
+mt.start()
+mt.join()
+
+---------------------------------------
+
+线程池
+第三方模块 threadpool
+
+可用方法:
+ 'NoResultsPending',
+ 'NoWorkersAvailable',
+ 'Queue',
+ 'ThreadPool',
+ 'WorkRequest',
+ 'WorkerThread',
+ 'makeRequests',
+ 'sys',
+ 'threading',
+ 'traceback'
+
+pl = threadpool.ThreadPool(poolsize)
+
+threadpool.makeRequests(some_callable, list_of_args[, callback])
+    调用makeRequests创建了要开启多线程的函数, 以及函数相关参数和回调函数, 其中回调函数可以不写
+
+[pl.putRequest(r) for r in req]
+    将所有要运行的请求放入线程池
+
+pl.wait()
+    等待所有线程工作完成后退出
+
+---------------------------------------
+
+线程在运行在进程中, 实现线程间通信可直接使用进程全局变量
+
+---------------------------------------
+
+进程和线程的区别和联系
+
+1. 两者都是多任务编程方式, 均可使用计算机的多核
+2. 进程的创建要比线程消耗更多的资源
+3. 进程空间独立, 数据安全性更好操作, 有专门的进程间通信方式
+4. 线程使用全局变量通信, 往往要和同步互斥机制配合防止产生资源的争夺
+5. 一个进程可以包含多个线程, 线程共享进程资源
+6. 进程线程都有自己的特有资源
+
+使用场景
+    需要创建较多的并发, 任务较小, 线程比较合适
+    如果程序间数据资源使用重叠较多, 要考虑到线程锁是否需要更复杂的逻辑
+    如果多个任务并无什么关联性, 不宜用多线程将其融入到一个进程中
+    python线程不适用于计算密集型并发
+
+
+python线程之GIL (全局解释器锁)
+
+    python --> 支持多线程 --> 同步互斥 --> 加锁 --> 超级锁 --> 在同一时刻, 解释器只能解释一个线程 --> 大量的python库为了省事沿用了这种方法
+    这些造成了python多线程效率低下
+
+    GIL问题: 由于python的全局解释器锁造成python的多线程执行效率低下
+
+解决的方法:
+    不使用线程, 使用多进程
+    不使用c, c++做解释器, 使用C#, java
+    
+python线程适合高用时的IO操作, 网路IO, 不适合cpu密集型程序

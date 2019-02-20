@@ -1,0 +1,80 @@
+Help on package pymongo:
+
+NAME
+    pymongo - Python driver for MongoDB.
+
+FILE
+    /home/tarena/.local/lib/python2.7/site-packages/pymongo/__init__.py
+
+PACKAGE CONTENTS
+    _cmessage
+    auth
+    bulk
+    client_options
+    collation
+    collection
+    command_cursor
+    common
+    cursor
+    cursor_manager
+    database
+    errors
+    helpers
+    ismaster
+    max_staleness_selectors
+    message
+    mongo_client
+    mongo_replica_set_client
+    monitor
+    monitoring
+    monotonic
+    network
+    operations
+    periodic_executor
+    pool
+    read_concern
+    read_preferences
+    response
+    results
+    server
+    server_description
+    server_selectors
+    server_type
+    settings
+    son_manipulator
+    ssl_context
+    ssl_match_hostname
+    ssl_support
+    thread_util
+    topology
+    topology_description
+    uri_parser
+    write_concern
+
+FUNCTIONS
+    get_version_string()
+    
+    has_c()
+        Is the C extension installed?
+
+DATA
+    ALL = 2
+    ASCENDING = 1
+    DESCENDING = -1
+    GEO2D = '2d'
+    GEOHAYSTACK = 'geoHaystack'
+    GEOSPHERE = '2dsphere'
+    HASHED = 'hashed'
+    MAX_SUPPORTED_WIRE_VERSION = 5
+    MIN_SUPPORTED_WIRE_VERSION = 0
+    OFF = 0
+    SLOW_ONLY = 1
+    TEXT = 'text'
+    __version__ = '3.4.0'
+    version = '3.4.0'
+    version_tuple = (3, 4, 0)
+
+VERSION
+    3.4.0
+
+

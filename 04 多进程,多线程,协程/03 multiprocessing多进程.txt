@@ -1,0 +1,133 @@
+multiprocessing 模块创建进程 (python标准库)
+
+1. 需要将事件封装为函数
+2. 使用multiprocessing提供的类创建新进程
+3. 新的进程和对应的函数相关联, 进程启动会自动执行函数, 完成事件
+4. 进程回收
+
+创建子进程对象
+    multiprocessing.Process(group=None, target=None, name=None, args=(), kwargs={}, *, daemon=None) 类
+        功能: 创建子进程
+        参数: name, 给创建的进程起一个名字, 默认process-1
+              target, 目标函数
+              args, 元组  要给函数传递的参数, 相当于位置传参
+              kwargs, 字典  要给函数传递的参数, 相当于键值传参
+
+    进程对象属性函数
+        p.start()
+            功能: 启动进程, 此时进程真正创建
+        
+        p.join([timeout])
+            功能: 阻塞等待回收相应的子进程
+            参数: 默认为阻塞, timeout为超时时间
+    
+    Process对象的其他属性
+        p.name   进程名称
+        p.pid   创建的进程的PID号
+        p.is_alive()   进程是否处于活跃状态
+
+        p.daemon
+            默认值为False, 表示注进程结束后, 不影响子进程执行, 如果设置为True, 则主进程执行完毕所有的子进程一同退出
+            * 设置必须在start前
+            * 一般使用daemon = True 时不用加join
+            * 该属性并不是linux/unix系统中所说的守护进程设置
+
+什么是守护进程
+    生命周期长, 随系统创建, 随系统销毁
+    不受前端控制, 后台运行
+    操作系统进程或者是自动化运行进程居多
+
+---------------------------------------
+
+# 创建自己的进程类
+
+from multiprocessing import Process
+
+class ClockProcess(Process):
+
+    def __init__(self, value):
+        self.value = value
+        Process.__init__(self)   # super(ClockProcess, self).__init__();   super.__init__()
+        
+    def run(self):
+        """在自定义的进程中 重写父类的这个方法"""
+        n = 5
+        while n > 0:
+            print("The time is {}".format(time.ctime))
+            time.sleep(self.value)
+            n -= 1
+
+# 用自己的进程类创建进程对象
+p = ClockProcess(2)
+
+# 自动执行run方法
+p.start()
+p.join()
+
+通过重写Process中的run方法, 这样就可以让join, start方法支持要运行的内容
+
+---------------------------------------
+
+多进程
+    优点:
+        并行多个任务, 提高运行效率
+        空间独立, 数据安全, 创建方便
+    缺点:
+        进程创建销毁过程中消耗较多的计算机资源
+
+在需要频繁的创建删除较多进程的情况下, 导致计算机资源消耗过多
+进程池如何处理?
+根据CPU核数的不同, 规定同时处理固定数量的进程, 这些进程便组成了一个进程池, 每个任务排队进入进程池, 后面的事件不断补上
+1. 创建进程池, 在池内放入适量的进程
+2. 将时间加入进程池的等待队列
+3. 使用进程池中的进程不断处理事件
+4. 所有事件处理后, 回收关闭进程池
+
+
+进程池
+    multiprocessing.pool.Pool([processes[, initializer[, initargs[, maxtasksperchild[, context]]]]]) 
+
+    pl = Pool()
+        功能: 创建进程池
+        参数: processes, 指定进程池中进程的数量, processes不填写返回os.cpu_count()
+        返回: 返回一个对象, 该对象可以通过get()方法得到, func函数的返回值
+
+    pl.apply_async(func[, args[, kwds[, callback[, error_callback]]]]) 
+        功能: 异步方式将事件放入进程池执行
+        参数: func, 要执行的事件函数
+              args, 同Process中的args通过元组给函数传递位置参数
+              kwargs, 同Process中的kwargs通过字典给函数传递名称参数
+        返回值: 返回class multiprocessing.pool.AsyncResult 类对象, 该对象可以通过其get()方法得到func函数的返回值
+
+    pl.apply(func[, args[, kwds]]) 
+        用法和apply_async一样, 只是需要顺序执行, 一个事件结束后在执行另一个事件
+
+    pl.close()
+        功能: 关闭进程池, 使其无法加入新的事件
+
+    pl.join()
+        功能: 阻塞等待进程池退出(当所有事件处理完毕后)
+
+    pl.map(func, iterable[, chunksize]) 
+        功能: 类似于内建函数map, 将第二个参数的迭代数传递给第一个参数的函数执行. 同时兼容了使用进程池执行
+        返回值: 返回func函数的返回值列表
+        
+        若有 r = pl.map(func, iterable)
+        相当于
+            r = []
+            for i in iterable:
+                res = pl.apply_async(func, (i,))
+
+    pl.map_async(func, iterable[, chunksize[, callback[, error_callback]]])
+        功能: 异步方式将迭代对象中的数据放入func函数中执行
+        返回值: 返回class multiprocessing.pool.AsyncResult 类对象, 该对象可以通过其get()方法得到func函数的返回值列表
+
+    使用with
+    with Pool[5] as pl:
+        print(pl.map(func, range(1, 10)))   # 输出列表
+
+---------------------------------------
+
+其他介绍
+
+multiprocessing.current_process() 获取当前进程对象, 仅适用于用multiprocessing中方法或类创建的进程

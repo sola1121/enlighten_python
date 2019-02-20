@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var star = "*"
+        for (var row=1; row<=5; row++){
+            var space = ""
+            for (var col=4; col>=row; col--){
+                space += " "
+            }
+            console.info(space + star)
+            star += "**"
+        }
+
+        for (var x=1; x<=9; x++){
+            var show = ""
+            for (var y=1; y<=x; y++){
+                show += x + "*" + y + "=" + x*y + "\t"
+            }
+            console.info(show)
+        }
+    </script>
+</body>
+</html>

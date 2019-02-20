@@ -1,0 +1,41 @@
+﻿Sublime编辑器
+
+  Linux中启动命令 $ subl
+                  $ subl 文件名
+                  $ subl 文件夹
+
+1.字体放大缩小: Ctrl + 滑轮
+                Ctrl + "+"/"-"
+2.左侧导航栏: view -> side bar -> Show/Hide side bar, Ctrl + k 或 Ctrl + ｂ
+  只有打开文件夹时才能打开side bar
+
+3.同时选中多个光标: Ctrl + 鼠标左键单击
+                
+4.多行注释: Ctrl + /
+
+5.多选相同的块, 批量修改某个单词: Ctrl + d 重复此操作选下一个单词
+
+6.新建窗口: Ctrl + n
+
+7.替换行: Ctrl + Shift + 上下键
+
+8.删除光标所在行: Ctrl + x
+
+9.回退: Ctrl + z
+
+10.控制台:  Ctrl + ` 
+
+11.换新行 Ctrl + Enter
+
+Notepadqq编辑器 (Linux中)
+
+启动命令:
+    $ notepadqq
+    $ notepadqq 文件名
+
+
+
+
+
+
+

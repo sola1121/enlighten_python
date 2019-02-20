@@ -1,0 +1,99 @@
+URL的使用
+    1) urls.py
+        默认是在主目录中, 主路由配置文件, 会包含最基本的地址映射.
+        每个请求到达, 都会由urls.py中的urlpatterns列表中的url()进行匹配.
+
+        url函数匹配上之后, 可能将请求转交给其他urls.py 或 视图(views)去处理
+
+
+urls.py
+    1) url函数
+        from django.conf.urls import url
+        url函数语法
+            url(regex, views, kwargs=None, name=None)
+                regex
+                    正则表达式, 匹配请求的url
+                views
+                    视图处理函数或其他的urls.py
+                kwargs
+                    字典, 用来向views传参, 没有参数可以省略
+                name
+                    字符串, 给url()起的别名, 主要在模板中使用
+            示例
+                urlpatterns = [
+                    url(r"^index/$", index_view),   # from .views import index_view 视图(views.py) 是自己创建的
+                ]
+    2) 通过url向views传参
+        (1) 使用正则表达式传参
+            使用子组传参, 一个子组是一个参数, 若想使用多个参数, 可以使用多个子组
+            子组 - ()
+                urlpatterns = [
+                    url(r"^index/$", index_view),   # 访问路径是index/的时候, 交给index_views处理
+                    url(r"^index/(\d{2})$", index_args_view),   # 访问路径是index/两位数字, 交给index_args_index处理
+                ]
+            注意:
+                ● 在url中, 一个子组()表示一个参数
+                ● 在views.py中, 对应的处理函数根据url()中子组的个数, 相应的定义参数, 定义的参数要位于request之后
+                    示例
+                        # 在urls.py中
+                        url(r"^index/(\d{2})$", index_view)   # 子组将作为位置参数传递给视图
+                        # 在自建views.py中
+                        def index_view(request, number): ... # number对应的就是url中传过来的两位数字符串
+        (2) 使用url()函数的第三个参数, 字典传参kwargs
+            # 在urls.py中
+            url(r"^index/$", index_view, {"name": "siro", "age": "1"})
+            # 在自建views.py中
+            def index_view(request, name, age): ...
+            注意:
+                ● 视图处理函数中, 必须声明参数
+                ● 视图处理函数的参数的名称和位置, 必须要和url函数中字典中的名称和位置保持一致
+        (3) 使用url()函数的第四个参数, name别名
+            # 在urls.py中
+            url(r"^index/$", index_view, name="index")
+            # 在模板中使用
+            <a href="{% url 'index' %}">返回首页</a>
+
+---------------------------------------
+
+Django中的应用
+    1. 什么是应用
+        应用就是网站中的一个独立的程序模块
+        在Django中, 注目录一般不处理用户的具体请求, 主目录主要做的是项目的初始化和设置, 以及请求的分发
+    2. 创建应用
+        (1) 命令
+            ./manage.py startapp 应用名称
+        (2) 在settings.py中进行注册
+            在INSTALLED_APPS中进行注册
+                INSTALLED_APPS = [
+                    'django.contrib.admin',
+                    'django.contrib.auth',
+                    'django.contrib.contenttypes',
+                    'django.contrib.sessions',
+                    'django.contrib.messages',
+                    'django.contrib.staticfiles',
+                    # 在此注册应用
+                ]
+    3. 应用的结构组成
+        (1) migration目录
+            存放数据库中间文件(日志文件)
+        (2) __init__.py
+            应用的初始化文件
+        (3) admin.py
+            应用的后台管理配置文件
+        (4) apps.py
+            应用的配置文件
+        (5) models.py
+            模型文件, 与数据库有关
+        (6) tests.py
+            测试文件
+        (7) views.py
+            定义视图的文件
+
+    ☭ urls与views之间
+        主目录中有urls.py, 而没有views.py, 如果需要在主目录中响应请求, views是需要自己手动创建的, 推荐使用views.py作为名称.
+        创建的应用(app)目录中, 有views.py, 而没有urls.py, 如果需要在应用上分发路由, 需要在建一个, 推荐使用urls.py作为文件名.    
+        这两者的区别是因为Django框架(基于1.11.8版本)希望能明确的区分主目录与创建的应用之间的功能.
+        主目录是用来配置项目和接收并分配请求的, 而app是模块化的来处理请求并返回响应的.
+        通常都会在应用中创建一个分路由urls.py文件, 其专门用于处理本应用请求. 其由主目录中的urls.py文件调用(使用include函数), 这让功能职责更加清晰.
+            主目录urls.py --include--> 应用目录urls.py ----> 应用目录views.py
+

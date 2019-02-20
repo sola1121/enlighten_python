@@ -1,0 +1,34 @@
+1. Python 数据库编程
+    1) Python数据库接口(Python DB-API)
+        (1) 为开发人员提供的数据库应用编程接口
+        (2) 支持的数据库服务软件概举
+             Oracle, MySQL, SQL_Server, MongoDB, ...
+    2) Python提供的操作MySQL模块
+        python2 : mysqldb
+        python3 : pymysql
+    3) pymysql模块使用流程
+        (1) 建立数据库连接
+        (2) 创建游标对象
+        (3) 使用游标对象的方法操作数据库
+        (4) 提交commit
+        (5) 关闭游标对象
+        (6) 关闭数据库连接
+    4) 建立数据库连接
+        connect对象 = pymysql.connect("主机地址", "用户名", "密码", "库名", charset="utf-8")
+    5) connect连接对象支持的方法
+        cursor(): 创建一个游标对象db.cursor()
+        commit(): 提交到数据库执行(表记录增删改发生时才需要)
+        rollback(): 回滚(之前执行的增删改回滚)
+        close(): 关闭connect对象连接数据库
+    6) cursor对象支持的方法
+        execute("SQL命令") : 执行SQL命令
+        fetchone() : 取得结果集的第一个返回, 有点像yield语句, 依次取走一条
+        fetchmany(n) : 取得结果集的n条记录
+        fetchall() : 取得结果集的所有记录
+        close() : 关闭游标对象
+        # 注意: 使用fetch..函数是拿一条就少一条
+
+
+
+什么时候使用数据库对象, 什么时候使用游标对象
+    对数据库表操作使用游标对象, 对数据库库进行操作使用库对象

@@ -1,0 +1,94 @@
+Number
+Boolean
+String
+Array
+等都是内置对象 皆可用 new 声明
+
+其他的内置对象
+    1. JS中对象分类
+        1) 内置对象 - ES提供
+        2) 外部对象
+            (1) window 来自BOM
+            (2) document 来自DOM
+            以上两个对象都需要依赖于浏览器
+            (3) 自定义对象 - 如: function
+        对象: 包含属性和方法(函数)
+            对象.属性
+            对象.方法()
+
+    2. RegExp对象
+        RegExp - Regular Expression 正则表达式
+        1) 创建RegExp对象的方式
+            var regExp = /匹配模式/修饰符
+            var regExp = new RegExp("匹配模式", "修饰符")
+        2) RegExp对象中的方法
+            (1) test(string) 
+                string: 要验证的字符串
+                作用: 验证string是否满足当前正则表达式对象的格式. 如果string满足正则表达式的话, 则返回true, 否则返回false
+                示例
+                    /* 验证数字是6位数 */
+                    var num = "123456"
+                    var reg = /^\\d{6}$/
+                    if (reg.test(num)) {
+                        console.info("yes")
+                    } else {
+                        console.info("no")
+                    }
+    3. Math对象
+        作用: 执行与数学相关的运算和数据
+        属性
+            Math.PI : 圆周率π
+            Math.E : 自然对数e
+        方法例举
+            1) 三角函数            
+                Math.sin()
+                Math.cos()
+                Math.tan()
+                Math.cot()
+            2) 计算函数
+                Math.sqrt(x) 开平方
+                Math.log(x) 求对数
+                Math.pow(x, y) 求x的y次方
+            3) 数值函数 
+                Math.abs(x) 求绝对值
+                Math.max(a, b, c, d) 求一组数据中的最大值
+                Math.min(a, b, c, d) 求一组数据中的最小值
+                Math.random() 生成0~1之间的随机数
+                Math.round(x) 四舍五入取整
+    4. Date对象
+        作用: 获取客户端的日期时间
+        1) 创建Date对象
+            (1) 获取当前日期时间
+                var time_now = new Date()
+            (2) 初始化自定义时间对象
+                var time_self = new Date("2018/06/13 18:30:00")
+        2) 方法例举
+            (1) 读取或设置当前时间的毫秒数
+                getTime()
+                    返回自1970-1-1 00:00:00 到Date对象所经过的毫秒数
+                setTime(毫秒数)
+                    根据给定的毫秒数, 结合1970-1-1 计算日期
+            (2) 读取时间分量
+                getFullYear()
+                    获取当前日期时间对象的四位年份数
+                getYear()
+                    返回自1900年以来, 到当前日期对象所经过的年数
+                getMonth()
+                    返回0-11的数字来表示1-12月
+                    需要得到当前月份的值需要+1
+                getDate()
+                    返回当前日期对象的日
+                getDay()
+                    返回当前日期对象的星期数
+                    返回0-6表示星期日-星期六
+                获取时间
+                    getHours() 获取小时
+                    getMinutes() 获取分钟
+                    getSeconds() 获取秒
+                    getMilliseconds() 获取毫秒
+            (3) 转换为字符串
+                toString()
+                toLocalString()
+                toLocalTimeString()
+                toLocalDateString()
+                

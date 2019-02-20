@@ -1,0 +1,284 @@
+2018-02-22
+
+------------------作用域------------------
+
+Python 作用域
+    作用域也叫命名空间, 是访问变量时查找变量名的范围空间
+
+Python的四个作用域 LEGB
+作用域                     英文解释                   英文简写
+局部作用域(函数内)         Local function              L
+外部嵌套函数作用域         Enclosing function locals   E
+函数定义所在模块的作用域   Global(module)              G
+Python内置模块的作用域     Builtin(python)             B
+
+变量名的查找规则, 由小到大
+    在访问变量时,先查找本地变量,然后是包裹此函数外部函数内的变量,之后是全局变量,最后是内置变量
+    L ->  E  ->  G  ->  B
+
+说明:
+    在默认的情况下,变量赋值会创建或者修改本地作用域的变量
+
+可用于控制作用域的语句
+    global 用于函数内部,让变量变为全局变量,改变G
+    nonlocal 用于内嵌函数,让变量变为嵌套的上一级函数作用域,改变E
+
+可用于显示变量的作用域的内建函数
+    globals() 返回当前全局作用域内的变量的字典
+    locals() 返回当前局部作用域内的变量的字典
+注:
+    可以通过globals()[变量名]获取到变量 
+
+------------------函数式编程------------------
+
+函数式编程
+    是指用一系列函数解决问题
+
+python语言 函数是一等公民
+    函数本身可以赋值给变量,赋值后变量绑定函数
+    允许将函数本身作为参数传入另一个函数
+    允许函数返回一个函数
+
+好处:
+    每一个函数完成细小的功能,一系列函数的任意组合可以解决大问题
+    函数仅接收输入并产生输出,不包含任何可以影响输出的内部状态
+
+函数式编程的要求:
+    def 创建的函数最好不要访问局部作用域以外的变量,这样可以保证返回结果的唯一性(可重入性)
+    可重入性是指,输入一定,结果必然一定的函数
+示例:
+    def myadd1(x, y):   # <-- 这是可重入函数
+        return x + y
+
+    s = 0
+    def myadd2(x, y):   # <-- 这不是可重入函数,因为他会改变局部变量以外的变量
+        global s
+        s += x + y
+        return s
+
+
+高阶函数   high order function
+什么是高阶函数:
+    满足下面两个条件之一的就为高阶函数:
+        1)函数接受一个或多个函数作为参数传入
+        2)函数返回一个函数
+
+python 内建的高阶函数 bulitin module
+    map, filter, sorted
+
+map 函数
+    map(func, *iterables)
+    用函数对可迭代对象中的每一个元素作为参数计算出新的可迭代对象.当最短的一个迭代器完成迭代后此迭代器生成结束
+
+filter 函数
+    filter(func, iterable)
+    筛选可迭代对象iterable中的数据,返回一个可迭代对象,此可迭代对象将对iterable生成的数据进行筛选
+    函数func将对iterable中的每个元素进行求值,返回False则将此数据丢弃,返回True,则保留此数据
+
+sorted 函数
+    sorted(iterable, key=None, reverse=False)
+    将原可迭代对象进行排序,生成排序后的列表
+
+
+递归函数 recursion
+    函数直接或间接的调用自身
+
+
+装饰器 decorators
+什么是装饰器:
+    装饰器是一个函数,主要作用是用来包装另一个函数或类
+    包装的目的是在不改变原函数名或类名的情况下,改变被包装对象的行为
+
+-------------------模块----------------
+
+程序由模块组成
+模块内有函数,类,变量
+...
+
+
+模块化编程的优点:
+1)有利于多人合作开发
+2)代码更易于维护
+3)提高代码的复用率(模块可以被其他代码或模块使用)
+4)模块化编程有助于解决函数名和变量名冲突(重名)
+问题:
+模块内的变量的作用域为模块内全局(模块内的函数可以直接访问本模块的全局变量)
+
+模块加载过程
+    在模块导入时, 模块所有的语句都会执行
+    如果一个模块已经导入,则在次导入时不会重新执行模块内的语句
+
+模块路径的搜索顺序
+import xxx(模块名)   # 去哪里找xxx.py ?
+1)程序运行的当前路径(运行时路径: pwd命令返回的路径)
+2)sys.path提供的路径
+    sys.path是一个列表,里面放的是模块的搜索路径
+3)搜索内建模块
+
+
+模块被导入和执行的过程
+1)先搜索相关路径中的模块(.py)
+2)判断是否由此模块对应的.pyc文件,如果.pyc文件比py文件新,则直接加载.pyc文件
+3)否则用模块.py文件生成.pyc并加载执行
+
+          编译(compile)       执行(execute)    
+example.py   --->   example.pyc   --->   python3
+
+一般编译出来的文件保存在项目目录__pycache__目录中
+
+
+--------------迭代器和生成器------------------
+
+迭代器 Iterator 和 生成器 Generator
+
+迭代器 Iterator
+什么是迭代器:
+  迭代器是指用iterable(obj)函数返回的对象(实例)
+  迭代器可以用next(it)函数获取迭代器对象
+
+两个函数
+  iter(iterable) 从可迭代对象中返回一个迭代器,iter必须是一个能提供迭代器的对象
+  next(iterable) 从迭代器对象中获取下一个记录. 如果无法获取下一条记录,则触发StopIteration异常
+
+示例:
+ls = [1, 3, 5 ,7]
+it = iter(ls)   # it绑定迭代器对象
+print(next(it))   # 1
+print(next(it))   # 3
+print(next(it))   # 5
+print(next(it))   # 7
+print(next(it))   # StopIteration异常
+
+生成器 Generator
+生么是生成器:
+  生成器能够动态的提供数据对象,生成器对象也是可迭代对象
+
+生成器有两种:
+  生成器函数
+  生成器表达式
+
+生成器函数的定义
+  含有yield
+  语句的函数是生成器函数,此函数被调用时返回一个生成器对象
+  生成器对象是一个可迭代对象
+  生成器只生成一次数据,用了就没了
+  yield翻译为产生(或生产)
+
+yield语句
+语法:
+    yield 表达式
+说明:
+    yield 用于def函数中,目的是将此函数作为生成器函数使用
+    yield 用来生成数据,供迭代器的next(iteration)函数使用
+注: yield函数由Python提供
+示例:
+def myyeild():   # 生成器函数, function object
+    print("yield函数被调用")
+    yield 2
+    yield 3
+    yield 5
+    yield 6
+
+myyeild()   # 调用, myyield函数将返回一个可迭代对象(生成器对象)
+gen = myyeild()   # gen绑定生成器对象
+it = iter(gen)   # it绑定迭代器对象
+print(next(it))   # 2
+print(next(it))   # 3
+print(next(it))   # 5
+print(next(it))   # 6
+print(next(it))   # StopIteration异常
+
+for x in myyeild():   # 用for访问生成器函数
+    print(x)
+
+生成器函数说明:
+    生成器函数的调用将返回一个生成器对象,生成器对象是一个可迭代对象
+    生成器函数调用return语句会触发一个StopIteration异常
+
+生成器函数的应用示例:
+def myinteger(begin, end):
+    n = begin 
+    while n<end:
+        print("will create", n)
+        yield n
+        n += 1
+
+for x in myinteger(10, 20):
+    print(x)
+
+
+生成器表达式
+语法:
+    (表达式 for 变量 in 可迭代对象 [if 真值表达式])
+    注: if 子句可以省略
+作用:
+    用推导式形式生成一个新的生成器
+示例:
+gen = (x ** 2 for x in range(1, 5))   # 看起来有点像推导式, 但这是生成器表达式, 用的是()
+it = iter(gen)
+next(it)   # 1
+next(it)   # 4
+next(it)   # 9
+next(it)   # 16
+next(it)   # StopIteration异常
+
+应用示例:
+def isodd(a):
+    if a % 2 == 0:
+        return False
+    return True
+# 这是一个生成器表达式生成100以内奇数的立方
+for x in (x**3 for x in range(100) if isodd(x)):   # 使用的生成器表达式, 节约空间, 和计算量, 现用现生成
+    print(x, end)
+
+# 先一次性生成100以前奇数的立方存于列表中,在打印循环
+for x in [x**3 for x in range(100) if isodd(x)]:
+    print(x)
+
+
+迭代工具函数 zip, enumerate
+    迭代工具函数的作用是生成一个个性化的可迭代对象
+
+zip函数
+格式:
+    (iter1, iter2, iter3, ...)
+作用：
+    返回一个zip对象,此对象用于生成一个元组,此元组的个数是由最小的可迭代对象决定
+示例1:
+numbers = [10086, 10000, 10010, 95588]
+names = ["中国移动", "中国电信", "中国联通"]
+for x in zip(numbers, names):
+    n, a = x
+    print(a, "的客服电话是:", n)
+zip(numbers, names)   # 返回其地址与类型, 并没有返回数据值
+
+注: zip用于数据压缩, 大多数时候用于字典生成, 可以将zip对象转化为dict对象
+
+示例2:
+areas = ["北京", "上海", "广州", "深圳"]
+codes = ["京", "沪", "粤", "深"]
+for b, s, g in zip(range(100), areas, codes):
+    print(b, s, g)
+
+枚举函数 enumerate
+格式:
+    enumerate(iterable, start=0)
+作用:
+    生成带索引的枚举对象,返回的迭代类型为索引-值对(index-value对),默认索引从零开始,可以用start指定
+示例1:
+names = ["kizuna", "luna", "akari", "siro", "nojanoli"]
+for x in enumerate(names):
+    print(x)
+
+示例2:
+lst = list()
+while True:
+    in_str = input("words: ")
+    if in_str == "" or in_str is None:
+        break
+    lst.append(in_str)
+for x in enumerate(lst, start=1):
+    print("line_%02s: %s" % x)
+
+
+

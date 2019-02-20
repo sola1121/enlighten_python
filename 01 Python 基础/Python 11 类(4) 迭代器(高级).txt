@@ -1,0 +1,98 @@
+
+iter(iterable) 从可迭代对象中返回一个迭代器,iter必须是一个能提供迭代器的对象
+next(iterable) 从迭代器对象中获取下一个记录. 如果无法获取下一条记录,则触发StopIteration异常
+
+迭代器(高级)
+
+什么是迭代器:
+    可以通过next(it)函数取值的对象就是迭代器
+迭代器协议:
+    迭代器协议是指对象能够使用next函数获取下一下数据,在没有下一项数据时触发一个StopIteration异常来终止迭代的约定
+
+迭代器协议的实现方法:
+    在类内需要__next__(self): 方法来实现迭代器协议
+    1)返回需要的数据
+    2)如果没有需要返回数据
+        raise StopIteration
+
+什么是可迭代对象
+    是指能用iter(obj)函数返回的对象(实例)
+    可迭代对象内部需要定义__iter__(self)方法来返回迭代器对象(实例)
+    
+list, dict, range(),生成器函数返回的对象
+生成器表达式返回的对象都是可迭代对象
+
+for x in range(10):
+    print(x)
+以上for语句调用的解析过程
+1: 调用range(10)返回可迭代对象,用内部的变量绑定后待使用
+2: 调用此对象的__iter__(self)方法,得到迭代器,用变量来绑定
+3: 循环调用__next__(self)方法,每次调用完后用变量x绑定,然后执行语句块直到得到StopIteration异常为止
+
+示例1:
+# 生成整数的迭代器
+class IntegerIterator:
+"""此类定义一个整数的迭代器对象
+此对象每次用next取值是生成从start开始,到stop结束(不包含stop)的整数
+"""
+    def __init__(self, start, stop):
+        self.start = start 
+        self.stop = stop
+    
+    def __next__(self):
+        if self.start >= self.stop:   #先检查还有没数据要生成,如果没有,按迭代器协议抛出StopIteration异常
+            raise StopIteration
+        r = self.start   # 先设定要返回的值存于r内
+        self.start += 1   # 将start走向下一步
+        return r   # 返回要生成的对象
+
+it = IntegerIterator(5, 8)   # 创建一个迭代器对象
+print(next(it))   # 5
+print(next(it))   # 6
+print(next(it))   # 7
+print(next(it))   # StopIteration
+
+示例2:
+class IntegerIterator:
+"""此类定义一个整数的迭代器对象
+此对象每次用next取值是生成从start开始,到stop结束(不包含stop)的整数
+"""
+    def __init__(self, start, stop):
+        self.start = start 
+        self.stop = stop
+    
+    def __next__(self):
+        if self.start >= self.stop:   #先检查还有没数据要生成,如果没有,按迭代器协议抛出StopIteration异常
+            raise StopIteration
+        r = self.start   # 先设定要返回的值存于r内
+        self.start += 1   # 将start走向下一步
+        return r   # 返回要生成的对象
+
+
+class MyInteger:
+"""MyInteger类为生成整数的可迭代对象,
+此对象有定有__iter__方法来返回一个迭代器
+"""
+    def __init__(self, begin, end):
+        # 此对象先保存整数的开始值和结束值
+        self.beg = begin
+        self.end = end
+    
+    def __iter__(self):
+    # iterf返回一个可迭代的对象
+        return IntegerIterator(self.beg, self.end)   # IntegerIterator中凭借__next__返回生成元素
+
+
+myint = MyInteger(1, 4)   # MyInteger绑定迭代对象
+it = iter(myint)
+print(next(it))
+print(it.__next__())
+
+for x in MyInteger(1, 100):   # 如同range类, 这样MyInteger可以直接迭代使用
+    print(x)
+
+
+
+
+
+

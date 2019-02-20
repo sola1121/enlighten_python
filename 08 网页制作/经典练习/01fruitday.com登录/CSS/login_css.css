@@ -1,0 +1,107 @@
+/* charset=utf-8 */
+
+body{
+    margin-left: 20%;
+}
+
+hr{
+    margin-bottom: 30px;
+    color: grey;
+}
+
+li{
+    padding: 10px;
+}
+
+.login_content{
+    width: 75%;
+    color: grey;
+    
+}
+
+/* 密码框 */
+#passwd{
+    font-style: italic;
+}
+
+/* 图片上的div按钮 */
+#img_button{
+    position: relative;
+    left: 200px;
+    top: -5em;
+    border: forestgreen solid 1px;
+    border-radius: 10px;
+    color: forestgreen;
+    width: 5em;
+    padding: 10px 0px 10px 15px; 
+}
+#img_button>a:link{
+    color: rgb(98, 150, 22);
+    font-family: "黑体", Arial, Helvetica, sans-serif;
+    text-decoration: none;
+}
+
+/* 左容器div */
+#left_content{
+    width: 50%;
+}
+
+/* 右容器div */
+#right_content{
+    width: 50%;
+    position: relative;
+    right: -35em;
+    top: -360px;
+}
+#right_content a:link{
+    color: dimgrey;
+}
+#right_content a:hover{
+    color: dimgrey;
+}
+
+/* 登录注册div按钮 */
+#button_login, #button_regist{
+    border-radius: 10px;
+    width: 136px;
+    height: 26px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-align: center;
+    border: rgb(100, 150, 50) solid 1px;
+}
+
+#button_login{
+    margin-left: 75px;
+    background-color: rgb(100, 150, 50);
+    
+}
+#button_login a:link{
+    color: white;
+    text-decoration: none;
+}
+
+#button_regist{
+    position: relative;
+    top: -42px;
+    left: 10em;
+    background-color: rgb(245, 255, 237);
+    margin-left: 60px;
+}
+#button_regist a:link{
+    color: rgb(100, 150, 50);
+    text-decoration: none;
+}
+
+/* 输入框们 */
+.user_info{
+    height: 36px;
+    width: 21em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.user_info:focus{
+    box-shadow: springgreen;
+}
+

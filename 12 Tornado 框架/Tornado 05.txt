@@ -1,0 +1,15 @@
+代码的封装
+    应该把处理一类事情的代码(例如: 所有与数据库相关的代码)都封装到一个类中
+
+尽量避免创建过多的对象. 
+    如: 
+        在dbutil的使用上, 将其通过新建类继承tornado.web.Application添加到Application的子类, 以使用子类类的方式将其添加到所有的request操作中
+
+如何在UIModule子类中寻找到application
+    self.handler.application
+    这样可以利用重写过的application子类, 完成一些默认功能的更改或添加
+
+session, cookie
+
+cookie: 服务器写入到浏览器中的一些键值对. 这些键值对会在下次访问服务器时, 被浏览器自动提交上来.
+session: 相关信息存储在服务器, 然后向浏览器中写入一个键值对, 该键值对就是下一次访问服务器时, 找到存储信息的以个ID. ID应该尽量避免不重复.

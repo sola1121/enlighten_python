@@ -1,0 +1,156 @@
+DOM - 事件
+    1. 什么是事件
+        通常由用户的行为来激发的操作
+    2.触发事件的行为
+        所有事件在绑定的时候, 前面要加 on
+        1) 鼠标事件
+            click   鼠标单击事件
+            mouseover   鼠标移入进元素激发的事件
+            mouseout   鼠标移出元素激发的事件
+            mousemove   鼠标在元素内移动时的事件
+        2) 键盘事件
+            keydown   键位按下时事件
+            keypress   键位按下时事件
+            keyup   键位抬起时事件
+        3) 状态改变事件
+            load   当元素加载完成时激发的事件
+            change   元素发生改变时激发的事件,多用于<select>上
+            focus   当元素获取焦点时触发的事件
+            blur   当元素失去焦点时触发的事件
+            submit   当表单被提交时触发的事件
+    3. 绑定事件的方式
+        1) 在元素中绑定事件
+            <标记 on事件名="执行函数()">
+            示例
+                <div onfocus="fun()">...</div>   // div成为焦点时
+                <body onload="fun()">...</body>   // body加载时
+                <div onmouseover="fun()">...</div>   // div鼠标移入时
+        2) 在JS中动态的位元素绑定事件
+            示例
+                /* 使用匿名函数动态绑定 */
+                var elem = document.getElementById("block")
+                elem.on事件名 = function(){
+                    事件操作, this表示elem元素上自身
+                }
+
+                /* 使用函数引用动态绑定 */
+                var elem = document.getElementById("block")
+                elem.on事件名 = do_something
+                function do_something(){
+                    事件操作, this表示window对象
+                }
+            注意
+                在使用匿名函数动态绑定事件中, 在事件处理函数内, 允许通过this关键字, 来表示当前的元素(DOM元素)
+                如: 在elem匿名函数动态的绑定的事件中使用this, 表示的就是网页中的当前元素
+                    this.innerText("elem元素本身")
+                未在使用匿名函数动态绑定事件中的this, 它表示的是window对象, 即普通的函数中, this表示的是window
+            自我理解: 
+                动态绑定中, 使用的是匿名函数, 该匿名函数直接绑定在元素的事件上, 属于元素的事件绑定, 所属是该元素, 所以在其中的this指向本元素
+    4. 事件行为
+        1) load事件
+            常用: 为body去绑定load事件, 目的是为了在所有内容都加载完成之后再执行的操作放在此处
+            示例
+                <body onload=""></body>
+                JS中动态绑定
+                    /* 匿名函数动态绑定 */
+                    window.onload=function(){
+                        执行事件
+                    }
+                    /* 函数引用动态绑定 */
+                    window.onload=init
+                    function init(){
+                        执行事件
+                    }
+        2) submit事件
+            只有在表单被提交时才会触发
+            注意: 该事件需要一个boolean的返回值来通知表单是否要提交. 返回为true, 可以提交表单, 返回为false则阻止表单提交
+            示例
+                var fm = document.getElementByTagName("form")
+                /* 为form绑定submit事件 */
+                fm.onsubmit = function(){
+                    return false     // 当表单被提交时, 返回false, 这样就不会提交表单, 可用于判断表单内容最后是否返回
+                }
+    5. 事件对象(事件参数对象, event对象)
+        1) 什么是事件对象
+            任何一个事件在触发后, 都会自动产生一个event对象, 名字就叫event, 代表当前事件对象
+            event对象中包含与当前事件相关的一些属性和方法
+        2) 获取event对象
+            (1) 在html元素中绑定事件
+                示例
+                    <标记 on事件名="btn(event)">
+
+                    function btn(event){   // 这里不用强制写event, 因为只是个参数, 但是推荐依然写event
+                        // 处理事件函数
+                    }
+            (2) 在JS中动态为元素绑定事件
+                示例
+                    var d1 = document.getElementById("d1")
+
+                    d1.onclick = function(event){
+                        // event表示的就是事件对象
+                        // 这里的事件是一个mouseevent
+                    }
+        3) 事件的常用属性
+            (1) 事件源
+                什么是事件源
+                    触发当前事件的元素是谁
+                获取事件源
+                    通过 event.target获取事件源
+                    事件源是一个DOM对象, 指的是一个标签元素, 该标签的某一个事件绑定触发的事件
+            (2) 鼠标事件(事件对象的常用属性)
+                鼠标事件
+                    click, mouseover, mousemove, mouseout
+                    (1) offsetX, offsetY
+                        获取鼠标在元素上的坐标点
+                        以元素的左上角为(0, 0)
+                    (2) clientX, clientY
+                        获取鼠标在网页上的坐标点
+                    (3) screenX, screenY
+                        获取鼠标在屏幕上的坐标点
+            (3) 键盘事件(事件对象的常用属性)
+                键盘事件
+                    keypress, keydown, keyup
+                    (1) keypress
+                        只有在输入字符的前提下, 才会被激发
+                        属性
+                            which : 当前按下的字符的ASCII码
+                            key : 当前按下的字符
+                        注意: 该事件允许通过一个返回值, 通知元素是否要处理该事件. 
+                            返回值为true, 则正常显示输入的字符, 返回值为false, 则终止显示
+                    (2) keydown
+                        只要按下键盘键位时就会被触发, 无论是否有字符的输入
+                        属性
+                            which
+                                当前按下键位的键位码
+                                只区分按键, 并不区分大小写
+                                大小写字符, 是同一键位, 所以键位码相同
+                            返回值同keypress
+                示例
+                    /* 规定能输入什么 */
+                    window.onload = function(){
+                        document.getElementById("uname").onkeypress = function(event){   // 传入名为event的event对象
+                            if (event.which >= 48 && event.which <= 57){   // 输入的字符在ASCII码48~57之间
+                                return true
+                            }
+                            return false
+                        }
+
+                    }
+
+                    window.onload = function(){
+                        document.getElementById("uname").onkeydown = function(event){   // 传入名为event的event对象
+                            ...
+                        }
+                    }
+
+    6. 事件冒泡
+        1. 什么是事件冒泡
+            当激发子元素事件时, 同时把父元素对应的事件也给执行了
+            这是一个默认的特点
+            产生场合: 
+                1) 必须是父子结构或具备层级关系的元素
+                2) 必须同时设置了相同的事件
+        2. 阻止事件冒泡
+            让该事件在当前元素中执行, 不向上冒泡
+                event.stopPropagation();
+

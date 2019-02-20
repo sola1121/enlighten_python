@@ -1,0 +1,122 @@
+什么是文件:
+    文件是数据管理和数据存储的单位
+    文件通常用来长期存储数据
+file 
+I/O (input/output)
+内存 ---> 外部设备(output)
+    write ---> read
+外部设备 ---> 内存(input)
+    read <--- write
+
+文件的操作顺序:
+    1) 打开文件 open --> read/write 
+    2) 读写文件
+    3) 关闭文件
+
+文件的打开函数
+    open(file, mode='rt') 用于打开一个文件, 返回此文件流对象,如果打开文件失败,则会触发IOError错误
+注: 其使用的是操作系统的内核
+    由操作系统提供的文件读写方式(操作系统提供的API)
+        文本读写方式
+        二进制读写方式
+
+文件关闭方法
+    file.close()
+
+示例:
+try:
+    # 打开文件, 用file绑定, file为io对象
+    file = open("filename.py", 'rt')
+    # 此处用来读写文件
+    # ...
+
+    # 关闭文件
+    file.close()
+except IOError:
+    print("Error")
+
+
+mode参数
+'r'	以只读方式打开(默认)   (read)
+'w'	以只写方式打开，删除原有文件内容(如果文件不存在，则创建该文件并以只写方式打开)   (write)
+'x'	创建一个新文件, 并以写模式打开这个文件,如果文件存在则会产生"FileExistsError"错误   
+'a'	以只写文件打开一个文件，如果有原文件则追加到文件末尾  (append)
+'b'	用二进制模式打开   (binary)
+'t'	文本文件模式打开 (默认)   (text)
+'+'	为更新内容打开一个磁盘文件 (可读可写)
+
+缺省模式是 'rt'
+'w+b' 可以实现二进制随机读写，当打开文件时，文件内容将被清零
+'r+b' 以二进制读和更新模式打开文件,打开文件时不会清空文件内容
+'r+' 以文本模式读和更新模式打开文件,打开文件时不会清空文件内容
+
+注: t和b不能同时存在, 只有以文本方式或以二进制方式打开两个读写方式
+
+文件流对象方法
+file.close()	关闭文件(关闭后文件不能再读写会发生ValueError错误)
+file.readline()	读取一行数据, 如果到达文件尾则返回空行
+file.readlines(max_chars=-1)	返回每行字符串的列表,max_chars为最大字符(或字节)数
+file.writelines(lines)	每行字符串的列表
+file.flush()	把写入文件对象的缓存内容写入到磁盘
+file.read(size = -1)	从一个文件流中最多读取size个字符
+file.write(text)	写一个字符串到文件流中，返回写入的字符数
+
+二进制文件操作方法	
+file.tell()	返回当前文件流的绝对位置, 主观点就是读取文件光标的位置
+file.seek(offset, whence=0)	改变数据流的位置，返回新的绝对位置, 主观点就是设置读取文件光标的位置 seek:寻找
+file.readable()	判断这个文件是否可读,可读返回True,否则返回False
+file.writable()	判断这个文件是否可写,可写返回True,否则返回False
+file.seekable()	返回这个文件对象是否支持随机定位
+file.truncate(pos = None)	剪掉 自pos位置之后的数据，返回新的文件长度
+
+
+读取文本文件时可能会遇到的问题
+    当字符串中有\n换行符时,可以使用rstrip, strip, lstrip等str方法函数去掉
+    想要文本有换行,记得在后面加\n换行符
+
+什么是二进制文件
+    文件中以字节(bytes)为单位存储,不以字符为单位进行存储的文件
+
+file.seek(offset, whence=0) 函数方法
+file.seek(偏移量, whence=相对位置)
+    偏移量:
+        大于0的数代表向文件末尾方向移动
+        小于0的数代表向文件头方向移动
+    相对位置:
+        0 代表从文件头开始偏移
+        1 代表从当前读写位置开始偏移
+        2 代表从文件尾开始偏移
+
+示例:
+file = open("data3.bin", 'rb')
+# 读取data3.bin中的 第5~15
+# file.read(5)
+file.seek(5, 0)   # 从文件头开始向后移动5个字节
+file.seek(-15, 2)   # 从文件尾向前移动15个字节
+file.seek(3, 1)   # 向当前位置向后移动3个字节
+b2 = file.read(10)
+print(b2)
+file.close()
+
+
+
+标准输入数出文件
+    sys.stdin   # 标准输入
+    sys.stdout   # 标准输入
+    sys.stderr   # 标准错误输出
+
+示例:
+sys.stdout.write("This is in Out stream.")
+sys .stderr.write("This is in Error stream.")
+
+# 从键盘读取数据,直到输入Ctrl+D文件结束符才停止
+in_str = sys.stdin.read()   # 默认的标准输入时读取键盘
+print(in_str)
+
+说明:
+    每一个python程序启动后,都会有以上三个文件
+
+
+
+
+

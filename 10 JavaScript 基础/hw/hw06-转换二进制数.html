@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="convertBin()">输入数字转换为二进制</button>
+    <script>
+        function convertBin(){
+            var num = parseInt(window.prompt("输入一个数"))
+            var arr = new Array()
+            while (num!=0) {
+                arr[arr.length] = num % 2
+                num = parseInt(num / 2)
+                arr.reverse()
+            }
+            console.info(arr.join(""))
+        }
+    </script>
+</body>
+</html>

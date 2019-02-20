@@ -1,0 +1,66 @@
+常见套接字属性
+
+Data descriptors defined here:
+     |  
+     |  family
+     |      the socket family
+     |  
+     |  proto
+     |      the socket protocol
+     |  
+     |  timeout
+     |      the socket timeout
+     |  
+     |  type
+     |      the socket type
+
+fileno() -- return underlying file descriptor
+    返回文件描述符, 文件描述符是一个序列号, 每一个IO操作系统都会分配一个不同的整数与之对应, 该整数即为IO操作的描述符
+    能分配的一般从3开始, 0为 sys.stdin, 1为 sys.stdout
+
+getsockname() -> address info
+    获取套接字绑定的地址, 即bind参数的值
+
+getpeername() -- return remote address [*]
+    返回客户端的套接字地址
+    使用前提是一个可以连接的套接字对象, 即bind, listen后, 对accept返回的用于维护用户连接的套接字才能使用
+
+getsockopt(level, optname[, buflen]) -- get socket options
+    功能: 获取套接字选项
+    
+setsockopt(level, optname, value[, optlen]) -- set socket options
+    功能: 设置套接字选项
+    参数: level, 要定义的选项类型, 常用选项 IPPROEO_TCP, IPPROTP_IP, SOL_SOCKET 
+          optioname, 根据level确定的子选项, 
+          value, 更具选项设置的值
+    示例:
+    # 设置断开后端口可以立刻使用
+    server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+
+server.setblocking(bool)
+        功能: 将套接字设置的阻塞状态
+        参数: bool类型, 默认为True, 即阻塞, 设置False为非阻塞
+    
+server.settimeout(second)
+    功能: 设置套接字的超时检测
+    参数: 超时时间
+超时等待即对原本阻塞的函数进行设置, 使其不在始终阻塞, 而是阻塞等待一定时间后自动返回. 
+            在规定时间中如果正常结束阻塞则继续执行否则产生timeout异常
+
+socket.gethostname()   # 'tedu'
+socket.gethostbyname('tedu')   # '127.0.0.1'
+socket.gethostbyname('localhost')   # '127.0.0.1'
+socket.gethostbyaddr('www.bilibili.com')   # 返回主机名, ip地址的列表
+
+socket.getservbyname()   # 通过名字获取服务器端口
+
+
+IP二进制转换
+socket.inet_aton('127.0.0.1')   # b'\x7f\x00\x00\x01'
+socket.inet_ntoa(b'\x7f\x00\x00\x01')   # '127.0.0.1'
+
+socket.inet_pton(socket.AF_INET, '127.0.0.1')   # 转换IPV4, socket.AF_INET表示转换的ipv4
+socket.inet_pton(socket.AF_INET6, '2001:DB8:0:23:8:800:200C:417A')   # 转换IPV6, socket.AF_INET6表示转换的ipv6
+也有
+socket.inet_ntop   socket.inet_ntop   换二进制IP地址到对应描述进制
+

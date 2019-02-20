@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="verify()">用户验证</button>
+    <script>
+        function verify(){
+            var verify_code = ["fd3s", "oepi", "d7hi", "2gbh", "lg0n", "3jah", "df0g", "sdl5", "y1te", "mndb"]
+            var random_code = verify_code[(Math.random() * 10).toFixed(0)]   // 随机取元素
+            var get_code = window.prompt("请输入验证码: ", random_code)   // 这样random_code会直接出现在输入框中, "请输入验证码: " + random_code才是提示
+            if (get_code.toLowerCase() == random_code){
+                window.alert("验证成功.")
+            } else {
+                window.alert("验证失败")
+            }
+        }
+        
+        /* 生成指定长度的随机字符 */
+        function generate_code(num){
+            var random_code = ""
+            var source_code = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", 
+                               "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+            for (var i=0; i<num; i++){
+                var randIndex = parseInt(Math.random() * source_code.length)
+                random_code += arr[randIndex]
+            }
+            return random_code
+        }
+    </script>
+</body>
+</html>

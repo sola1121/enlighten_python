@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0 auto;
+            padding: 10px;
+            width:50%;
+            height: 100%;
+            border: 1px solid black;
+        }
+        form{
+            display: inline;
+        }
+        .form_input{
+            font-size: 24px;
+            padding-left: 12px;
+            height: 36px;
+            border-spacing: 0px;
+        }
+        #container table>tbody td{
+            text-align: center;
+            border-collapse:collapse;
+            border: 1px solid black;
+            padding: 6px 2em 6px 0;
+            width: 10em;
+        }
+    </style>
+</head>
+<body onload="clearHistory()">
+    <form action="" method="post">
+        <input type="text" name="commodity" id="commodity" class="form_input" placeholder="商品名称">
+        <input type="text" name="price" id="price" class="form_input" placeholder="商品价格">
+        <input type="text" name="quantity" id="quantity" class="form_input" placeholder="购买数量">
+    </form>
+    <button onclick="add_tr()">添加</button>
+    <div id="container">
+        <table>
+            <tbody>            
+                <tr>
+                    <td>商品名称</td>
+                    <td>商品价格</td>
+                    <td>购买数量</td>
+                    <td>操作</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+    <script>
+        function $useId(id_code){
+            return document.getElementById(id_code)
+        }
+        function $useTag(tag_name){
+            return document.getElementsByTagName(tag_name)[0]
+        }
+        
+        function clearHistory(){
+            window.history = null
+        }
+
+        function verify_value(elem){
+            if (elem.value == null || elem.value == ""){
+                return "None"
+            }
+            return elem.value
+        }
+        
+        function delete_tr(self){
+            // console.info(self.parentNode.parentNode)
+            var con = window.confirm("是否要删除?")
+            if (con) {
+                $useTag("tbody").removeChild(self.parentNode.parentNode)
+            }
+        }
+
+        function add_tr(){
+            var new_tr = document.createElement("tr")
+            var commodity = document.createElement("td")
+            var price = document.createElement("td")
+            var quantity = document.createElement("td")
+            var control = document.createElement("td")
+            
+            $useTag("tbody").appendChild(new_tr)
+            document.getElement
+            new_tr.appendChild(commodity)
+            new_tr.appendChild(price)
+            new_tr.appendChild(quantity)
+            new_tr.appendChild(control)
+
+            commodity.innerText = verify_value($useId("commodity"))
+            price.innerText = verify_value($useId("price"))
+            quantity.innerText = verify_value($useId("quantity"))
+            control.innerHTML = '<button onclick="modify(this)">修改</button><button onclick="delete_tr(this)">删除</button>'
+        }
+    </script>
+</html>

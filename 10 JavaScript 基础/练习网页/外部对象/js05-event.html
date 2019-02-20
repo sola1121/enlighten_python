@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #block_div{
+            width: 200px;
+            height: 200px;
+            border: 1px black solid;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div id="block_div"></div>
+</body>
+    <script src="common.js"></script>
+    <script>
+        window.onload = function(){
+            // 为div绑定鼠标移入事件
+            $useId("block_div").onmouseover = function(){
+                createDiv()
+            }
+            // 为div绑定鼠标移动事件
+            $useId("block_div").onmousemove = function(event){
+                $useId("child_block").innerHTML = event.offsetX + ", " + event.offsetY
+            }
+            // 为div绑定鼠标移出事件
+            $useId("block_div").onmouseout = function(){
+                document.body.removeChild($useId("child_block"))
+            }
+        }
+
+        function createDiv(){
+            var new_div = document.createElement("div")
+            document.body.appendChild(new_div)
+            new_div.setAttribute("id", "child_block")
+            new_div.style.width = "150px"
+            new_div.style.height = "150px"
+            new_div.style.border = "solid 1px black"
+            new_div.style.position = "absolute"
+            new_div.style.left = "300px"
+            new_div.style.top = "0"
+        }
+    </script>
+
+</html>

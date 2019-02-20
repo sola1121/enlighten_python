@@ -1,0 +1,28 @@
+/*charset=utf-8*/
+
+#div-font01{
+    font-size: 30px;
+    color: greenyellow;
+    background-color: gray;
+}
+
+/* 后代选择器 */
+#div-font01 span{
+    text-shadow: floralwhite;
+    color: black
+}
+
+.content{
+    text-align: center;
+}
+.content span{
+    padding-right: 5em;
+}
+.content span>a:link{
+    text-decoration: none;
+    color: rgb(86, 206, 86);
+}
+.content span>a:hover{
+    font-size: 2em;
+    color: rgb(230, 113, 113)
+}

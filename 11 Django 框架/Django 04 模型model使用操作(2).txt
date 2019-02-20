@@ -1,0 +1,151 @@
+关系映射
+    1. 一对一映射
+        1) 什么是一对一
+            A表中的一条记录只能与B表中的一条记录相关联
+            如: 正常人一个人只有一个鼻子, 一夫一妻制
+            数据库中的实现: 
+                A表 设置主键
+                B表 增加一列, 并引用自A表的主键, 还得增加一个唯一约束
+        2) 语法
+            在关联的两个类的任何一个类中 增加:
+            属性 = models.OneToOneField(Entry)   # 将会默认关联Entry数据表的id
+            该属性将作为唯一(unique)外键(foreign key)存在于所对应数据库中
+        3) 查询
+            示例
+                from models import *
+                class Wife:
+                    ...
+                    husband = models.OneToOneField(Husband)   # 会作为Husband的主键(id)的外键而存在
+            (1) 正向查询：通过wife 找 husband
+				# 1.获取 id 为1 的 Wife的信息
+                    wife = Wife.objects.get(id=1)
+				# 2.通过 Wife 的关联属性 husband 来找 Husband
+                    husband_obj = wife.husband
+			(2) 反向查询：通过husband 找 wife
+				# 1.获取 id 为12 的 Husband的信息
+                    husband=Husband.objects.get(id=12)
+				# 2.通过 author 的关联属性 wife 来找wife
+                    wife_obj = husband.wife
+
+				wife 是Django通过OneToOneField在Husband中默认增加的一个隐式属性
+                
+            示例
+                def wife_author_view(request):
+                    # 正向查询: 通过wife找author
+                    # 1. 获取id为1的wife的信息
+                    wife = Author_Wife.objects.get(id=1)
+                    # 2. 再获取wife对应的Author
+                    author = wife.author
+                    dic = {"wife": wife, "author": author}        
+                    return render(request, "one2one.html", dic)
+
+                def author_wife_view(request):
+                    # 反向查询: 通过author找wife
+                    # 1. 获取id为9的author的信息
+                    author = Author.objects.get(id=9)
+                    # 2. 在获取author对应的wife
+                    wife = author.author_wife
+                    dic = {"author": author, "wife": wife}
+                    return render(request, "one2one.html", dic)
+
+    2. 一对多映射
+        1) 什么是一对多
+            A表中的一条数据可以与B表中的多条数据关联
+            B表中的一条数据只能与A表中的以条数据关联
+            如: 一个出版社可以有多个出版书物, 而一本书只有一个出版社
+                一种商品类型包含有多个商品, 而一个商品只有一种商品类型
+        2) 在数据库中的体现
+            通过外键(foreign key)来体现一对多
+            在"多"表中增加外键(foreign key)对"一"表的主键进行引用
+        3) 语法
+            使用外键(Foreign Key)
+            在"多" 的实体中,增加
+                属性 = models.ForeignKey(Entry)
+            该属性将作为可重复(MUL)外键(foreign key)存在于对应数据库中
+            示例
+                Book(多) 和 Publisher(一)
+
+                class Book(models.Model):
+                    ...
+                    publisher = modles.ForeignKey(Publisher)
+        4) 查询
+            Book(多) 和 Publisher(一)
+            # 建立出版社与书籍的主外键关系
+            class Book(models.Model):
+                ...
+                publisher = models.ForeignKey(Publisher)
+
+            (1) 正向查询 - 通过Book查询Publisher
+                # 1. 查询id为1的书籍信息
+                    book = Book.objects.get(id=1)
+                # 2. 查询关联的publisher
+                    publisher = book.publisher
+            (2) 反向查询 - 通过Publisher查询Book
+                Django会在1的实体中增加关联对象_set属性用于查询"多"的数据
+                结合Publisher和Book之间关系:
+                    在Publisher中增加了以个book_set属性
+                示例
+                    publisher = Publisher.objects.get(id=1)
+                    book = publisher.book_set.all()
+            
+            示例
+                def book_publisher_view(request):
+                    # 1. 查询id为1的书籍信息
+                    book = Book.objects.get(id=1)
+                    # 2. 查询该书关联的出版社信息
+                    publisher = book.publisher
+                    dic = {"book": book, "publisher": publisher}
+                    return render(request, "one2many.html", dic)
+
+                def publisher_book_view(request):
+                    # 1. 查询id为1的Publisher的信息
+                    publisher = Publisher.objects.get(id=1)
+                    # 2. 查询该出版社所关联的所有图书
+                    books = publisher.book_set.all()
+                    dic = {"publisher": publisher, "books": books}
+                    return render(request, "one2many.html", dic)
+
+    3. 多对多映射
+        1) 什么是多对多
+            A表中的一条记录可以与B表中的任意多条记录匹配
+            B表中的一条记录可以与A表中的任意多条记录匹配
+            如: 一个作者可以对应多个书籍, 而一本书可以有多个作者
+        2) 在数据库中的体现
+            必须创建第三张表, 关联涉及到的两张表数据
+        3) 语法
+            允许在任何一个实体中增加操作
+                entry = models.ManyToManyField(Entry)
+                使用ManyToManyField将会在数据库中新建一个表, 其由于存储关联表的主键们
+                新建的表时一个使用unique key 约束关联表存储的id, 避免重复
+            示例
+                class Author(models.Model):
+                    ...
+                    book = models.ManyToManyField(Book)
+        4) 查询
+            class Author(models.Model):
+                ...
+                book = models.ManyToManyField(Book)
+            (1) 正向查询 - 通过Author查询所有的Book
+                # 1. 查询id为1的author
+                author = Author.objects.get(id=1)
+                # 2. 查询该author对应的所有book
+                books = author.book.all()   # 通过关联属性.all() 查询所有对应数据
+            (2) 反向查询 - 通过Book查询所有的Author
+                Django中会在Book实体中增加一个隐式属性author_set
+
+                book = Book.objects.get(id=1)
+                authors = book.author_set.all()
+        示例
+            def author_book_view(request):
+                # 通过author查询其所有的book
+                author = Author.objects.get(id=9)
+                books = author.book.all()
+                dic = {"author": author, "books": books}
+                return render(request, "many2many.html", dic)
+
+            def book_author_view(request):
+                # 通过Book查询其所有的author
+                book = Book.objects.get(id=1)
+                authors = book.author_set.all()
+                dic = {"book": book, "authors": authors}
+                return render(request, "many2many.html", dic)

@@ -1,0 +1,198 @@
+使用forms模块处理表单 forms.Form
+    1. forms模块的作用
+        通过forms模块, 允许将表单与class相结合, 可以自动生成表单控件
+    2. 使用forms模块
+        1) 创建forms.py文件 (可以自定义名称, 推荐使用该名称)
+        2) 导入forms
+            from django import forms
+        3) 创建class, 一个class对应一个表单
+            必须继承自forms.Form类
+        4) 在class中创建属性
+            一个属性对应着一个表单控件, 使用和models的类相似, 如 forms.CharField(label="示例")
+            Built-in Field classes
+                BooleanField
+                CharField
+                ChoiceField
+                TypedChoiceField
+                DateField
+                DateTimeField
+                DecimalField
+                DurationField
+                EmailField
+                FileField
+                FilePathField
+                FloatField
+                ImageField
+                IntegerField
+                ...
+            Slightly complex built-in Field classes
+                ComboField
+                MultiValueField
+                SplitDateTimeField
+            Fields which handle relationships
+                ModelChoiceField
+                ModelMultipleChoiceField
+                ...
+            (详情: 参考文档)
+    3. 在模板中解析form对象
+        1) 注意
+            (1) 需要自己添加<form>
+            (2) 需要自己添加提交按钮
+        2) 处理方式
+            (1) 手动解析
+                在视图中创建 xxFrom() 并发送到模板中
+                示例
+                    # 在应用的views.py中
+                    form = RemarkForm()
+                    dic = {"form": form}
+                    return render(request, "xxhtml.html", dic)
+                手动解析
+                    模板template中
+                    {% for field in form %}
+                        {{ field.label }}   # 控件前的文本
+                        {{ field }}   # 表示控件
+                    {% endfor %}
+            (2) 自动解析
+                # form是由views.py传递给template的forms.Form对象
+                1. {{ form.as_p }}
+                    将表单中的每一个属性都解析成一个p标记, 再显示标签以及控件
+                2. {{ form.as_ul }}
+                    将表单中的每一个属性都解析成一个li标记, 再显示标签以及控件
+                    注意: 需要自己添加<ul></ul> 或 <ol></ol>
+                3. {{ form.as_table }}
+                    将表单中的每一个属性都解析成一个tr标记, 再显示标签以及控件
+                    注意: 需要自己添加<table></table>
+
+    4. 使用forms.Form获取表单数据(get方式一般不这样干)
+        1) 通过forms.Forms子类的构造函数接收post数据
+            # 在views.py中, 从request.POST中获取数据初始化forms.Form子类
+            form = xxxForm(request.POST)
+        2) 需要让form通过验证后再取值
+            form.is_valid()
+            返回true: 提交的数据已经通过所有验证, 允许获取表单数据
+            返回false: 提交的数据有暂时未通过验证的
+        3) 获取表单提交的数据
+            通过form.cleaned_data字典接收提交的数据
+            cd = form.cleaned_data
+            print(cd["dic_data"])   # 获取提交数据中的dic_data数据
+
+
+---------------------------------------
+
+使用forms模块处理表单 forms.ModelFrom
+    1. forms的高级处理, 继承ModelForm
+        将 Models和Forms结合到一起使用
+        1) 在forms.py 中, 创建class, 继承自forms.ModelForm
+        2) 创建内部类 : Meta, 关联Form 和 Models
+            这些属性都是继承自ModelForm中的
+            (1) model : 指定要关联的Model类是谁
+            (2) fields : 从models中取哪些字段要生成控件
+                1. 取值 "__all__", 全部控件生成控件
+                2. 指定一个列表, 声明允许生成控件的字段名
+            (3) labels : 指定每个属性关联的label, 取值为字典
+                labels = {
+                    '属性名1': 'label文本1',
+                    '属性名2': 'label文本2',
+                }
+                这些属性名就是在fields中书写的对应的models字段名
+            (4) widgets : 指定每个属性管理的小部件, 用于完成对input框的完善
+        注意: 如同models子类的Meta, ModelForm的定义也需要些在Meta类中
+
+    2. 内置小部件
+        1) 小部件
+            小部件(widget), 表示生成到页面中的控件的类型以及其他属性
+        2) 常用小部件
+            TextInput : type="text"
+            NumberInput : type="number"
+            EmailInput : type="email"
+            URLInput : type="url"
+            PasswordInput : type="password"
+            HiddenInput : type="hidden"
+            CheckboxInput : type="checkbox"
+            Textarea : <textarea></textarea>
+            Select : <select></select>
+            DateInput, DateTimeInput, TimeInput
+        3) 小部件的使用
+            (1) 继承自 forms.Form
+                class FormForm(formsForm):
+                    class Meta:
+                1. 基本版
+                    属性 = forms.CharField(
+                        label="对应标签",
+                        widget=forms.小部件类型
+                    )
+                    示例
+                        pword = forms.CharField(label="用户密码", widget="forms.PasswordInput")
+                2. 高级版
+                    # 指定标签中的属性
+                    属性 = forms.CharField(
+                        label="对应标签",
+                        widget=forms.小部件类型(
+                            attrs={"属性名1": "属性值1", "属性值2": "属性值2, ...}   // 对应相应input框中的各个属性名称
+                            )
+                    )
+                    示例
+                        uname = forms.CharField(label="用户名", widget=forms.Textarea(
+                            attrs={"placeholder": "请输入用户名", "class": "form_control"}
+                            )
+                        )
+            (2) 继承自 forms.ModelForm
+                class WidgetForm(forms.ModelForm):
+                    class Meta:
+                        model = Entry
+                        fields = "__all__"
+                        labels = {
+                            "属性1": "label标签1",
+                            "属性2": "label标签2",
+                            ...
+                        }
+                        widgets={
+                            "属性1": forms.小部件类型(attrs=...),
+                            ...
+                        }
+
+    3. 示例
+        # forms.py中
+        from django.db import models
+        from django.forms import ModelForm
+
+        TITLE_CHOICES = (
+            ('MR', 'Mr.'),
+            ('MRS', 'Mrs.'),
+            ('MS', 'Ms.'),
+        )
+
+        class Author(models.Model):
+            name = models.CharField(max_length=100)
+            title = models.CharField(max_length=3, choices=TITLE_CHOICES)   # 使用<select>标签
+            birth_date = models.DateField(blank=True, null=True)
+
+            def __str__(self):
+                return self.name
+
+        class Book(models.Model):
+            name = models.CharField(max_length=100)
+            authors = models.ManyToManyField(Author)   # 多对多映射
+
+        class AuthorForm(ModelForm):
+            class Meta:
+                model = Author
+                fields = ['name', 'title', 'birth_date']   # 与数据库映射的表单控件们
+
+        class BookForm(ModelForm):
+            class Meta:
+                model = Book
+                fields = ['name', 'authors']
+
+        # ModelForm子类的方式相当于
+        class AuthorForm(forms.Form):
+            name = forms.CharField(max_length=100)
+            title = forms.CharField(
+                max_length=3,
+                widget=forms.Select(choices=TITLE_CHOICES),
+            )
+            birth_date = forms.DateField(required=False)
+
+        class BookForm(forms.Form):
+            name = forms.CharField(max_length=100)
+            authors = forms.ModelMultipleChoiceField(queryset=Author.objects.all())

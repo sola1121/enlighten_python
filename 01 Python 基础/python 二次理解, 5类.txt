@@ -1,0 +1,70 @@
+面向对象
+    类
+        用来描述对象, 创建对象
+    
+    对象(实例)
+        属性
+            实例变量
+        行为
+            实例方法
+
+class(超类名1, 超类名2, ...):
+    类变量
+    实例方法
+    类方法
+    静态方法
+    文档字符串
+
+
+覆盖
+    __mro__  方法解决次序
+
+super()函数
+
+面向对象语言的特征
+    封装
+    继承
+    多态(静态/动态)
+
+
+多继承:
+    MRO(Method Resolution Order)
+
+
+函数重写
+    repr   __repr__
+    str   __str__
+    len   __len__
+    bool   __bool__
+
+迭代器
+    next(it)   --->   __next__(self)   # 向迭代器取值
+可迭代对象
+    iter(obj)   --->   __iter__(self)   # 用于返回迭代器
+用处:
+    可以用for循环遍历
+    推导式
+    生成器表达式
+迭代器协议
+    没有数据时触发StopIteration异常
+
+
+对象属性管理函数
+getattr(obj, name[, default])	
+作用:
+    从一个对象得到对象的属性；getattr(x, 'y') 等同于x.y; 
+    当属性不存在时,如果给出default参数,则返回default,如果没有给出default,则产生一个AttributeError错误
+
+hasattr(obj, name)	
+作用:
+    用给定的name返回对象obj是否有此属性,此种做法可以避免在getattr(obj, name)时引发错误
+
+setattr(obj, name, value)
+作用:
+	给对象obj的名为name的属性设置相应的值value, set(x, 'y', v) 等同于 x.y = v
+
+delattr(obj, name)
+作用:
+	删除对象obj中的name属性, delattr(x, 'y') 等同于 del x.y
+
+

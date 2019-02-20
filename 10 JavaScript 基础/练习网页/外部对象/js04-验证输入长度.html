@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0 auto;
+            width:50%;
+            border: 5px solid black;
+        }
+        #check_info{
+            border: 1px solid greenyellow;
+            width: 200px;
+            margin: 20px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form action="" method="post">
+        用户名: <input type="text" id="uname" name="uname">
+    </form>
+    <button onclick="verify_uname()">验证</button>
+    <div id="check_info"></div>
+</body>
+    <script src="common.js"></script>
+    <script>
+        function verify_uname(){
+            var uname = $useId("uname")
+            var check = $useId("check_info")
+            if (uname.value.length >= 6 && uname.value.length <=18){
+                check.innerText = "通过"
+                check.style.color = "green"
+            } else {
+                check.innerText = "没通过"                
+                check.style.color = "red"
+            }
+        }
+    </script>
+</html>

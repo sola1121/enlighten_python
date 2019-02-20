@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .the_class{
+            color: brown;
+        }
+    </style>
+</head>
+<body>
+    <p>输入内容: 
+        <input type="text" name="input_content" id="input_content">
+        <button id="click_show">显示内容</button>
+        <button id="add_class">增加class属性</button>
+        <button id="toggle_class">切换class属性</button>
+    </p>
+    <div id="show_content"></div>
+</body>
+    <script src="jQuery_3.3.1.js"></script>
+    <script>
+        window.onload = run_func
+
+        function run_func(){
+            $("#click_show").get(0).onclick = show_content
+            $("#add_class").get(0).onclick = add_class
+            $("#toggle_class").get(0).onclick = toggle_class
+        }
+        
+        function show_content(){
+            var the_value = $("#input_content").val()
+            $("#show_content").html("<h2>" + the_value + "</h2>")
+        }
+
+        function add_class(){
+            $("#show_content").addClass("the_class")
+        }
+
+        function toggle_class(){
+            $("#show_content").toggleClass("the_class")
+        }
+
+    </script>
+</html>

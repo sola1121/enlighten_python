@@ -1,0 +1,34 @@
+<ul style="list-style-type: none; width: 80%; margin: 10px auto;">
+        {% for blog in blogs %}
+        <li>
+            <table width="100%">
+                <tr>
+                    <td rowspan="4" width="25%" align="center">
+                        <table>
+                            <tr><td align="center">
+                                <img width="128px" height="128px"
+                                     src={% if blog["avator"] %}
+                                            static/images/{{ blog["avator"] }}
+                                        {% else %}
+                                            static/images/with_magic.jpg
+                                        {% end %}>
+                            </td></tr>
+                            <tr><td align="center">
+                                <p style="width: 120px; white-space: nowrap; text-overflow: ellipsis;">{{ blog['author'] }}</p>
+                            </td></tr>
+                        </table>
+                    </td>
+                    <td>{{ blog['title'] }}</td>
+                </tr>
+                <tr><td>{{ blog['tags'] }}</td></tr>
+                <tr><td>{{ blog['content'] }}</td></tr>
+                <tr><td  align="right">
+                    {% if blog['count'] %}
+                        评论数量 {{ blog['count'] }}
+                    {% else %}
+                        <a href="#">快来围观</a>
+                    {% end %}
+                </td></tr>
+            </table>
+        </li>
+    {% end %}

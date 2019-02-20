@@ -1,0 +1,139 @@
+自定义模块并导入
+  用户自己编写的模块
+  模块名要遵循变量名的命名规则
+示例:
+# mymodule.py
+def mysum(n):
+    """自定义求和函数"""
+    s = 0
+    for x in range(1, n+1):
+        s += x
+    return s
+def myfac(n):
+    """自定义递归"""
+    if n == 1:
+        return 1
+    return n * myfac(n-1)
+var_myname1 = "hello"
+var_myname2 = "world"
+print("===>>end_program<<===")
+
+# run_mymodule.py
+import mymodule   # 自动寻找同路径下.py文件
+print("100以内整数和:", mymodule.mysum(100))
+print("5的阶乘是:", mymodule.myfac(5))
+print("有的变量1:", var_myname1)
+
+
+模块路径的路径索引顺序
+import xxx(模块名)   # 去哪里找xxx.py ?
+1)程序运行的当前路径(运行时路径: pwd命令返回的路径)
+2)sys.path提供的路径
+    sys.path是一个列表,里面放的是模块的搜索路径
+3)搜索内建模块
+
+
+模块加载过程
+    在模块导入时, 模块所有的语句都会执行, 以确保创建了模块中的各种对象
+    如果一个模块已经导入,则在次导入时不会重新执行模块内的语句
+
+注: 如果所导入的模块中有执行语句,导入后他会执行,想要不执行,可以在导入模块中添加判断,判断其是否为主模块
+    if __name__ == '__main__': # 判断模块是否是主模块 
+
+重新加载已导入的模块
+示例:
+import example
+example.func1()   # 调用之前的func1函数
+# 修改 example.py
+import imp   # imp模块是与模块导入相关的模块
+imp.reload(example)   # 重新加载模块
+example.func()   # 模块被重新加载,可以在不关闭程序重新加载模块
+
+
+---------------------包-----------------
+
+包(模块包) package
+    包是将模块以文件夹的形式进行分组管理的方法
+作用:
+    1)将一系列模块进行分类管理,有利于防止命名冲突
+    2)可以在需要时加载一个会哦部分模块而不是全部模块
+示例:
+ThePack/
+    __init__.py
+    menu.py   # 菜单管理模块
+    games/   # 游戏相关的模块
+        __init__.py
+        contra.py   # 魂斗罗
+        supermario.py   # 马里奥
+        tanks.py   # 坦克大战
+    office/   # 办公相关模块
+        __init__.py
+        excel.py
+        word.py
+        powerpoint.py
+
+包的导入
+    规则和模块的导入方式相同
+示例:
+import 包名 [as 包别名]
+import 包名.模块名 [as 模块别名]
+import 包名.子包名.模块名 [as 模块别名]
+
+from 包名 import 模块名 [as 模块别名]
+from 包名.子包名 import 模块名 [as 模块别名]
+from 包名.子包名.模块名 import 变量名 [as 变量别名]
+
+# 导入所有的子包和模块
+from 包名 import *
+from 包名.模块名 import *
+
+import ThePack.menu   # 这样的导入形式肯定是从包里面导入模块或者其中的包
+
+
+----------------包内文件-------------------
+
+__init__.py 文件
+    1)__init__.py 是常规包内必须存在的文件
+    2)__init__.py 会在包加载时被自动调用
+作用:
+    1)在内部填写文档字符串
+    2)在__init__.py 文件内可以加载此包所依赖的一些模块
+
+__init__.py 内的 __all__列表
+作用:
+    用来记录此包中有哪些子包或模块需要导入
+    当用 from 包 import * 语句导入模块时,只查找__all__列表中的模块或子包
+说明:
+    __all__列表只在 from 包 import * 时起作用
+
+
+----------------包的相对导入-----------------
+
+包的相对导入
+    包的相对导入是指包内模块的相互导入
+    注意: 只限在包内
+语法: 
+    from 相对路径包或模块 import 属性或模块名
+    或
+    from 相对路径包或模块 import *
+相对路径:
+    在 from xxx import 语句中可以使用相对路径导入
+    xxx 中可以含有相对路径
+    . 代表当前路径
+    .. 代表上一级目录
+    ... 代表上二级目录
+    .... 以此类推
+    注: 相对导入时不能超出包的外部
+        其基准目录是当前导入语句所写的模块的目录
+
+
+包的加载路径
+  同模块的加载路径相同
+    1)可以将路径添加到sys.path中
+    2)可以将此包安装到sys.path指定的路径中
+
+
+
+
+
+

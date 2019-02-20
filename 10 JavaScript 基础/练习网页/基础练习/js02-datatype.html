@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var num1 = 35;
+        var num2 = 035;
+        var num3 = 0x35;
+        console.info("数值表示方法: ", "num1: " + num1, "num2: " + num2, "num3: " + num3)
+        var num4 = 1.234;
+        var num5 = 1.5e4;
+        console.info("数值表示方法: ", num4, num5)
+        var str = "siro";
+        var i = str.charCodeAt(0);
+        var r = str.charCodeAt(1);
+        var o = str.charCodeAt(2);
+        var s = str.charCodeAt();
+        var ori =  "\u0115";   // 将Unicode转换为字符
+        console.info("获取字符串(截取): ", i, r, o, s, "Unicode转换: ", ori);
+        var decimal = s.toString(10);   // 转换为十进制, 默认
+        var binary = s.toString(2);   // 转换为二级制
+        console.info(binary, decimal);
+        var ty1 = typeof str;
+        var ty2 = typeof(str);
+        console.info("数据类型typeof: ", ty1, ty2);
+        console.log("========================")
+
+        var input = window.prompt("Ya hooo: ");   // 输入的任何都是字符串
+        var new_num = input + 10;
+        console.info("数据类型: ", typeof(new_num), new_num);
+        var input = Number(input);
+        var new_num = input + 10;
+        console.info("转换后: ", typeof(new_num), new_num);
+    </script>
+</body>
+</html>

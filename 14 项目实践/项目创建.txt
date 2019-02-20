@@ -1,0 +1,16 @@
+开始创建django项目 fruitday
+
+    可以为新项目创建一个虚拟环境, 以保障源python的纯净, 和新项目的环境
+    virtualenv fruitdayenv
+    source fruitdayenv/bin/activate
+    pip install django==1.11.12
+
+建立项目 django-admin startproject fruitday
+建立app ./manage.py startapp xxxapp 或 python manage.py startapp xxxapp
+
+为每个应用建立单独的 urls.py
+建立templates(可能没有)
+
+配置settings文件
+
+

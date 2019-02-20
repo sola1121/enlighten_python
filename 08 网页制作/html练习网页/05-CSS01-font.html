@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #div_font{
+            font-size: 20px;
+            color: paleturquoise;
+            background-color: slategray;
+        }
+        .underline{
+            text-decoration: none;
+        }
+        .font_class{
+            font-size: 26px;
+            background-color: #8a226b;
+            color: #f3f58b
+        }
+        #div-font02>span{
+            text-decoration: underline;
+        }
+        #in{
+            color:grey;
+            font-style: italic;
+        }
+        #in:focus{
+            color: lightsalmon;
+            font-style: normal;
+        }
+    </style>
+    <link rel="stylesheet" href="05-CSS01-font.css">
+</head>
+<body>
+    <div style="font-size: 36px; color: red; background-color: black;">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
+        Officiis eligendi accusamus atque repellat dolores adipisci iusto autem error et consequatur, 
+        expedita dignissimos corporis distinctio! Asperiores adipisci velit voluptates corrupti illum.
+    </div>
+    <div id="div_font">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        Eius quidem veniam, quisquam minima, aut exercitationem obcaecati natus maiores, 
+        doloremque ut fugit soluta quasi alias a laudantium quia culpa hic ipsa!
+    </div>
+    <div id="div-font01">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+        <span>Voluptas, architecto repellat! Aliquam eaque voluptates dicta dolorem fugit error tempora ad vitae ipsum. </span>
+        Consequatur expedita reiciendis explicabo totam, tempora culpa aliquam!
+    </div>
+    <div class="font_class underline" id="div-font02">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <span>Sunt reiciendis modi sequi, doloribus deserunt quas illum, suscipit adipisci recusandae perferendis deleniti?</span>
+        Amet maxime quod alias iure doloremque, rem laborum corrupti!
+    </div>
+    <div>
+        <p class="content">
+            <span class="link_something"><a href="https://www.bilibili.com">bilibili</a></span>
+            <span class="link_something"><a href="https://www.python.org">python.org</a></span>
+        </p>
+    </div>
+    <div>
+        <p>这是一个输入框
+            <input type="text" name="uname" id="in">
+        </p>
+    </div>
+</body>
+</html>

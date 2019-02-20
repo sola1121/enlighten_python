@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>显示author</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <td>id</td>
+                <td>姓名</td>
+                <td>年龄</td>
+                <td>邮箱</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for info in au_lst %}
+                <tr>
+                    <td>{{ info.id }}</td>
+                    <td>{{ info.name }}</td>
+                    <td>{{ info.age }}</td>
+                    <td>{{ info.email }}</td>
+                    <td><a href="{% url 'up_au' info.id %}">修改</a>, <a href="/delete_author/{{ info.id }}/">删除</a></td>
+                    
+                </tr>
+            {% endfor %}
+
+            {% comment "使用别名的另一种删除方式, 在url中定义name" %}
+                <td><a href="/update_author/{{ info.id }}/">修改</a>, <a href="{% url 'del_au' info.id %}>删除</a></td>
+            {% endcomment %}
+        </tbody>
+    </table>
+</body>                                                                           
+</html>

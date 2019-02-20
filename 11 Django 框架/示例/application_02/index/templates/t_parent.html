@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>父模板</title>
+</head>
+<body>
+    <h2>这是Django中的模板</h2>
+    <p>
+        <img src="{% static 'img/trees.jpg' %}">
+    </p>
+    {% block content1 %}
+        <h3>这是允许在子模板中修改的内容</h3>
+    {% endblock %}
+
+    {% block content2 %}
+        <h3>这是允许在子模板中修改的内容</h3>
+    {% endblock %}
+        
+</body>
+</html>

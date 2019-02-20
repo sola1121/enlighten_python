@@ -1,0 +1,1406 @@
+Help on package pymysql:
+
+NAME
+    pymysql - PyMySQL: A pure-Python drop-in replacement for MySQLdb.
+
+DESCRIPTION
+    Copyright (c) 2010 PyMySQL contributors
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+
+PACKAGE CONTENTS
+    charset
+    connections
+    constants (package)
+    converters
+    cursors
+    err
+    tests (package)
+    times
+    util
+
+SUBMODULES
+    FIELD_TYPE
+
+CLASSES
+    builtins.Exception(builtins.BaseException)
+        pymysql.err.MySQLError
+            pymysql.err.Error
+                pymysql.err.DatabaseError
+                    pymysql.err.DataError
+                    pymysql.err.IntegrityError
+                    pymysql.err.InternalError
+                    pymysql.err.NotSupportedError
+                    pymysql.err.OperationalError
+                    pymysql.err.ProgrammingError
+                pymysql.err.InterfaceError
+            pymysql.err.Warning(builtins.Warning, pymysql.err.MySQLError)
+    builtins.Warning(builtins.Exception)
+        pymysql.err.Warning(builtins.Warning, pymysql.err.MySQLError)
+    builtins.frozenset(builtins.object)
+        DBAPISet
+    builtins.object
+        datetime.date
+            datetime.datetime
+        datetime.time
+    
+    class DBAPISet(builtins.frozenset)
+     |  frozenset() -> empty frozenset object
+     |  frozenset(iterable) -> frozenset object
+     |  
+     |  Build an immutable unordered collection of unique elements.
+     |  
+     |  Method resolution order:
+     |      DBAPISet
+     |      builtins.frozenset
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __eq__(self, other)
+     |      Return self==value.
+     |  
+     |  __hash__(self)
+     |      Return hash(self).
+     |  
+     |  __ne__(self, other)
+     |      Return self!=value.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.frozenset:
+     |  
+     |  __and__(self, value, /)
+     |      Return self&value.
+     |  
+     |  __contains__(...)
+     |      x.__contains__(y) <==> y in x.
+     |  
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |  
+     |  __iter__(self, /)
+     |      Implement iter(self).
+     |  
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |  
+     |  __len__(self, /)
+     |      Return len(self).
+     |  
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __or__(self, value, /)
+     |      Return self|value.
+     |  
+     |  __rand__(self, value, /)
+     |      Return value&self.
+     |  
+     |  __reduce__(...)
+     |      Return state information for pickling.
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __ror__(self, value, /)
+     |      Return value|self.
+     |  
+     |  __rsub__(self, value, /)
+     |      Return value-self.
+     |  
+     |  __rxor__(self, value, /)
+     |      Return value^self.
+     |  
+     |  __sizeof__(...)
+     |      S.__sizeof__() -> size of S in memory, in bytes
+     |  
+     |  __sub__(self, value, /)
+     |      Return self-value.
+     |  
+     |  __xor__(self, value, /)
+     |      Return self^value.
+     |  
+     |  copy(...)
+     |      Return a shallow copy of a set.
+     |  
+     |  difference(...)
+     |      Return the difference of two or more sets as a new set.
+     |      
+     |      (i.e. all elements that are in this set but not the others.)
+     |  
+     |  intersection(...)
+     |      Return the intersection of two sets as a new set.
+     |      
+     |      (i.e. all elements that are in both sets.)
+     |  
+     |  isdisjoint(...)
+     |      Return True if two sets have a null intersection.
+     |  
+     |  issubset(...)
+     |      Report whether another set contains this set.
+     |  
+     |  issuperset(...)
+     |      Report whether this set contains another set.
+     |  
+     |  symmetric_difference(...)
+     |      Return the symmetric difference of two sets as a new set.
+     |      
+     |      (i.e. all elements that are in exactly one of the sets.)
+     |  
+     |  union(...)
+     |      Return the union of sets as a new set.
+     |      
+     |      (i.e. all elements that are in either set.)
+    
+    class DataError(DatabaseError)
+     |  Exception raised for errors that are due to problems with the
+     |  processed data like division by zero, numeric value out of range,
+     |  etc.
+     |  
+     |  Method resolution order:
+     |      DataError
+     |      DatabaseError
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class DatabaseError(Error)
+     |  Exception raised for errors that are related to the
+     |  database.
+     |  
+     |  Method resolution order:
+     |      DatabaseError
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    Date = class date(builtins.object)
+     |  date(year, month, day) --> date object
+     |  
+     |  Methods defined here:
+     |  
+     |  __add__(self, value, /)
+     |      Return self+value.
+     |  
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |  
+     |  __format__(...)
+     |      Formats self with strftime.
+     |  
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |  
+     |  __hash__(self, /)
+     |      Return hash(self).
+     |  
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |  
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |  
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __radd__(self, value, /)
+     |      Return value+self.
+     |  
+     |  __reduce__(...)
+     |      __reduce__() -> (cls, state)
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __rsub__(self, value, /)
+     |      Return value-self.
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  __sub__(self, value, /)
+     |      Return self-value.
+     |  
+     |  ctime(...)
+     |      Return ctime() style string.
+     |  
+     |  fromordinal(...) from builtins.type
+     |      int -> date corresponding to a proleptic Gregorian ordinal.
+     |  
+     |  fromtimestamp(...) from builtins.type
+     |      timestamp -> local date from a POSIX timestamp (like time.time()).
+     |  
+     |  isocalendar(...)
+     |      Return a 3-tuple containing ISO year, week number, and weekday.
+     |  
+     |  isoformat(...)
+     |      Return string in ISO 8601 format, YYYY-MM-DD.
+     |  
+     |  isoweekday(...)
+     |      Return the day of the week represented by the date.
+     |      Monday == 1 ... Sunday == 7
+     |  
+     |  replace(...)
+     |      Return date with new specified fields.
+     |  
+     |  strftime(...)
+     |      format -> strftime() style string.
+     |  
+     |  timetuple(...)
+     |      Return time tuple, compatible with time.localtime().
+     |  
+     |  today(...) from builtins.type
+     |      Current date or datetime:  same as self.__class__.fromtimestamp(time.time()).
+     |  
+     |  toordinal(...)
+     |      Return proleptic Gregorian ordinal.  January 1 of year 1 is day 1.
+     |  
+     |  weekday(...)
+     |      Return the day of the week represented by the date.
+     |      Monday == 0 ... Sunday == 6
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  day
+     |  
+     |  month
+     |  
+     |  year
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  max = datetime.date(9999, 12, 31)
+     |  
+     |  min = datetime.date(1, 1, 1)
+     |  
+     |  resolution = datetime.timedelta(1)
+    
+    class Error(MySQLError)
+     |  Exception that is the base class of all other error exceptions
+     |  (not Warning).
+     |  
+     |  Method resolution order:
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class IntegrityError(DatabaseError)
+     |  Exception raised when the relational integrity of the database
+     |  is affected, e.g. a foreign key check fails, duplicate key,
+     |  etc.
+     |  
+     |  Method resolution order:
+     |      IntegrityError
+     |      DatabaseError
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class InterfaceError(Error)
+     |  Exception raised for errors that are related to the database
+     |  interface rather than the database itself.
+     |  
+     |  Method resolution order:
+     |      InterfaceError
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class InternalError(DatabaseError)
+     |  Exception raised when the database encounters an internal
+     |  error, e.g. the cursor is not valid anymore, the transaction is
+     |  out of sync, etc.
+     |  
+     |  Method resolution order:
+     |      InternalError
+     |      DatabaseError
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class MySQLError(builtins.Exception)
+     |  Exception related to operation with MySQL.
+     |  
+     |  Method resolution order:
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class NotSupportedError(DatabaseError)
+     |  Exception raised in case a method or database API was used
+     |  which is not supported by the database, e.g. requesting a
+     |  .rollback() on a connection that does not support transaction or
+     |  has transactions turned off.
+     |  
+     |  Method resolution order:
+     |      NotSupportedError
+     |      DatabaseError
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class OperationalError(DatabaseError)
+     |  Exception raised for errors that are related to the database's
+     |  operation and not necessarily under the control of the programmer,
+     |  e.g. an unexpected disconnect occurs, the data source name is not
+     |  found, a transaction could not be processed, a memory allocation
+     |  error occurred during processing, etc.
+     |  
+     |  Method resolution order:
+     |      OperationalError
+     |      DatabaseError
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class ProgrammingError(DatabaseError)
+     |  Exception raised for programming errors, e.g. table not found
+     |  or already exists, syntax error in the SQL statement, wrong number
+     |  of parameters specified, etc.
+     |  
+     |  Method resolution order:
+     |      ProgrammingError
+     |      DatabaseError
+     |      Error
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors inherited from MySQLError:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Exception:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    Time = class time(builtins.object)
+     |  time([hour[, minute[, second[, microsecond[, tzinfo]]]]]) --> a time object
+     |  
+     |  All arguments are optional. tzinfo may be None, or an instance of
+     |  a tzinfo subclass. The remaining arguments may be ints.
+     |  
+     |  Methods defined here:
+     |  
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |  
+     |  __format__(...)
+     |      Formats self with strftime.
+     |  
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |  
+     |  __hash__(self, /)
+     |      Return hash(self).
+     |  
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |  
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |  
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __reduce__(...)
+     |      __reduce__() -> (cls, state)
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  dst(...)
+     |      Return self.tzinfo.dst(self).
+     |  
+     |  isoformat(...)
+     |      Return string in ISO 8601 format, HH:MM:SS[.mmmmmm][+HH:MM].
+     |  
+     |  replace(...)
+     |      Return time with new specified fields.
+     |  
+     |  strftime(...)
+     |      format -> strftime() style string.
+     |  
+     |  tzname(...)
+     |      Return self.tzinfo.tzname(self).
+     |  
+     |  utcoffset(...)
+     |      Return self.tzinfo.utcoffset(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  hour
+     |  
+     |  microsecond
+     |  
+     |  minute
+     |  
+     |  second
+     |  
+     |  tzinfo
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  max = datetime.time(23, 59, 59, 999999)
+     |  
+     |  min = datetime.time(0, 0)
+     |  
+     |  resolution = datetime.timedelta(0, 0, 1)
+    
+    Timestamp = class datetime(date)
+     |  datetime(year, month, day[, hour[, minute[, second[, microsecond[,tzinfo]]]]])
+     |  
+     |  The year, month and day arguments are required. tzinfo may be None, or an
+     |  instance of a tzinfo subclass. The remaining arguments may be ints.
+     |  
+     |  Method resolution order:
+     |      datetime
+     |      date
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __add__(self, value, /)
+     |      Return self+value.
+     |  
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |  
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |  
+     |  __hash__(self, /)
+     |      Return hash(self).
+     |  
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |  
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |  
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  __radd__(self, value, /)
+     |      Return value+self.
+     |  
+     |  __reduce__(...)
+     |      __reduce__() -> (cls, state)
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __rsub__(self, value, /)
+     |      Return value-self.
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  __sub__(self, value, /)
+     |      Return self-value.
+     |  
+     |  astimezone(...)
+     |      tz -> convert to local time in new timezone tz
+     |  
+     |  combine(...) from builtins.type
+     |      date, time -> datetime with same date and time fields
+     |  
+     |  ctime(...)
+     |      Return ctime() style string.
+     |  
+     |  date(...)
+     |      Return date object with same year, month and day.
+     |  
+     |  dst(...)
+     |      Return self.tzinfo.dst(self).
+     |  
+     |  fromtimestamp(...) from builtins.type
+     |      timestamp[, tz] -> tz's local time from POSIX timestamp.
+     |  
+     |  isoformat(...)
+     |      [sep] -> string in ISO 8601 format, YYYY-MM-DDTHH:MM:SS[.mmmmmm][+HH:MM].
+     |      
+     |      sep is used to separate the year from the time, and defaults to 'T'.
+     |  
+     |  now(tz=None) from builtins.type
+     |      Returns new datetime object representing current time local to tz.
+     |      
+     |        tz
+     |          Timezone object.
+     |      
+     |      If no tz is specified, uses local timezone.
+     |  
+     |  replace(...)
+     |      Return datetime with new specified fields.
+     |  
+     |  strptime(...) from builtins.type
+     |      string, format -> new datetime parsed from a string (like time.strptime()).
+     |  
+     |  time(...)
+     |      Return time object with same time but with tzinfo=None.
+     |  
+     |  timestamp(...)
+     |      Return POSIX timestamp as float.
+     |  
+     |  timetuple(...)
+     |      Return time tuple, compatible with time.localtime().
+     |  
+     |  timetz(...)
+     |      Return time object with same time and tzinfo.
+     |  
+     |  tzname(...)
+     |      Return self.tzinfo.tzname(self).
+     |  
+     |  utcfromtimestamp(...) from builtins.type
+     |      Construct a naive UTC datetime from a POSIX timestamp.
+     |  
+     |  utcnow(...) from builtins.type
+     |      Return a new datetime representing UTC day and time.
+     |  
+     |  utcoffset(...)
+     |      Return self.tzinfo.utcoffset(self).
+     |  
+     |  utctimetuple(...)
+     |      Return UTC time tuple, compatible with time.localtime().
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  hour
+     |  
+     |  microsecond
+     |  
+     |  minute
+     |  
+     |  second
+     |  
+     |  tzinfo
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  max = datetime.datetime(9999, 12, 31, 23, 59, 59, 999999)
+     |  
+     |  min = datetime.datetime(1, 1, 1, 0, 0)
+     |  
+     |  resolution = datetime.timedelta(0, 0, 1)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from date:
+     |  
+     |  __format__(...)
+     |      Formats self with strftime.
+     |  
+     |  fromordinal(...) from builtins.type
+     |      int -> date corresponding to a proleptic Gregorian ordinal.
+     |  
+     |  isocalendar(...)
+     |      Return a 3-tuple containing ISO year, week number, and weekday.
+     |  
+     |  isoweekday(...)
+     |      Return the day of the week represented by the date.
+     |      Monday == 1 ... Sunday == 7
+     |  
+     |  strftime(...)
+     |      format -> strftime() style string.
+     |  
+     |  today(...) from builtins.type
+     |      Current date or datetime:  same as self.__class__.fromtimestamp(time.time()).
+     |  
+     |  toordinal(...)
+     |      Return proleptic Gregorian ordinal.  January 1 of year 1 is day 1.
+     |  
+     |  weekday(...)
+     |      Return the day of the week represented by the date.
+     |      Monday == 0 ... Sunday == 6
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from date:
+     |  
+     |  day
+     |  
+     |  month
+     |  
+     |  year
+    
+    class Warning(builtins.Warning, MySQLError)
+     |  Exception raised for important warnings like data truncations
+     |  while inserting, etc.
+     |  
+     |  Method resolution order:
+     |      Warning
+     |      builtins.Warning
+     |      MySQLError
+     |      builtins.Exception
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.Warning:
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      helper for pickle
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+
+FUNCTIONS
+    Binary(x)
+        Return x as a binary type.
+    
+    Connect(*args, **kwargs)
+        Connect to the database; see connections.Connection.__init__() for
+        more information.
+    
+    Connection = Connect(*args, **kwargs)
+        Connect to the database; see connections.Connection.__init__() for
+        more information.
+    
+    DateFromTicks(ticks)
+    
+    TimeFromTicks(ticks)
+    
+    TimestampFromTicks(ticks)
+    
+    connect = Connect(*args, **kwargs)
+        Connect to the database; see connections.Connection.__init__() for
+        more information.
+    
+    escape_dict(val, charset)
+    
+    escape_sequence(val, charset)
+    
+    escape_string(value)
+    
+    get_client_info()
+    
+    install_as_MySQLdb()
+        After this function is called, any application that imports MySQLdb or
+        _mysql will unwittingly actually use
+
+DATA
+    BINARY = DBAPISet({249, 250, 251, 252})
+    DATE = DBAPISet({10, 14})
+    NULL = 'NULL'
+    NUMBER = DBAPISet({0, 1, 3, 4, 5, 8, 9, 13})
+    ROWID = DBAPISet()
+    STRING = DBAPISet({253, 254, 247})
+    TIME = DBAPISet({11})
+    TIMESTAMP = DBAPISet({12, 7})
+    __all__ = ['BINARY', 'Binary', 'Connect', 'Connection', 'DATE', 'Date'...
+    apilevel = '2.0'
+    paramstyle = 'format'
+    threadsafety = 1
+    version_info = (1, 2, 2, 'final', 0)
+
+VERSION
+    0.5.None
+
+FILE
+    /usr/local/lib/python3.5/dist-packages/pymysql/__init__.py
+
+

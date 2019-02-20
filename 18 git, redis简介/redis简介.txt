@@ -1,0 +1,119 @@
+Redis
+特性:
+    1. 支持持久化, 可以将数据写入磁盘, 供重启后使用
+    2. 支持多种数据类型储存
+    3. 支持数据备份优势
+
+优势:
+    性能: 读写能力强
+    丰富的存储类型
+    原子性: 单独操作是原子性的,支持事务
+
+安装:
+    安装redis服务
+        sudo apt-get install redis-server
+    默认端口
+        6379
+    
+启动redis
+    redis-server
+命令行操作
+    redis-cli
+
+
+常用命令
+    -----------存, 取, 删, 查----------
+    存数据
+        set key键 value
+    取数据
+        get key键
+    删除数据
+        del key键 
+            (返回: 0失败, 1成功)
+    检查数据是否存在
+        exists key键 
+            (返回: 0不存在, 1存在)
+    获取全部key键
+        keys *
+
+    -------------数据有效期------------
+    设置数据有效期, 以秒为单位   
+        expire key键 秒数 
+            (返回: 1成功设定过期时间)
+    以毫秒设定数据的过期时间
+        pexpire key键 毫秒数
+    返回指定数据剩余的秒数
+        ttl key键  
+            (返回: 返回剩余的时间, -1无过期时间, -2已过期)
+    返回指定数据剩余毫秒数
+        pttl key键
+            (返回: 返回剩余的时间, -1无过期时间, -2已过期)
+
+    -----------------------------------
+    从数据库中随机返回一个key键对应的值
+        randomkey
+
+    重新命名 key为newkey
+        rename key newkey
+    仅当newkey不存在时, 将key命名为newkey
+    
+        renamenx key newkey
+    获取key键所存数据的类型
+        type key键
+    
+
+hash
+    哈希方式存储, 用于存储对象
+        HMSET key field value
+            如: hmset obj name "siro" age 1
+    获取数据
+        hget key field
+            如: hget obj name
+    获取字段和值
+        hgetall key
+    查询当前key中是否存在该字段
+        hexists key field
+            (返回: 0不存在, 1存在)
+    删除当前指定的字段
+        hdel key field
+            (返回: 0删除失败, 1删除成功)
+    查询当前key中全部字段名名
+        hkeys key
+    查询当前key中全部值
+        hvals key
+    
+    获取当前key中数据数量
+        hlen key
+
+    更改指定的key的值
+        hset key field value
+    新添新字段到指定key
+        hsetnx key field value
+
+
+事务
+    一次执行对个命令, 将命令放入队列缓存, 当被执行的时候用命令逐条执行, 彼此命令之间互不干扰, 一条命令执行失败, 其他命令继续执行.
+    当事务执行过程中, 其他客户端提交命令请求将不会插入到当前事务中.
+
+事务执行阶段
+    开始事务
+    命令放入队列缓存
+    执行事务
+
+开始事务
+    multi
+执行命令放入队列
+    多个命令 (返回: Queueu)
+        这些命令会被放入事务队列中
+执行事务
+    exec
+
+
+---------------------------------------
+
+Django Redis
+    安装 
+        sudo pip install django-redis
+    
+
+

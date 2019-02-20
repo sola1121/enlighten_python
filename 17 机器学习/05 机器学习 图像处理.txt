@@ -1,0 +1,42 @@
+机器视觉工具包 OpenCV - python
+示例: basic.py
+
+边缘检测
+示例: edge.python
+
+通过均衡直方提升亮度
+示例: eq.py
+
+角点检测
+示例: corner.py
+
+star特征检测
+示例: star.py
+
+sift特征检测
+示例: sift.py
+
+特征(描述)矩阵
+示例: desc.py
+
+图像识别
+示例: obj.py
+
+
+
+人脸识别
+
+1. 视频捕捉
+示例: vidcap.py
+2. 人脸定位
+    基于哈尔级联分类器的人脸定位
+示例: haar.py
+3. 人脸识别
+    基于openCV的局部二值模式直方图(LBPH)模型
+示例: face.py
+
+4. 成分分析(CA)
+    1) 主成分分析(PCA)
+        
+
+

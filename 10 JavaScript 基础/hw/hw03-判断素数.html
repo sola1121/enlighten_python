@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var num = window.prompt("输入一个数, 我来判断他是不是素数: ")
+        num = parseInt(num)
+        var flag = false
+        for (var i=2; i<Math.round(num/2); i++){
+            if (num % i == 0) {
+                flag = true
+                break
+            }
+        }
+        if (num == 1 || num == 2){
+            flag = false
+        } else if (num <= 0) {
+            console.alert("MMP, 正整数.")
+        }
+        if (flag){
+            console.info(num, "不是素数")
+        } else {
+            console.info(num, "是素数")
+        }
+    </script>
+</body>
+</html>

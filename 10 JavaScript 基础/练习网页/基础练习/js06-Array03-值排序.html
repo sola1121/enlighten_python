@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="find_max()">显示排序数组</button>
+    <button onclick="arr_sort()">三个元素数组排序</button>
+    <button onclick="find_index()">找寻元素存在及下标</button>
+    <script>
+        function find_max(){
+            var arr = [34, 5,54,87,34,98,23,98,4,1,7,8,89]
+            var max_num = arr[0]
+            for (var i=1; i<=arr.length; i++){
+                if (arr[i] > max_num){
+                    max_num = arr[i]
+                }
+            }
+            console.info("数组中最大值", max_num)
+        }
+
+        function arr_sort(){
+            var arr = [34, 45, 26]
+            // 比较第一个和第二个数字, 如果第一个数字比第二个数字大, 则交换位置
+            if (arr[0] > arr[1]){
+                arr[0] ^= arr[1]
+                arr[1] ^= arr[0]
+                arr[0] ^= arr[1]
+            }
+            console.info("第一次比较", arr)
+            // 比较第二个数字与第三个数字, 如果第二个数字比第三个数字大, 则交换位置
+            if (arr[1] > arr[2]){
+                arr[1] ^= arr[2]
+                arr[2] ^= arr[1]
+                arr[1] ^= arr[2]
+            }
+            console.info("第二次比较", arr)
+            // 比第三个数字与第一个数字, 如果第一个数字比第三个数字大, 则交换位置
+            if (arr[0] > arr[2]){
+                arr[0] ^= arr[2]
+                arr[2] ^= arr[0]
+                arr[0] ^= arr[2]
+            }
+            console.info("第三次比较", arr)
+        }
+        
+        function find_index(){
+            var arr = new Array(1, 2, 3, 5,56,67,4,87,3,4,243,14,7,8,624)
+            var index = -1   // 用于存储找到的下标, 默认为-1, 不表示任何下标
+            var input = parseInt(window.prompt("输入一个数值"))
+            for (var i=0; i<arr.length; i++){
+                if (input==arr[i]){
+                    index = i
+                    break
+                }
+            }
+            if (index == -1){
+                console.info("所查找不存在")
+            } else {
+                console.info("所查数据存在", index)
+            }
+        }
+    </script>
+</body>
+</html>

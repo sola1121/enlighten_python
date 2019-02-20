@@ -1,0 +1,155 @@
+
+----------------函数递归-------------------
+
+递归函数 recursion
+  函数直接或间接的调用自身
+递归说明:
+  递归一定要控制递归的层数,当符合某一条件时要终止递归调用
+  几乎所有的递归都能用while循环替代
+  函数每次调用的时候都在内存开辟新的空间以临时保存产生的变量等,调用完毕返回调用它的内存块,及所在语句块
+  递归深度最大为1000
+示例1:
+    def func():
+        func()   # 直接调用自身
+    func()
+    print("func调用已返回.")
+示例2:
+    def fa():
+        fb()
+    def fb():
+        fa()
+    fa()
+    print("不可能完成递归, 此句不会打印.")
+示例3:
+    # 打印1 2 3 4 5
+    def fn(n):
+        print(n)
+        if n == 5:
+            return
+        fn(n + 1)   # 递归调用至下一层
+示例4:
+    # 用递归求n的阶乘
+    def factorial(n):
+        if n == 1:
+            return 1
+        return n * factorial(n-1)
+走楼梯似得调用方式
+就像走地下室,每一次递归就是向下走一层,但走到最底层(1000或所定义的),就往回走,会接着调用上层
+
+递归的优缺点
+  优点:
+    递归可以把问题简单化,让思路更为清晰,代码更简洁
+  缺点:
+    递归因系统环境影响大,当递归深度太大时,可能会得到不可预测的结果
+
+---------------------------------------
+
+闭包 closure
+    将组成函数的语句和这些语句执行的环境打包在仪器室,得到的对象称为闭包
+说明:
+    如果一个内嵌函数访问外部嵌套函数作用域的变量,并返回这个函数,则这个函数就是闭包
+属性:
+    参数存储在__closure__中
+闭包必须满足的三个条件:
+    1)必须有一个内嵌函数
+    2)内嵌函数必须引用外部嵌套函数中的变量
+    3)外部函数返回值必须是内嵌函数
+示例:
+# 得到一个数的n次方法函数
+def make_power(y):
+    def fn(x):
+        return x ** y
+    return fn
+pow2 = make_power(2)   # pow2绑定到了内嵌函数上,内嵌函数被定义为 def fn(x): return x ** 2; 充分体现了函数是变量
+pow2(3)   # 9   
+
+闭包的使用示例:
+# 用闭包生成一系列抛物线函数 y = ax**2 + bx + c
+def make_fn(a, b, c):
+    def fn(x):
+        return a*x**2 + b*x +c
+    return fn
+
+f1 = make_fn(1, 0, 1)   # 定义了a, b, c的值
+print(f1(6))
+
+---------------------------------------
+
+装饰器 decorators
+什么是装饰器:
+    装饰器是一个函数,主要作用是用来包装另一个函数或类
+    包装的目的是在不改变原函数名或类名的情况下,改变被包装对象的行为
+
+    可以直接替换函数, 也可以把原先函数写入装饰器, 完成更改
+
+函数装饰器 functional decorators
+    函数装饰器是指装饰器函数传入的是一个函数,返回的也是一个函数
+
+函数装饰器的语法
+    def 装饰器函数名(参数):
+        语句块
+        return 函数对象
+
+    @ 装饰器函数名<换行>
+    def 函数名(参数列表):
+        语句块
+
+注意: 首先执行装饰器里面的语句块
+      return 的函数对象(变量)就是最后要执行的函数
+
+示例:
+def mydeco(fn):   # 此函数传入一个函数,返回一个函数,此函数可以作为装饰器函数
+    def myfn():
+        print("local myfun runned.")
+    return myfn
+
+@ mydeco
+def myfunc():
+    print("function myfunc runned.")
+
+myfunc()   # 执行
+
+# 加了@ mydeco装饰器后相当于在def myfunc之后交了一条语句
+myfunc = mydeco(myfunc)
+
+
+▉没有参数的函数装饰器外面再包装一层函数调用
+示例:
+# 不改变原代码完整性的前提下,添加调用用户权限检查的功能
+def pri_ck(fn):
+    def check():   # 执行权限的检查
+        print("check the privalegy")
+        fn()   # 调用原来的函数
+    return check
+@ pri_ck
+def f1():
+    print("f1 runned.")
+@ pri_ck
+def f2():
+    print("f2 runned.")
+@ pri_ck
+def f3():
+    print("f3 ruuned.")
+#用户1调用           #用户2调用
+f1()                 f1()
+f2()                 f2()
+f3()                 f3()
+
+▉装饰器修饰带有参数的函数
+示例:
+def sent_mssg(fn):
+    def do_things(name, x):   # 参数与所要替换的函数相同
+        print("welcome", name, ", please get you line number,")
+        fn(name, x)
+        print("sent the message.")
+    return do_things
+@ sent_mssg
+def save_money(name, x):
+    print(name, "saved", x, "$")
+@ sent_mssg
+def fetch_money(name, x):
+    print(name, "fetched", x, "$")
+
+
+
+--------------------------------------

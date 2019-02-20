@@ -1,0 +1,63 @@
+初始化方法
+作用:
+    创建对象初始化实例变量(属性)
+格式:
+class 类名(继承列表):
+    def __init__(self[, 参数列表):
+        语句块
+
+注: []代表其中的内容可以没有
+    对象创建后也可以手动使用__init__方法,在进行一次初始化
+
+说明:
+    1) 初始化方法名必须为__init__,不可改变
+    2) 在一个类中只能有一个__init__方法
+    3) 初始化方法会在实例创建后自动调用,且将实例自身通过第一个参数self传入__init__方法
+    4) 初始化方法内如果需要使用return返回, 则必须返回None
+
+示例:
+class Car:
+    """车类
+    """
+    def __init__(self, color, brand, model):
+        self.color = color
+        self.brand = brand
+        self.model = model
+        print("__init__方法被调用.")
+    
+    def run(self, speed):
+        print("The %s %s %s is running in speed %dkm/h on the high way."
+              %(self.color, self.brand, self.model, speed))
+
+car1 = Car("white", "audio", "A4")
+print(car1.brand, car1.model)
+car1.run(120)
+
+
+---------------------------------------
+
+用于类的函数
+    isinstance(obj, class_or_tuple)
+    返回这个对象obj是否是某个类创建的对象,或者某些类中的一个类的对象,如果是返回True,否返回False
+示例:
+isinstance(1+2j, (int, tuple, complex))   # 返回True
+
+
+对象的属性管理函数
+    getattr(obj, name[, default])
+    从一个对象的到对象的属性, getattr(x, 'y')等同于x.y当属性不存在时,如果给出default参数,则返回default,如果没有给出default,则产生一个AttributeError错误
+
+    hasattr(obj, name)
+    用给定的name返回对象obj是否有此属性,此种做法可以避免getattr(obj, name)时引发错误, 他返回True或False
+
+    setattr(obj, name, value)
+    给对象obj的名为name的属性设置相应的值, setattr(x, 'y', v)等同于x.y = v
+
+    delattr(obj, name) 
+    删除对象obj中name属性, delattr(x, 'y') 等同于del x.y
+
+注: 参数形式是 (对象, 对象中的属性(变量)名)
+
+
+
+

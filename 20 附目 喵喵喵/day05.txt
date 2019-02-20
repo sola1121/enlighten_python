@@ -1,0 +1,101 @@
+1、概念
+	1、django项目(Web应用)
+	2、web服务器
+		1、nginx
+		2、Apache
+			LNMP:Linux、nginx、mysql、Php/Python/perl
+			LAMP:Linux、Apache、mysql、Php/Python/perl
+	3、uwsgi
+		是web服务器和web框架之间的一种简单通用的接口
+2、单项目部署(nginx + uwsgi + django)
+	1、确保django项目能够运行
+	2、安装nginx(网站服务)
+		1、安装nginx
+			sudo apt-get install nginx
+		2、启动nginx
+			sudo /etc/init.d/nginx start
+		3、验证
+			打开浏览器,输入 ：127.0.0.1 显示：Welcome to nginx!
+	3、安装uwsgi
+		1、安装
+			sudo pip3 install uwsgi
+		2、验证(用uwsgi启动django项目)
+			uwsgi --http :8008 --chdir /home/tarena/friutday_1 --module friutday.wsgi
+				friutday.wsgi 指的是 friutday/wsgi.py
+	4、部署
+		1、配置uwsgi(配置文件)
+			在用户主目录下创建目录 uwsgi,用来存放uwsgi的项目的配置文件(每一个项目一个配置文件)
+			1、mkdir /home/tarena/uwsgi
+			2、cd /home/tarena/uwsgi
+			3、vi friutday_uwsgi.ini 并写入如下内容：
+				[uwsgi]
+				# 和nginx通信的端口
+				socket = 127.0.0.1:8002
+				chdir = /home/tarena/friutday_1
+				wsgi-file = friutday/wsgi.py
+				# 进程
+				processes = 4
+				# 线程
+				threads = 2
+				stats = 127.0.0.1:8080
+		2、配置nginx(配置文件)
+			1、更改配置文件
+				sudo -i
+				cd /etc/nginx/sites-enabled/
+				vi project_nginx.conf
+					server{
+						listen 8000;
+						server_name frituday.com;
+						charset utf-8;
+						client_max_body_size 75M;
+						location /static{
+							alias /home/tarena/friutday_1/static;
+						}
+						location /{
+							include uwsgi_params;
+							uwsgi_pass 127.0.0.1:8002;
+						}
+					}
+			2、拷贝uwsgi_params文件到项目目录
+				sudo cp /etc/nginx/uwsgi_params /home/tarena/friutday_1
+			3、重启nginx服务
+				sudo /etc/init.d/nginx restart
+		3、收集静态文件
+			1、在项目settings.py中添加如下内容：
+				STATIC_ROOT = '/home/tarena/friutday_1/static/'
+			2、收集静态文件
+				python3 manage.py collectstatic
+		4、用uwsgi启动django项目
+			uwsgi --ini friutday_uwsgi.ini
+3、多项目部署
+	1、每个项目需要创建单独的uwsgi配置文件,选用不同的端口
+	2、nginx的配置文件只要1个就可以,添加server{...}
+4、设置开机自启动django项目
+	1、编写py文件
+		import os
+		uwsgi_files = os.listdir("/home/tarena/uwsgi")
+		for i in uwsgi_files:
+				os.system("uwsgi --ini /home/tarena/uwsgi/%s" % i)
+	2、编写sh脚本文件(project.sh)
+		#!/bin/bash
+		python3 /home/tarena/project.py
+	3、添加到开机自启动
+		1、拷贝到/etc/init.d/
+			sudo cp project.sh /etc/init.d/
+		2、修改权限
+			cd /etc/init.d/
+			sudo chmod 755 project.sh
+		3、添加到开机自启动
+			sudo update-rc.d project.sh defaults 99
+
+
+
+
+
+
+
+
+
+
+
+

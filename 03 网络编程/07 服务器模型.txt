@@ -1,0 +1,225 @@
+服务器模型
+
+硬件服务器: 主机   集群
+
+软件服务器: 网络服务器 在后端提供网络功能, 逻辑处理, 数据处理的程序或者架构等
+    例如: httpserver  Django  flask
+
+服务器架构: c/s (客户端服务器架构)   b/s (浏览器服务器架构)  这些都是服务器的组织形式
+
+服务器的追求: 处理速度快, 数据更安全, 并发量更大
+
+硬件: 更高配置, 更多主机, 集成, 分布
+软件: 程序占有更少的资源, 更流畅的运行, 处理更多的并发
+
+
+基本的服务器模型
+
+  循环   IO多路复用   并发模式   
+
+    循环模型 
+        单线程程序, 循环接收连接或者请求, 然后处理, 处理后继续循环
+        缺点: 不能同时处理多个客户端的并行, 不允许某个客户端长期占有服务器
+        优点: 结构比较简单, 适用于UDP程序, 要求处理请求可以很快完成
+
+    IO多路复用模型
+        通过同时监控多个IO来达到IO并发的目的
+        缺点: 单线程, 不能够长期阻塞, 不适合处理大量CPU占用高的程序(处理CPU密集型没啥意义)
+        优点: 开销小, 比较适合IO密集型的服务端程序
+
+    并行服务器
+        每有一个客户端连接请求就创建一个新的进程或者线程处理客户端的请求, 而主进程或主线程可以继续接受其他客户端的连接
+        缺点: 资源消耗比较大
+        优点: 客户端需要长期占有服务器的情况
+
+实例:
+---------------------------------------
+
+基于fork的多进程并发
+    1. 创建套接字, 绑定, 监听
+    2. 接收客户端请求
+    3. 创建子进程处理客户端请求, 父进程继续准备接收新的客户端连接
+    4. 客户端退出, 则销毁相应的子进程
+
+
+FTP_TCP_服务端 
+客户端
+    1. 查看文件库中有哪些文件
+    2. 下载文件到本地
+
+确定技术
+
+    os.fork --- 多进程
+    tcp socket
+
+    os.listdir(path)   # 获取目录下所有文件的名字列表
+
+    os.path.isfile(path)   # 判断是否为文件
+    os.path.isdir(path)   # 判断是否为目录
+
+---------------------------------------
+
+多线程并发
+
+相对于多进程并发
+
+劣势
+    需要用到同步互斥
+    受到GIL的影响
+
+优势
+    只需要消耗较少系统资源
+
+实现: threading模块完成
+
+步骤
+1. 创建套接字 绑定 监听
+2. 准备接收客户端连接
+3. 每当有一个客户端连接进来就创建一个新的线程
+4. 客户端退出后结束响应线程, 关闭客户端套接字
+
+---------------------------------------
+
+基于多线程的httpServer
+
+思路: 
+    每有一个客户端就用一个线程为其服务
+    httpServer的功能(解析请求和处理响应)封装成类
+    所有的静态页面收集到一个文件夹
+    处理方法放在一个文件夹
+
+技术实现
+并发: 多线程
+server类的设计: 
+    初始化: 将socket返回值变为属性, 并增加一系列其他属性
+    服务器启动方法: 接收客户连接请求, 创建不同线程
+    客户端处理函数: handleRequst
+
+
+实现动态载入模块
+    sys.path: 是一个列表, 可以添加路径. 该列表中的路径, 对python下的所有环境可见
+    __import__(): 参数为一个目录, 等同于import导入
+
+    示例:
+        sys.path.append("/home/tarena/handler")   # 添加搜索路径
+        __import__(sys.argv[1])   # 动态导入模块
+
+---------------------------------------
+
+使用集成模块完成网络并发
+
+python3   socketserver 内建模块
+
+
+完成继承, 就可以使用父类中定义好的功能
+    进程tcp并发
+        继承: ForkingMixIn   TCPServer   StreamRequestHandler
+        等同于: ForkingTCPServer
+
+    进程udp并发
+        继承: ForkingMixIn   UDPServer   DatagramRequestHandler
+        等同于: ForkingUDPServer
+
+    线程tcp并发
+        继承: ThreadingMixIn   TCPServer   StreamRequestHandler
+        等同于: ThreadingTCPServer
+
+    线程udp并发
+        继承: ThreadingMixIn   UDPServer   DatagramRequestHandler
+        等同于: ThreadingUDPServer
+
+所提供的功能封装
+
++------------+
+| BaseServer |
++------------+
+      |
+      v
++-----------+        +------------------+
+| TCPServer |------->| UnixStreamServer |
++-----------+        +------------------+
+      |
+      v
++-----------+        +--------------------+
+| UDPServer |------->| UnixDatagramServer |
++-----------+        +--------------------+
+
+基类: BaseRequestHandler   BaseServer
+
+TCPServer
+UDPServer
+
+ForkingTCPServer
+ForkingUDPServer
+
+ForkingMixIn
+ThreadingMixIn
+
+StreamRequestHandler
+DatagramRequestHandler
+
+ThreadingTCPServer
+ThreadingUDPServer
+
+UnixDatagramServer
+UnixStreamServer
+ThreadingUnixDatagramServer
+ThreadingUnixStreamServer
+
+其他封装:
+    os
+    selectors
+    socket
+    threading
+    time
+
+---------------------------------------
+
+Python的httpServer
+
+涉及的标准库
+    python2 --> BaseHTTPServer
+    python3 --> http.server
+
+python2
+    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+python3
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+示例:
+#通用的导入代码, 用于处理python2与python3模块的不同
+try:
+    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+except ImportError:
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+    
+# 请求处理类
+class RequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        print("GET method Run.")
+        html_file = open(r"E:\达内学习文件\03 网络编程\py_web\07 服务器模型-0并行服务器\test.html", "rb")
+        content = html_file.read()
+        # 组织响应行, 这里200是响应码
+        self.send_response(200)
+        # 组织响应头, 这里字符串是响应头具体内容
+        self.send_header('content-type', 'text/plain; charset=utf-8')
+        # 响应头结束
+        self.end_headers()
+        # 发送响应体
+        self.wfile.write(content)
+        return
+
+    def do_POST(self):
+        pass
+    
+# 指定地址
+address = ("0.0.0.0", 8000)
+
+# 生产服务器对象
+server = HTTPServer(address, RequestHandler)
+
+# 运行
+server.serve_forever()
+
+
+

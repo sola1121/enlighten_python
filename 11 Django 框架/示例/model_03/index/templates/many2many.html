@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>多对多查询author和book</title>
+</head>
+<body>
+    <h2>作者信息:</h2>
+    <h4>姓名: {{ author.name }}</h4>
+    <h4>邮箱: {{ author.email }}</h4>
+    <h2>出版的所有书籍:</h2>
+    {% for book in books %}
+        <h4>书名: {{ book.title }}</h4>
+        <h4>出版时间: {{ book.publicate_date }}</h4>
+    {% endfor %}
+
+    <h2>书籍信息:</h2>
+    <h4>书名: {{ book.title }}</h4>
+    <h4>出版时间: {{ book.publicate_date }}</h4>
+    <h2>所有作者:</h2>
+    {% for au in authors %}
+        <h4>姓名: {{ au.name }}</h4>
+        <h4>邮箱: {{ au.email }}</h4>
+    {% endfor %}
+</body>
+</html>

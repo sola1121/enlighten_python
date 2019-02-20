@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        count_day = 0
+
+        function isLeap(year){
+            if ((year % 4==0 && year % 100 !=0) || (year % 400 ==0)){
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        function count_month(month, year){
+            if (month == 2){
+                if (isLeap(year)) {
+                    count_day += 29
+                } else {
+                    count_day += 28
+                }
+            } else if (month == 8){
+                count_day += 31
+            } else if ((month & 1) == 1){
+                count_day += 31
+            } else if ((month & 1) == 0){
+                count_day += 30
+            }
+        }
+        
+        function show_result(weekend){
+            switch (weekend) {
+                case 0:
+                    console.info("周日")
+                    break
+                case 1:
+                    console.info("周一")
+                    break
+                case 2:
+                    console.info("周二")
+                    break
+                case 3:
+                    console.info("周三")
+                    break
+                case 4:
+                    console.info("周四")
+                    break
+                case 5:
+                    console.info("周五")
+                    break
+                case 6:
+                    console.info("周六")
+                    break
+                default:
+                    console.info("Unknow Error")
+            }
+        }
+
+        function main(){
+            var input_year = parseInt(window.prompt("输入年: "))
+            var input_month = parseInt(window.prompt("输入月: "))
+            var input_day = parseInt(window.prompt("输入日: "))
+
+            for (var year=1990; year<=input_year; year++){
+                if (isLeap(year)) {
+                    count_day += 366
+                } else {
+                    count_day += 365
+                }
+            }
+
+            for (var month=input_month; month>0; month--){
+                count_month(month, input_year)
+            }
+
+            count_day += input_day
+            weekend = count_day % 7
+            show_result(weekend)
+        }
+        
+        main()
+
+    </script>
+</body>
+</html>

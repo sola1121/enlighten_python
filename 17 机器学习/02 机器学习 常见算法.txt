@@ -1,0 +1,164 @@
+3. 简单分类器
+    简单分类器, 依靠人判断
+    输入    输出
+    3   1      0
+    2   5      1
+    1   8      1
+    6   4      0
+    5   2      0
+    3   5      1
+    4   7      1
+    4  -1     0
+    7   5      ?->0
+    代码：简单分类器simple.py
+
+---------------------------------------
+
+4. 逻辑分类
+    1) 预测函数
+        x1 x2 -> y
+                1
+        y = -----------
+            1 + e^-z
+        z = k1x1 + k2x2 + b
+    2) 成本函数
+        交叉熵误差
+        J(k1,k2,b) = sigma(-ylog(y')-(1-y)log(1-y'))/m + m
+                            正则函数(||k1,k2,b||)x正则强度
+        x x -> 0.9 1
+        x x -> 0.2 0
+        sklearn.linear_model.LogisticRegression(solver='liblinear', C=正则强度)
+                   A   B   C
+        ... -> A 1 0.9 0.1 0.3 A
+        ... -> B 0 0.3 0.6 0.4 B
+        ... -> C 0 0.1 0.2 0.6 C
+        如A,B,C出现的概率, 这样由大到小就可以用作分类
+        代码：mlog.c
+
+---------------------------------------
+
+5. 朴素贝叶斯分类
+    x x ... x  -> 0
+    x x ... x  -> 1
+    x x ... x  -> 0
+    x x ... x  -> 0
+    x x ... x  -> 1
+    x x ... x  -> 2
+    x x ... x  -> 1
+    x x ... x  -> 0
+    x x ... x  -> 2
+    ...
+    1 9 ... x  -> 0 0.8
+                -> 1 0.9 *
+                -> 2 0.7
+    (1) 贝叶斯定理
+                P(A)P(B|A)
+        P(A|B) = -------------
+                    P(B)
+    (2) 朴素-贝叶斯分类
+        求X样本属于C类别的概率，即当观察到X样本出现时，其所属的类别为C的概率：
+        P(C|X)=P(C)P(X|C)/P(X)
+        P(C)P(X|C)=P(C,X)=P(C,x1,x2,...,xn)
+                        =P(x1,x2,...,xn,C)
+                        =P(x1|x2,...,xn,C)P(x2,x3,...,xn,C)
+        =P(x1|x2,...,xn,C)P(x2|x3,...,xn,C)P(x3,x4,...,xn,C)
+        =P(x1|x2,...,xn,C)P(x2|x3,...,xn,C)P(x3|x4,...,xn,C)...P(C)
+        朴素：条件独立假设，即样本各个特征之间并无关联，不构成条件约束。
+        =P(x1|C)P(x2|C)P(x3|C)...P(C)
+        X样本属于C类别的概率，正比于C类别出现的的概率乘以C类别条件下X样本中每一个特征值出现的概率之乘积。
+
+        sklearn.naive_bayes
+
+        示例: 朴素贝叶斯nb.py
+
+    3) 划分训练集和测试集
+        sklearn.model_selection.train_test_split(输入集合, 输出集合, test_size=测试集比例, random_state=随机种子源) 
+        -> 训练用输入, 测试用输入, 训练用输出, 测试用输出
+
+        示例: 朴素叶贝斯split.py
+
+    4) 交叉验证
+        1) 查准率和召回率
+            查准率: 被正确识别为某类别的样本数/被识别为该类别的样本数   即准确率, 正确性
+            召回率: 被正确识别为某类别的样本数/该类别的实际样本数   即完整性, 全不全
+            f1_score = 2 × 查准率 × 召回率 / (查准率 + 召回率)
+            取值在0至1之间, 0表差, 1表好
+            sklearn.model_selection.cross_val_score(分类器, 输入集合, 输出集合, cv=验证次数, scoring=验证指标名称) -> 验证指标值数组
+            可以取验证指标的平均值来预测
+
+            sklearn.model_selection.cross_val_score(model, x, y, cv=5, scoring='f1_weighted')->[0.6 0.8 0.4 0.7 0.6]
+            示例: 交叉验证cv.py
+
+    5) 混淆矩阵
+        以实际类别为行, 以预测类别为列.
+              0     1    2
+            0  45   4    3
+            1  11   56   2
+            2   5   6    49
+            sklearn.metrics.confusion_matrix(实际输出, 预测输出)->混淆矩阵
+
+            代码：混淆矩阵cm.py
+
+    6) 分类报告
+        sklearn.metrics.classification_report(实际输出, 预测输出) -> 分类报告
+        示例: 分类报告cr.py
+
+---------------------------------------
+
+6. 随机森林分类
+    1) 评估汽车档次
+        代码：评估汽车档次car.py
+
+    2) 验证曲线
+        f1_score = f(模型对象超参数)
+        验证曲线的峰值，寻找相对理想的超参数。
+        model = se.RandomForestClassifier(max_depth=8, n_estimators=200, random_state=7)
+                                                        ^^^^^^^^^^^^
+        model = se.RandomForestClassifier(max_depth=8, random_state=7)
+        sklearn.model_selection.validation_curve(model, x, y, 'n_estimators', [100, 200, 300, ...], cv=5) -> 训练集得分矩阵, 测试集得分矩阵
+            1    2   3   4    5
+        100 -> 0.7 0.9 0.6 0.8 0.7
+        200 ->
+        300 ->
+        ...
+    代码：验证曲线vc.py
+
+    3) 学习曲线
+        f1_score = f(训练集大小)
+        sklearn.model_selection.learning_curve(model, x, y, 训练集大小数组, cv=5) -> 训练集大小数组, 训练集得分矩阵, 测试集得分矩阵
+
+    代码：学习曲线lc.py
+
+---------------------------------------
+
+7. 支持向量机(SVM)
+    1.分类边界
+      同时满足四个条件：
+        A.正确分类
+        B.支持向量到分类边界的距离相等
+        C.间距最大
+        D.线性（直线，平面）
+    
+    2.升维变换
+        对于在低维度空间中无法线性划分的样本，通过升维变换，在高纬度空间寻找最佳线性分类边界。
+        核函数：用于对特征值进行升维变换的函数。
+        多项式核函数
+        径向基核函数
+    代码：svm_line.py、svm_poly.py、svm_rbf.py
+    
+    3.当不同类别的样本数量相差悬殊时，样本数较少的类别可能被支持向量机分类器忽略，为此可以将class_weight参数指定为balanced，通过调节不同类别样本的权重均衡化。
+    代码：svm_balanced.py
+    
+    4.置信概率
+        svm.SVC(..., probability=True, ...)
+        支持向量机分类器.predict_proba(输入样本)->置信概率矩阵
+                类别1  类别2
+        样本1 ->  0.99    0.01
+        样本2 ->  0.02    0.98
+        ...
+    代码：svm_prob.py
+
+    5.最优超参数
+        sklearn.model_selection.GridSearchCV(模型, 参数组合表, cv=交叉验证次数)->最优模型对象
+        参数组合表：[{参数名: [取值列表]}, {}, ...]
+    代码: bhp.py

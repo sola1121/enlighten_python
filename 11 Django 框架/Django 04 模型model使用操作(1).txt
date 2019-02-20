@@ -1,0 +1,202 @@
+模型中的CURD (增删改查)
+    1. 通过ORM向DB中增加数据
+        1) Entry.objects.create(属性1=值, 属性2=值)
+            Entry: 具体要操作的Model类
+            示例
+                user_tb.objects.create(name="siro", age=1)
+        2) 创建一个Models对象, 通过对象的save()完成增加
+            obj = Entry(属性1=值, 属性2=值)   # Entry是一个models中的表类
+            obj.save()
+            示例
+                obj = user_tb(name="siro", age=1)
+                obj.save()
+        3) 使用字典构建对象, 通过save()完成增加
+            dic = {
+                "属性1": "值",
+                "属性2": "值",
+                ...
+            }
+            obj = Entry(**dic)   # 拆解字典传参, 本质上与2方法一样
+            obj.save()
+
+    2. 查询操作 ☭
+        通过Entry.objects调用查询接口
+        1) 基本查询操作
+            语法: all()
+            用法: Entry.objects.all()
+            返回: QuerySet
+            示例
+                # 在views.py的操作函数中
+                qs_lst = Entry.objects.all()   # 查询所有, select * from Entry;
+                # qs_lst
+                <QuerySet [<Entry: Entry object>, <Entry: Entry object>, ... >   # 每一个Entry object就是一个符合条件的查询返回
+                可以通过for循环遍历除每一个结果, 使用在数据库中的列名, Entry_object.列名就可以获得值
+                for info in qs_lst:
+                    print(info.name, info.age, info.email)
+        2) 查询指定列
+            语法: values("列1", "列2", ...)
+            用法: Entry.objects.values("列1", "列2", ...)
+            返回: 一个返回字典的QuerySet
+            示例
+                # 在views.py的操作函数中
+                qs_lst = Entry.objects.values("name", "age")   # 指定列查询, select name, age from Entry;
+                # qs_lst
+                <QuerySet [{'name': 'kizuna_ai', 'age': 2}, {'name': 'luna', 'age': 0}, {'name': 'siro', 'age': 1}]>
+                返回的是以字典为值的QuerySet
+            注意:
+                values()可以用在所有查询结果集的方法的后面
+                如:
+                    Entry.objects.all().values("name", "age")
+            类似的: values_list() 其会返回列表的QuerySet
+                qs_lst = Entry.objects.values_list("name", "age")
+                # qs_lst
+                <QuerySet [('kizuna_ai', 2), ('luna', 0), ('siro', 1)]>
+                返回的是以元组为值的QuerySet
+        3) 排序函数
+            语法: order_by("列1", "列2", ...)
+            用法: Entry.objects.order_by("列1", "列2", ...)
+                默认的排序规则是升序
+                如果需要降序, 则在列前添加一个"-"
+                order_by可以用在所有查询结果集方法的后面
+            示例
+                Entry.objects.order_by("age")
+                Entry.objects.all().order_by("-age")
+        4) 条件取反
+            语法: exclude()
+            用法: Entry.objects.exclude(条件)
+                返回不符合条件的QuerySet
+            示例
+                Entry.objects.exclude(id=3)   # select * from Entry where not id=3;
+                Entry.objects.exclude(id=3, age=6)   # select * from Entry where not (id=3 and age=2)
+                <QuerySet [<Entry: Entry object>, <Entry: Entry object>]>
+        5) 根据条件查询部分行数据 ☭
+            方法: filter(参数)
+            用法: Entry.objects.filter(参数)
+            (1) 使用多个参数的话, 使用逗号,隔开, 映射到sql语句上, 是使用and来进行关联的
+                示例
+                    Entry.objects.filter(id=1)   # select * from Entry where id=1;
+                    Entry.objects.filter(id=3, name="siro")   # select * from Entry where id=3 and name="siro";
+            (2) 通过Field Lookup(查询表达式)完成复杂条件的构建
+                查询表达式: 每个查询表达式都是一个独立的查询条件, 可以用在所有的有查询条件的位置处
+                           在函数参数中只有"="可以使用
+                1. __exact
+                    作用: 精确查询, 等值判断
+                    用法: Entry.objects.filter(属性__exact=值)
+                    示例
+                        Entry.objects.filter(id__exact=1)   # select * from Entry where id=1
+                2. __contains
+                    作用: 筛选出属性中包含指定关键字的记录(模糊查询)
+                    用法: Entry.objects.filter(属性__contains=值)
+                    示例
+                        Entry.objects.filter(name__contains="si")   # select * from Entry where name like "%si%"
+                3. __startswith
+                    作用: 筛选出以指定关键字开始的记录
+                4. __endwith
+                    作用: 筛选出以指定关键字结尾的记录
+                5. __lt
+                    作用: 筛选出属性值小于指定值的记录
+                6. __lte
+                    作用: 筛选出属性值小于等于指定值的记录
+                7. __gt
+                    作用: 筛选出属性值大于指定值的记录
+                8. __gte
+                    作用: 筛选出属性值大于等于指定值的记录
+                ...
+            
+        6) 查询只返回一条数据
+            语法: get(条件)
+            语法: Entry.objects.get(查询条件/表达式)
+            注意: 
+                该函数只适用于返回一条记录时使用, 没有返回报错, 返回多条报错
+        
+    3. 修改数据
+        1) 修改单个数据
+            (1) 通过get()得到要修改的实体对象
+            (2) 通过实体对象的属性修改属性值
+            (3) 再通过实体对象的save()保存回数据库
+                示例
+                    obj = Entry.objects.get(id=1)
+                    obj.name = "hinata"
+                    obj.age = 0
+                    obj.save()
+        2) 批量修改数据
+            调用查询结果集的 update() 完成批量修改
+            Entry.objects.all().update(属性1=值, 属性2=值)
+                示例
+                    Entry.objects.all().update(age=6)   # update Entry set age=6;
+    
+    4. 删除数据
+        调用实体对象/查询结果集的 delete() 即可
+        1) 删除单个对象
+            Entry.objects.get(id=1).delete()
+        2) 删除多个对象
+            Entry.objects.all().delete()   # delete from Entry;
+
+---------------------------------------
+
+转发与重定向
+    主要针对views.py中的操作
+    1. 转发(略)
+    2. 重定向
+        1) 什么是重定向
+            重定向新的方位地址发送请求(服务器端)
+        2) 语法
+            from django.http import HttpResponseRedirect
+            return HttpResponseRedirect(url)
+            让浏览器向指定地址再发送请求, 这样的效率比转发高一点
+
+---------------------------------------
+
+ORM 操作
+    django.db.models
+    1. F()操作
+        需求:
+            更新Entry表中所有人的age都+10
+                update Entry set age = age + 10;
+        from django.db.models import F   # 在应用中的views中使用
+        作用: 执行操作中, 获取某列的值时使用
+        语法
+            F('列名')
+        示例
+            Entry.objects.all().update(age=F('age')+10)
+    2. Q()操作
+        需求:
+            select * from Entry where id=1 or age>12;
+        from django.db.models import Q
+        作用: 在查询条件中, 可以完成或(or)的操作
+        语法
+            Q(表达式)|Q表达式
+        示例
+            Entry.objects.filter(Q(id=1)|Q(age__gt=10))
+            返回 <QuerySet [<Entry: kizuna_ai>, <Entry: siro>, <Entry: luna>]>
+
+---------------------------------------
+
+原生的数据库操作方法
+    1. 查询
+        函数: raw(sql语句)
+        语法: Entry.objects.raw(sql语句)
+        返回: RawQuerySet
+            如: <RawQuerySet: select * from index_author where id>=2>
+                可以使用for遍历出每一行的内容, 使用.运算符获取对应名字的列的值
+    2. 增删改
+        def doSQL(request):
+            with connection.cursor() as cursor:
+                sql = "delete form Entry"
+                cursor.execute(sql)
+                return HttpResponse("...")
+
+---------------------------------------
+
+自定义查询对象 - objects
+    1. 声明类EntryManager, 继承自models.Manager
+        在EntryManager中添加自定义函数
+
+        class EntryManager(models.Manager):
+            def 函数名(self, 自定义参数列表):
+                ...
+                return ...
+    2. 使用EntryManager覆盖models类中的objects
+        class Entry(models.Model):
+            objects = EntryManager()   # 替换掉objects, 换为自己定义的类对象
+

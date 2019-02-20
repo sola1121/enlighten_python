@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modle_Form表单和数据表直接关联</title>
+</head>
+<body>
+    <form action="07_model_form/" method="POST">
+        {% csrf_token %}
+        {{ form_object.as_p }}
+        <input type="submit" value="confirm">
+    </form>
+</body>
+</html>

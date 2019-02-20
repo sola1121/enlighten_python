@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FORM GET METHOD</title>
+</head>
+<body>
+    <h4>
+        <a href="/04_query/?id=9&name=yomemi">手动拼参数到04_query</a>
+    </h4>
+    <form id="frmLogin" action="/03_login_get" method="get">
+        {% comment "防止CSRF" %}
+            csrf_token 
+        {% endcomment %}
+        <p>userName: <input type="text" name="uname"></p>
+        <p>passWord: <input type="password" name="upwd"></p>
+        <input type="submit" value="提交">
+    </form>
+</body>
+<script src="/static/js/jquery_3.3.1.js"></script>
+<script src="/static/js/login.js"></script>
+</html>
