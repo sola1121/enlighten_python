@@ -49,6 +49,8 @@
     a = 100
     a = b = c = 200
     x, y = 100, 200
+  赋值表达式
+    print(a:=True)
   if 语句
   while 语句
   break
