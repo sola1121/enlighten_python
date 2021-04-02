@@ -222,7 +222,7 @@ def example():
 函数参数自左至右的顺序为:
   位置形参, 星号元组形参, 命名关键字形参, 双星号字典形参
 综合示例:
-  def example(a, b, *args, c, **kwargs):
+  def example(a, b, /, *args, c, **kwargs):
       print(a, b); print(args); print(c); print(kwargs)
 
   example(1, 2, 3, 4, ("hello", "python"), c="666", **{"必须": "前面加", "**": "以拆分"})   
