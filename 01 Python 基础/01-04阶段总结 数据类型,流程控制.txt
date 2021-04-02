@@ -1,5 +1,3 @@
-2018.02.11
-
 不可变的数据类型
     bool, int, float, complex, str, tuple, frozenset, bytes
 可变的数据类型
