@@ -15,19 +15,54 @@ AJAX 是纯前端技术(浏览器使用)
         1) 获得XMLRequest对象
         2) 进行配置, 包括请求路径, 发送的数据, 如何处理收到的响应
         3) 发送请求
+        
+        原生的异步请求, XMLHttpRequest对象
+        var xhr = new XMLHttpRequest()
+        
+        // 监控状态, 获取请求返回的结构, 当到达第四步, 并成功时
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState == 4 && xhr.status == 200){
+                // 异步请求成功的时候, 在调取XMLHttppRequest对象, 提取请求返回的内容
+                // 如下
+                var res_text = xhr.responseText   // 提取返回的文本
+                var res_json = JSON.parse(res_text)   // 将文本转换为JSON对象
+                ...
+            }
+        }
+        
+        // 进行请求, xhr.open(方法, 地址, 异步, user, password)
+        // 使用GET方法请求
+        xhr.open("GET", "/?method=get&text=发起GET请求")
+        xhr.send()
+        
+        // 使用POST方法请求
+        xhr.open("POST", "/")
+        /* 普通的POST传递数据 */
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+        xhr.send("method=post&text=发起POST请求")
+        /* POST发送Json */
+        xhr.setRequestHeader("Content-type","application/json;charset=utf-8")
+        xhr.send(JSON.stringify({method:"post", text: "发起POST请求"}))
+        
+        // 使用PUT方法请求
+        xhr.open("PUT", "/?method=put&text=发起PUT请求")
+        xhr.send()
+        
+        // 使用DELETE方法请求
+        xhr.open("DELETE", "/?method=delete&text=发起DELETE请求")
+        xhr.send()
 
     jQuery
         对标准JS进行了简单封装
         $.ajax(配置参数)
             配置参数是以JS对象的形式传入:
-                url: "/xxx", 请求提交的路径
-                data: {"k1": "v1", "k2": "v2", ...},  ajax请求提交的参数
-                type: "post",  ajax请求提交的方式
-                datatype: "json", 可接受的服务器响应内容的格式
+                url: "/xxx",                          // 请求提交的路径
+                data: {"k1": "v1", "k2": "v2", ...},  // ajax请求提交的参数
+                type: "post",                         // ajax请求提交的方式
+                datatype: "json",                     // 可接受的服务器响应内容的格式
                 success: function(back_data){
                     //当服务器正常响应后, 被回调的函数,. 服务器响应内容以参数形式传入调回函数.
                 }
                 error: function(back_err){
                     // 当服务器无法正常响应请求
                 }
-
