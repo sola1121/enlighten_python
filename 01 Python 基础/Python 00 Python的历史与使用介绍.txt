@@ -35,8 +35,8 @@ Python的官网
 
 Python的版本
     V2.7 (2020年结束维护)
-    V3.6
-    V3.7 (开发中)
+    V3.x
+    不会有V4
 
 Python的运行
     Python是解释执行的语言(与C/C++编译的静态语言不同)
@@ -52,6 +52,7 @@ Python解释执行器的类型
     .c C语言后缀
     .cpp/.cxx/.cc/.C C++语言后缀
     .py Python后缀
+    .go Golang后缀
 
 在Python的交互模式下编写并执行代码
 进入交互模式:
