@@ -1,6 +1,13 @@
-# 我的 python
+# enlighten_python
 
-    ./
+Python3的学习笔记
+
++ 包含基础的python数据类型, 表达式, 语句, 函数, 异常, 类型
++ python多线程,多进程, python网络编程, python网站开发, 入门的python爬虫, 入门的python数据处理与机器学习  
++ 常见数据库
++ Javascript的dom模型
+
+    enlighten_python
     ├── 00 python工具的使用
     │   ├── pdb_debuger.py
     │   ├── pdb模块_调试.txt
