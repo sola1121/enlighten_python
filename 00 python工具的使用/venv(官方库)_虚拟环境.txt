@@ -1,0 +1,26 @@
+为项目创建单独的环境避免干扰, 保持系统Python的纯净
+    python -m venv 新建环境名
+虚拟环境中包含了 Python 解释器、标准库以及各种支持文件。
+
+激活虚拟环境
+在 Windows 上，激活虚拟环境的命令是：
+    myenv\Scripts\activate
+在 Unix 或 MacOS 上，激活虚拟环境的命令是：
+    source myenv/bin/activate
+激活虚拟环境后，你的命令提示符会发生变化，通常会前面加上虚拟环境的名称，如 `(myenv)`
+
+在虚拟环境中安装包
+激活虚拟环境后，可以使用 `pip` 命令安装包，这些包将会被安装在虚拟环境中，而不会影响到系统级别的 Python 环境。
+例如，安装 Flask：
+    pip install Flask
+
+停止虚拟环境, 退出虚拟环境
+    deactivate
+这将恢复到系统级别的 Python 环境。
+
+删除虚拟环境
+如果你想删除虚拟环境，只需要删除它的目录即可。在 Windows 中，这可能需要管理员权限。
+    rmdir /s /q myenv
+
+在 Unix 或 MacOS 上，可以使用以下命令：
+    rm -rf myenv

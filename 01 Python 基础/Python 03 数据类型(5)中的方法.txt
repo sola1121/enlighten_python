@@ -89,7 +89,6 @@ Di.items()	返回可迭代的 dict_items 对象
 Di.fromkeys(iter, [initial]) 将迭代器iter里的元素设置为映射里的键, 如果有initial参数, 就把他作为这些键对应的值, 默认None
 
 
-
 集合set常用方法
 Se.add(e)	在集合中添加一个新的元素e；如果元素已经存在，则不添加
 Se.remove(e)	从集合中删除一个元素，如果元素不存在于集合中，则会产生一个KeyError错误
