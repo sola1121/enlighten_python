@@ -58,6 +58,7 @@
 
 
 内建函数
+
   容器类相关
       len(x)
       max(x)
@@ -65,6 +66,7 @@
       sum(x)
       any(x)
       all(x)
+
   类型转换相关
     bool(x)
     int(x, base=10)
@@ -75,10 +77,12 @@
     dict(x)
     set(x)
     frozenset(x)
+
   数值相关
        abs(x)
        round(x)
        pow(x)
+
   字符串相关
     bin(x)
     oct(x)
@@ -86,8 +90,10 @@
     ord(x)
     chr(x)
     ascii(x)
+
   可迭代对象相关
       range(x)
+      
   输入输出函数
     input(x)
     print(...)

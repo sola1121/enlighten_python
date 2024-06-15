@@ -42,27 +42,13 @@ St.isnumeric()	判断字符串是否全为大写字符
   print(s.isalpha())  # True
   print(s.center(10, "-"))   # ---abc----
 
-占位符, 常应用于格式化字符串, 也可用于转换数据的表现方式
-%s	字符串
-%r	字符串，使用repr 而不是str
-%c	整数转为单个字符
-%d	十进制整数
-%o	八进制整数
-%x	十六进制整数(字符a-F小写)
-%X	十六进制整数(字符A-F大写)
-%e	指数型浮点数(e小写),如2.9e+10
-%E	指数型浮点数(E大写),如2.9E+10
-%f, %F	浮点十进制形式
-%g, %G	十进制形式浮点或指数浮点自动转换
-%%	等同于一个%字符
-
 
 列表list常用方法
 Ls.index(v [, begin[, end]])	返回对应元素的索引下标, begin为开始索引，end为结束索引,当 value 不存在时触发ValueError错误
 Ls.insert(index, obj)	将某个元素插放到列表中指定的位置
 Ls.count(x)	返回列表中元素的个数
 Ls.remove(x)	从列表中删除第一次出现在列表中的值
-Ls.copy()	复制此列表（只复制一层，不会复制深层对象)
+Ls.copy()	复制此列表(只复制一层，不会复制深层对象)
 Ls.append(x)	向列表中追加单个元素
 Ls.extend(lst)	向列表追加另一个列表
 Ls.clear()	清空列表,等同于 L[:] = []
