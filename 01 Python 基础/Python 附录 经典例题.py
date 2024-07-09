@@ -180,7 +180,7 @@ def copy_file(src_file, dist_file):
             #     fw.write(b2)
     return True
 
-def main()
+def main():
     src = input("source file directory: ")
     dist = input("target file directory: ")
     if copy_file(src, dist):
@@ -211,7 +211,7 @@ class PrimeIterator:
     """此类为实现迭代器协议"""
     def __init__(self, be, en):
         self.beg = be; self.end = en
-        self.cur = beg   # 设定迭代器的当前位置
+        self.cur = be   # 设定迭代器的当前位置
 
     def __next__(self):
         while self.cur < self.end:   # 判断当前走过的值是否直达终点, 若果没有到达终点,则继续
@@ -228,15 +228,15 @@ class PrimeIterator2:
     """此类为实现迭代器协议"""
     def __init__(self, be, en):
         self.beg = be; self.end = en
-        self.cur = beg   # 设定迭代器的当前位置
+        self.cur = be   # 设定迭代器的当前位置
 
     @staticmethod
     def isprime(x):
-    for i in range(2, x):
-        if x % i == 0:
-            return False
-    else:
-        return True
+        for i in range(2, x):
+            if x % i == 0:
+                return False
+        else:
+            return True
 
     def __iter__(self):
         return self   # return 迭代器对象    
