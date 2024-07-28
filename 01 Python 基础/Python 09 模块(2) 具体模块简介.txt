@@ -79,8 +79,9 @@ while True:
 
 ---------------------------------------
 
-系统模块 sys
+系统环境模块 sys
   此模块保存系统的信息
+  其提供了与Python解释器及其环境操作相关的功能
 
 变量
 sys.path	模块搜索路径 path[0] 是当前脚本程序的路径名，否则为 ''
@@ -99,6 +100,7 @@ sys.stderr	标准错误输出文件对象, 用于输出错误信息
 
 方法
 sys.exit([arg])	退出程序，正常退出时sys.exit(0)
+sys.exc_info() 用于获取当前正在处理的异常信息
 sys.getrecursionlimit()	得到递归嵌套层次限制（栈的深度）
 sys.setrecursionlimit(n)	得到和修改递归嵌套层次限制（栈的深度）
 
@@ -134,6 +136,20 @@ print(in_str)
 
 
 ---------------------------------------
+
+系统交互模块 os
+  提供了与操作系统交互的功能，它提供了访问操作系统底层的接口.
+
+方法
+os.getcwd()   获得当前模块所在的绝对路径
+os.rename(旧文件路径, 新文件路径)   指定文件路径上的文件重命名
+os.remove(文件路径)  删除指定闻之文件, 调用的是系统的rm命令, 删除后文件就不在能找回
+os.listdir()   获得指定目录中的所有文件名称
+os.mkdir(目录路径)   创建一个新的空文件夹, 如果已经存在, 则报错
+os.system(系统命令)   执行所给的系统命令字符串 
+
+
+----------------------------------------
 
 数学模块 math
 变量
@@ -195,8 +211,14 @@ print(L2)
   深拷贝通常只对含有可变对象的对象进行复制, 不可变对象通常不变
 
 
-keyword 查看关键字
+--------------------------------------
 
+关键字查看模块 keyword
+keyword.kwlist 返回一个字符串列表, 里面是Python所有的关键字
+['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class',
+ 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global',
+ 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 
+ 'try', 'while', 'with', 'yield']
 
 ---------------------------------------
 

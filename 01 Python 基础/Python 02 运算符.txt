@@ -69,7 +69,7 @@
   <   <=
   >   >=
   ==   !=   (python2 中有<>)
-  比较左右, 返回True或False
+  比较左右值, 返回True或False
 
 
 is 和 is not 运算符

@@ -1,4 +1,5 @@
-Built-in Functions   
+Built-in Functions
+
 abs()  dict()  help()  min()  setattr() 
 all()  dir()  hex() next()  slice() 
 any()  divmod()  id() object()  sorted() 
@@ -15,6 +16,8 @@ complex()  hasattr()  max()  round()
 delattr()  hash()  memoryview()  set() 
 
 ---------------------------------------
+
+功能越复杂, 限制条件越多的函数或方法, 调用的难度越高, 使用的频率越低
 
 函数调用
     函数名(传参列表)
@@ -136,6 +139,7 @@ str(obj) 通过给定的对象返回一个字符串(这个字符串通常是给�
 
 
 globals 和locals 函数
+    用于控制作用域
     globals()返回当前全局作用域内的变量的字典
     locals()返回当前局部作用域内的变量的字典
 
@@ -143,7 +147,7 @@ globals 和locals 函数
 eval 和 exec函数
 eval函数
 作用: 
-    把一个字符串当成一个python表达式来执行,返回表达式执行后的结果\
+    把一个字符串当成一个python表达式来执行,返回表达式执行后的结果
     # 返回表达式结果
 格式:
     eval(source, globals=None, locals=None)
@@ -207,6 +211,7 @@ super函数
 
 
 ---------------内建高阶函数------------------
+
 接收函数或返回函数
 
 map 函数   映射

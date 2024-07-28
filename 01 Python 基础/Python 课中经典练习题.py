@@ -110,7 +110,7 @@ def print_list_re(lst):
 # 装饰器, 帮助理解
 import time
 
-def run_time(fun):
+def run_time(fun, *arg):
     strat_time = time.time()
     fun(*arg)
     print(time.time() - strat_time)

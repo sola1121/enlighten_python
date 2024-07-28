@@ -1,4 +1,3 @@
-异常(高级)
 
 with语句
 语法:
@@ -55,6 +54,3 @@ with FileWriter("log.txt") as fw:
 
 
 print("这是with语句之外, 也是程序的最后一条语句")
-
-
-

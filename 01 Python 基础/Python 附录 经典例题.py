@@ -32,8 +32,8 @@ print(lst)   # [1, 2, 3, 4, 5 , 6] 改变了列表的值,而不是变量
 
 # -------------------------------------
 # 题2:
-lst = [1, 2, 3]
-def f(n=0, lst=[]):
+L = [1, 2, 3]
+def fn(n=0, lst=[]):
     lst.append(n)
     print(lst)
 fn(4, L)   # [1, 2, 3, 4]
@@ -123,7 +123,7 @@ def primes1(begin, stop):
         print(i, end="  ")
     print("\n")
 
-primes2(10, 20)
+primes1(10, 20)
 
 # 2.生成素数
 def primes2(begin, stop):
@@ -249,7 +249,6 @@ class PrimeIterator2:
                 return res
         raise StopIteration   # self.cur < self.end 不成立时,返回异常
 
-for x in prime(1, 100):
+for x in PrimeIterator2(1, 100):
     print(x, end="  ")
-
 

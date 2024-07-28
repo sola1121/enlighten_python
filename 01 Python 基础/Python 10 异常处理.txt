@@ -1,23 +1,29 @@
 异常(基础) exception
 
 什么是错误
-  由于逻辑或语法等导致一个程序无法正常执行的问题
+    由于逻辑或语法等导致一个程序无法正常执行的问题
 
 什么是异常
-  异常是程序出错时标识的一种状态
-  当异常发生时,程序不会再向下执行,而转去掉用此函数的地方,待处理此错误恢复为正常状态
+    异常是代码在执行过程中出现的错误, 会造成程序的终止(Error)
+    异常是程序出错时标识的一种状态
+    当异常发生时,程序不会再向下执行,而转去调用此函数的地方,待处理此错误恢复为正常状态
 
 异常的作用
   通知上层调用者有错误产生需要处理
   用作信号通知
 
 
-try 语句
-两种语法:
-  try-except: 语句
-  try-finally: 语句
+异常相关的语句:
+    try-except
+    try-finally
+    raise 语句
+    assert 语句
 
-try-except语句的语法:
+
+try 语句
+
+try-except-else-finally语句的语法:
+
 try:
     可能触发异常的语句
 except 错误类型1 [as 变量1]:
@@ -25,31 +31,55 @@ except 错误类型1 [as 变量1]:
 except 错误类型2 [as 变量2]:
     异常处理语句2
 ...
-except: 
-    异常处理语句 other
+except:
+    发生其他异常时处理语句
 else:
     未发生异常语句
 finally:
-    最终语句,一定被执行,不论错对
+    最终语句,一定被执行,不论有无异常
 
-注: except 语句可以同时捕获多个不同类型的错误 
-    如, except (ZeroDivisionError, ValueError) as ex_err:
+except的使用 
+    except 语句可以同时捕获多个不同类型的错误 
+    如
+        except (ZeroDivisionError, ValueError) as ex_err:
+            ...
+
     当except不写捕获的类型时,可以捕获任意类型
-    如, except as ex_err:
+    如
+        except:
+            ...
+
+    通常, 可以通过except Exception 捕获其派生的所有异常
+    如
+        except Exception as ex_err:
+            ...
+
 
 作用:
     尝试捕获异常,将程序转为正常执行流程
 说明:
     1) as 子句是用于绑定错误对象的变量,可以省略
     2) except 子句可以有一个或多个,但至少要有一个
-    3) else 子句最多只能有一个,也可以省略不不写
-    4) finally 子句最多只能有一个,也可以省略不写,用于保证最后执行某个语句
+    3) else 子句最多只能有一个,也可以省略不不写,用于未出现异常执行某个语句
+    4) finally 子句最多只能有一个,也可以省略不写,不论是否出现异常,最后一定后执行某个语句
 
-try-finally 语句语法
+
+try-else 语句形式
+
+try:
+    可能触发异常的语句
+except:
+    异常处理语句
+else:
+    未发生异常执行语句
+
+
+try-finally 语句形式
+
 try:
     可能触发异常的语句
 finally:
-    最终语句,一定被执行,不论错对
+    最终语句,一定被执行,不论有无异常
 
 说明:
     finally子句不可以省略
@@ -61,13 +91,30 @@ finally:
     try-finally语句不会更改程序的(正常/异常)状态
 
 
+
+异常的穿透
+    有嵌套的try-except语句
+    当内层的try语句触发异常, 且并未被内层的except捕获, 那么其会向外层的except传递, 如果外层可以将其捕获, 那么会捕获
+    如
+        try:
+            可能触发异常的语句1
+            try:
+                可能触发异常的语句2
+            except NameError:
+                处理语句2的异常
+        except TypeError:
+            处理语句1,2的异常
+
+
 raise 语句
 作用:
-  触发一个错误,让程序进入异常状态
+  抛出一个异常,让程序进入异常状态
 语法:
     raise 异常类型
     或
     raise 异常对象
+如
+    raise ValueError("值错误")
 
 
 assert 语句(断言)
@@ -79,12 +126,6 @@ assert 语句(断言)
     if bool(真值表达式) == False:
         raise AssertionError(错误数据)
 
-
-异常总结:
-    try-except
-    try-finally
-    raise 语句
-    assert 语句
 
 异常结构
 BaseException
@@ -151,6 +192,7 @@ BaseException
            +-- UnicodeWarning
            +-- BytesWarning
            +-- ResourceWarning
+
 
 异常说明
 ZeroDivisionError	除(或取模)零 (所有数据类型)
