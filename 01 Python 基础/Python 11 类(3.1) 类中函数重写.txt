@@ -1,3 +1,4 @@
+区分
 方法重写: 子类不想原封不动的继承父类方法,而是想做一定的修改
 
 
@@ -14,21 +15,24 @@
     str(obj) 通过给定的对象返回一个字符串(这个字符串通常是给人阅读的)
 
 注: repr(obj) 函数和str函数都是返回一个对象的字符串对象转字符函数的重写方法:
-    repr() 函数的重写方法:
-        def __repr__(self):
-            ...
 
-    str() 函数的重写方法:
-        def __str__(self):
-            ...
-    
-    注: 如果没有__str__(self)方法,则返回repr(obj)函数结果替代
+repr() 函数的重写方法:
+    def __repr__(self):
+        ...
+
+str() 函数的重写方法:
+    def __str__(self):
+        ...
+
+注: 如果没有__str__(self)方法,则返回repr(obj)函数结果替代
+
 示例:
 # 重载str()函数对应的: __str__(self): 方法
 class Student:
     def __init__(self, name, age):
         self.name = name
         self.age = age
+    
     def __str__(self):
         """此方法会重写str(obj)所对应的 def __str__(self) 方法"""
         s = "%s is %s years old now." %(self.name, self.age)
@@ -40,6 +44,9 @@ print(str(stu))   # siro is 1 years old now.
 
 注: 没有str方法会调用repr函数，repr函数在类中也是可以通过def __repr__():重载
 
+
+---------------------------------------
+
 内建函数重写
 __abs__   abs()函数
 __len__   len()函数
@@ -50,13 +57,15 @@ __all__   all()函数
 __reversed__   reversed()函数
 __round__   round()函数
 __iter__   iter()函数
-__next__   next()函数
-__iadd__(self, other)  +=
-__imul__(self, other)  *= 
+__next__   next()函数 
+__dir__   dir()函数
 ...
 以此方式递推
 
 只有在类对象中定义了的函数才能拿出来对类对象进行直接的操作. 当然,算法得自己写
+
+
+---------------------------------------
 
 数值类型函数的重写
 __int__   int()函数
@@ -66,7 +75,7 @@ __bool__   bool()函数
 
 在一般能使用内建函数做相应对象类型处理了的类中,一般都是有重载了相应的内建函数的,如可以使用help(list)方式查看
 
-bool测试的重写
+bool的重写
 格式:
     def __bool__(self):
 作用:
@@ -85,7 +94,7 @@ class MyList:
     用实例变量data来绑定此列表,以备以后使用
     """
         self.data = [x for x in iterable]   # 列表表达式, data是个列表
-    
+
     def __repr__(self):
         return "MyList(%r)" %self.data
 
@@ -115,3 +124,29 @@ else:
     print("lst is False.")
 
 
+---------------------------------------
+
+属性访问
+__getattr__(self, name): 定义当访问不存在的属性时的行为。
+                         name：尝试访问但未在实例中找到的属性名称。
+                         返回值：可以返回任何值，该值将被视为属性 name 的值。如果没有找到属性并且不想返回任何值，可以抛出 AttributeError 异常
+__getattribute__(self, name): 定定义当访问任何属性时的行为。无论属性是否存在，都会调用这个方法。
+                              self：当前对象的实例。name：访问的属性名称。
+                              返回值：返回属性 name 的值。
+__setattr__(self, name, value): 定义当设置属性时的行为。
+                                self：当前对象的实例。name：要设置的属性名称。value：要赋予属性的值。
+__delattr__(self, name): 定义当删除属性时的行为。
+                         self：当前对象的实例。name：要删除的属性名称。
+
+
+---------------------------------------
+
+PICKLING（序列化/反序列化）
+__getstate__(self): 用于在没有 __slots__ 的情况下定制对象的序列化。
+__setstate__(self, state): 用于在没有 __slots__ 的情况下定制对象的反序列化。
+__reduce__(self): 用于定制对象的序列化过程。
+__reduce_ex__(self, protocol): 和 __reduce__ 一样，但可以接受一个协议参数。
+
+在 Python 中，序列化和反序列化是将对象状态转换为可以存储或传输的格式，以及在需要时将这种格式转换回对象状态的过程。
+序列化通常是将内存中的对象转换为字节流或文本，以便存储在文件中或通过网络传输。
+反序列化则是将字节流或文本转换回内存中的对象。

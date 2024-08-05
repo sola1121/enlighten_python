@@ -1,6 +1,12 @@
+属于对Python内建函数的用于自定义类实例化对象的重写
+    涉及__iter()__, __next__()方法的重写
 
+内建函数
 iter(iterable) 从可迭代对象中返回一个迭代器,iter必须是一个能提供迭代器的对象
 next(iterable) 从迭代器对象中获取下一个记录. 如果无法获取下一条记录,则触发StopIteration异常
+
+
+---------------------------------------
 
 迭代器(高级)
 
@@ -70,9 +76,9 @@ class IntegerIterator:
 
 
 class MyInteger:
-"""MyInteger类为生成整数的可迭代对象,
-此对象有定有__iter__方法来返回一个迭代器
-"""
+    """MyInteger类为生成整数的可迭代对象,
+    此对象有定有__iter__方法来返回一个迭代器
+    """
     def __init__(self, begin, end):
         # 此对象先保存整数的开始值和结束值
         self.beg = begin
@@ -90,9 +96,4 @@ print(it.__next__())
 
 for x in MyInteger(1, 100):   # 如同range类, 这样MyInteger可以直接迭代使用
     print(x)
-
-
-
-
-
 

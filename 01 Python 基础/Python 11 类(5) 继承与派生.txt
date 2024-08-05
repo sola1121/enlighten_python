@@ -1,0 +1,350 @@
+0. 知识体系
+    1) 继承与派生的概念
+    2) 单继承
+    3) 多继承
+    4) 多继承调用顺序
+    5) 属性或方法的重写
+    6) 调用父类的方法
+    7) 多层继承
+    8) 私有属性和方法
+    9) __init_subclass__()方法
+
+
+-----------------继承与派生-----------------
+
+继承 inheritance / 派生 derived
+
+一个类从另一个已有类获得其成员的相关特性, 就叫做继承(站在子类的角度)
+从一个已有类产生一个新的类, 称为派生(站在父类的角度)
+
+继承的目的是延续旧的类的功能
+派生的目的是在旧的类的基础上添加新的功能
+
+作用:
+    用继承/派生机制,可以将一些共有功能加在基类中,实现代码的共享
+    在不改变超类的代码基础上,改变原有类的功能
+
+名词:
+    基类(base class)/超类(super class)/父类(father class)
+    派生类(derived class)/子类(child class)
+
+
+------------------单继承------------------
+
+单继承就是一个子类仅继承自一个父类, 其子类将继承父类的属性和方法
+
+单继承的语法:
+class 类名(超类名):
+    ...
+
+示例:
+class Human():
+    """此类来描述人类的共性
+       具有一个名字 name
+       可以通过语言交流 say
+       两足行走 run
+    """
+    def __init__(self, name=None):
+        self.name = name
+
+    def say(self, what):
+        print("said:", what)
+
+    def run(self, speed):
+        print("%s is running as %d m/s speed" % (self.name, speed))
+
+class Student(Human):
+    def study(self, lan):   # 在继承了父类的属性和方法的基础上, 添加了"学习"方法
+        print(self.name, "student is studing:", lan)
+
+class Teacher(Human):
+    def teach(self, lan):   # 在继承了父类的属性和方法的基础上, 添加了"教授"方法
+        print(self.name, "teacher is teaching:", lan)
+
+s = Student()
+s.name = "xxx"
+s.run(2)
+s.study("python")
+
+继承说明:
+通过 help(__builtins__) 可知, 任何类都直接或间接的继承自object类
+object类是一切类的超类, cpython中其是用C变编译的
+
+
+类的__base__属性
+    __base__属性用来记录此类的基类
+
+示例:
+class A:
+    pass
+class B(A):
+    pass
+print(B.__base__)   # <class '__main__.A'>
+print(A.__base__)   # <class 'object'>
+print(object.__base__)   #None
+
+
+------------------多继承------------------
+
+多继承 multiple inheritance
+    多继承是指一个子类继承自两个或两个以上的基类
+    并且同时具有所有父类的属性和方法
+注: 继承有继承顺序的
+语法:
+    class 类名(超类名1, 超类名2, ...):
+        ...
+示例:
+class Car():
+    def run(self, speed):
+        print("The Car is running as %s km/h1." % speed)
+
+class Plane:
+    def fly(self, height):
+        print("The air is flying on the %s m sea level." % height)
+
+class PlaneCar(Car, Plane):
+    """planecar类, 同时继承汽车和飞机"""
+    pass
+
+p1 = PlaneCar()
+p1.fly(10000)
+p1.run(220)
+
+
+多继承可能会引发的问题
+    标识符(名字空间)冲突问题
+
+要谨慎使用多继承
+
+示例:
+# ai 写了一个类A
+class A:
+    def __init__(self):
+        self.name = "A"
+
+# luna 写了一个类B
+class B:
+    def __init__(self):
+        self.name = "B"
+
+# Akira感觉ai和luna写的两个类自己都可以用
+class AB(A, B):
+    def infos(self):
+        print(self.name)
+
+以上A与B类都规定了实例的name属性, 在实例化时将不知道使用的是哪个父类的, 将会出现TypeError
+在有类属性的时, 一样会出现这样的问题, 比如A与B类中都规定__slots__属性, 则在子类AB中同样会出现冲突, 不知道用哪个规定的, 出现TypeError
+
+
+----------------多继承顺序------------------
+
+当一个类有多个父类时, 默认使用第一个继承的父类的同名属性和方法
+可以使用__mro__属性或这mro()方法查看调用的先后顺序
+mro即Method Resolution Order 方法解析顺序 的缩写
+
+查看顺序
+    类名.__mro__
+    或
+    类名.mro()
+mro返回一个元组, 当调用超类某个属性或方法时, 在元组中越靠前的类中的属性和方法将越被优先考虑
+
+
+在子类的构造函数中显式的指定父类的初始化顺序
+通过在子类__init__()方法中, 显式调用 父类名.__init__() 实现
+示例
+class A():
+    pass
+class B():
+    pass
+class C(A, B):
+    def __init__(self):
+        B.__init__(self)
+        A.__init__(self)
+
+
+--------------子类重写父类的属性或方法-------------
+
+覆盖 override
+什么是覆盖:
+    当子类属性或方法与基类(超类)的属性或方法名字相同时, 在子类调用这些属性或方法时, 实际调用的是子类中的覆盖版本, 这种现象叫覆盖
+
+本质上也是找MRO中靠前的类中的属性或方法, 因为子类是最前面的, 所以总是优先使用.
+
+示例:
+class A:
+    def say_hello(self, com):
+        print("你好," com)
+    
+class B(A):
+    def say_hello(self, com):
+        print("覆盖父类的函数:", com)   # 此方法将覆盖父类的方法
+
+b = B()
+b.say_hello("北京")   # 打印: 覆盖父类的函数: 北京, 调用覆盖方法
+
+a = A()
+a.say_hello("中国")   # 打印: 你好, 中国, 调用A类方法
+
+
+---------------子类调用父类的方法---------------
+
+1. 子类显式调用基类的方法的方式
+    基类名.方法名(实例,实际调用参数,...)
+
+如:
+class A():
+    def say_hello(self, com):
+        print("你好," com)
+    
+class B(A):
+    def say_hello(self, com):
+        A.say_hello(self, com)   # 显式的调用基类A中的方法, 注意, 实例对象也要传入
+
+注: 
+    前提是你必须要知道基类的类名
+    且需要在定义子类方法时候显式调用父类方法
+
+
+2. super函数
+格式:
+    super([type[, object-or-type]])
+介绍:
+    super(type, obj) type应为当前类的类型, obj为当前类的实例, 返回当前类型的超类对象(要求obj必须为type类型实例)
+    super() 返回绑定的超类对象,等同于: super(__class__, self),必须用在方法内
+作用:
+    返回基类的代理对象, 可以用该代理对象来间接调用所在类的父类的方法
+注意:
+    super() 应该只在类的方法内部使用，而不应该在类外部或静态方法中使用。
+    super() 返回的是一个代理对象，而不是一个具体的实例。这个代理对象会在调用方法时查找MRO来确定应该调用哪个方法。
+
+在多继承的情况下，super() 返回的是MRO中排第一个的父类对象. super()还是更适合单继承. 
+如果想获取多继承靠后的父类, 需要用super(所找类名, 实例)来获取.
+
+示例:
+# 用来示意super函数间接调用父类方法
+
+class A():
+    def hello(self):
+        print("A class")
+
+class B(A):
+    def hello(self):
+        print("B class")
+    def call_super_hello(self): 
+        """这里想要调用父类的hello方法"""
+        # self.__base__.hello()
+        super(B, self).hello()   # 调用父类的hello
+        super().hello()   # 无参调用,只能在方法中调用 等同于:super(__class__, self).hello()
+
+b = B()
+b.hello()   # 如果想要b调用父类的方法?
+A.hello(b)   # 此种方法可以调用A的,但得知道B类的父类名称,子类对象显式调用基类的方法
+b.__class__.__base__.hello()   # 此种方法可以调用A的
+super(B, b).hello()   # 此时用super间接的调用父类的hello方法
+super(__class__, b).hello()
+
+官方文档部分解释
+class super(object)
+ |  super() -> same as super(__class__, <first argument>)
+ |  super(type) -> unbound super object
+ |  super(type, obj) -> bound super object; requires isinstance(obj, type)
+ |  super(type, type2) -> bound super object; requires issubclass(type2, type)
+ |  Typical use to call a cooperative superclass method:   # 调用父类的方法
+ |  class C(B):
+ |      def meth(self, arg):
+ |          super().meth(arg)
+ |  This works for class methods too:   # 对类方法同样有效
+ |  class C(B):
+ |      @classmethod
+ |      def cmeth(cls, arg):
+ |          super().cmeth(arg)
+
+
+使用super()函数显式调用基类的构造方法
+示例:
+class Human():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def infos(self):
+        print("Name:", self.name, "Age:", self.age)
+
+class Student(Human):
+    def __init__(self, name, age, score)
+        super().__init__(self, name, age)   # 调用父类的__init__方法, 这样的耦合性较高, 父类与子类的关联大
+        self.score = score
+
+    def infos(self):
+        print("Name:", self.name, "Age:", self.age, "Score:", self.score)
+
+
+h1 = Human("siro", 1)
+h1.infos()
+
+
+----------------区分多层继承与多继承-----------
+
+多层继承
+    多层继承允许一个类继承自另一个继承自其他类的类，形成一个层次结构。
+
+多继承
+    一个子类继承自多个父类
+
+在多层继承中，super() 函数用于调用继承链中下一个类的方法.
+比如, 若最终的子类需要调用父类与祖父类中的属性, 必须这些属性都要已经初始化
+class Gradfather():
+    def __init__(self):
+        self.g_val="GradFather"
+
+class Father(Gradfather):
+    def __init__(self):
+        super().__init__(self)   # 要完成最终子类可以调用祖父类的属性, 需要祖父类中的属性已经初始化
+        self.f_val="Father"
+
+class Child(Father):
+    def __init__(self):
+        super().__init__(self)   # 要完成该子类可以调用父类与祖父类的属性, 需要祖父类与父类中的属性已经初始化
+    def show():
+        print(self.g_val, self.f_val)
+
+
+----------------私有属性和方法----------------
+
+私有属性或方法
+    在Python中, 可以为属性和方法设置私有权限, 即设置某个属性或方法不继承给子类.
+
+设置格式: 在属性或方法名前面加上两个下划线 __
+    # 私有属性
+    __属性名
+
+    # 私有方法
+    def __方法名(self):
+      pass
+
+使用规则
+    只能在类的内部使用, 不能在类的外部使用
+    如果想在类的外部使用需通过公共接口
+
+
+----------------子类的初始化函数---------------
+
+__init_subclass__(cls, [...]) 方法
+    它在类创建时被调用，用于执行子类的初始化操作。
+    这个方法对于定义类时需要进行一些额外处理的情况非常有用，尤其是当你希望为所有子类设置一些默认行为或属性时。
+
+当定义一个类时，如果它包含 __init_subclass__ 方法，那么每当这个类作为基类被继承时，这个方法就会被调用。
+这个方法接收一个必选参数 cls，它是正在创建的子类的引用。
+此外，它还可以接收任意数量的关键字参数。
+
+示例
+class BaseClass:
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        # 这里可以对cls做一些操作，比如设置属性
+        cls.common_attribute = 'This is a common attribute'
+
+class SubClass(BaseClass):
+    pass
+
+print(SubClass.common_attribute)  # 输出: This is a common attribute

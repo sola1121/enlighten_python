@@ -15,6 +15,7 @@ compile()  globals()  map()  reversed() __import__()
 complex()  hasattr()  max()  round()   
 delattr()  hash()  memoryview()  set() 
 
+
 ---------------------------------------
 
 功能越复杂, 限制条件越多的函数或方法, 调用的难度越高, 使用的频率越低
@@ -44,6 +45,7 @@ dir()函数
 
 dir(obj) 函数, 返回所有属性的字符串列表
 help(obj) 函数, 可以查看模块相关的文档字符串
+
 
 --------------------------------------
 
@@ -224,6 +226,7 @@ map 函数   映射
     mit = map(power2, range(1, 10), range(1, 10))
     [x for x in mit]
 
+
 filter 函数   筛选
     filter(func, iterable)
 作用:
@@ -234,6 +237,7 @@ filter 函数   筛选
         return x % 2 == 1
     odd = [x for x in filter(isodd, range(10))]   # 生成奇数列表    
     [x for x in filter(lambda x: x%2==1, range(1, 10))]
+
 
 sorted 函数   排序
     sorted(iterable, key=None, reverse=False)
