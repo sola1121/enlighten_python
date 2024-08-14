@@ -1,0 +1,254 @@
+回忆
+    函数名存放的是函数所在的内存空间地址
+    函数名()执行函数名所存放空间地址中的代码
+    函数名可以像普通变量一样赋值, 赋值后的结果与原函数名作用是一样的
+
+当完成一个函数的调用, 在该函数中的变量将会被回收.
+当函数结束后, 如何缓存函数中的变量?
+    使用闭包
+
+
+--------------------------------------------------------------
+
+闭包 closure
+    将组成函数的语句和这些语句执行的环境打包在一起时,得到的对象称为闭包
+    闭包使得函数能够记住并访问其定义时的环境中的变量，即使这些变量在函数定义的外部作用域中已经不存在了。
+
+说明:
+    如果一个内嵌函数访问外部嵌套函数作用域的变量,并返回这个函数,则这个函数就是闭包
+
+属性:
+    参数存储在__closure__中
+
+闭包必须满足的三个条件:
+    1)必须有一个内嵌函数
+    2)内嵌函数必须引用外部嵌套函数中的变量
+    3)外部函数返回值必须是内嵌函数
+比如
+    def 外部函数(外部参数):
+        def 内部函数(内部参数):
+            内部函数代码块, 使用了外部函数中的变量
+            return 内部函数   # 这个便是闭包
+
+示例1:
+# 得到一个数的n次方法函数
+def make_power(y):
+    def fn(x):
+        return x ** y
+    return fn
+
+# 创建闭包
+pow2 = make_power(2)   # pow2绑定到了内嵌函数上,内嵌函数被定义为 def fn(x): return x ** 2; 充分体现了函数是变量
+pow2(3)   # 9   
+
+
+示例2:
+# 用闭包生成一系列抛物线函数 y = ax**2 + bx + c
+def make_fn(a, b, c):
+    def fn(x):
+        return a*x**2 + b*x +c
+    return fn
+
+f1 = make_fn(1, 0, 1)   # 定义了a, b, c的值 的 闭包
+print(f1(6))
+
+
+nolocal 关键字在闭包中的使用
+    nolocal可以让内部函数也可以修改外部函数中缓存的值
+比如
+    def 外部函数(外部参数):
+        外部变量
+        def 内部函数(内部参数):
+            nolocal 外部变量
+            使用 外部变量
+        return 内部函数
+
+
+---------------------------------------
+
+1. 装饰器 decorators
+
+什么是装饰器:
+    装饰器是一个函数,主要作用是用来包装另一个函数或类
+    包装的目的是在不改变原函数名或类名的情况下,改变被包装对象的行为
+
+    可以直接替换函数, 也可以把原先函数写入装饰器, 完成更改
+
+函数装饰器 functional decorators
+    函数装饰器是指装饰器函数传入的是一个函数,返回的也是一个函数
+    可见, 装饰器本质上就是一个闭包函数
+
+装饰器构成条件
+    1) 有嵌套, 在函数嵌套(函数里面在定义函数)的前提下
+    2) 有引用, 内部函数使用了外部函数的变量(包括外部函数的参数)
+    3) 有返回, 外部函数返回了内部函数名
+    4) 有额外功能, 改变了被装饰函数的行为
+
+函数装饰器的语法
+    方式1, 闭包实现
+        def 原有函数(原有参数):
+            ...
+
+        def 外部函数(原有函数做参, 原有参数做参):
+            def 内部函数():
+                添加的一些功能
+                调用原有函数(原有参数)
+            return 内部函数
+
+        装饰器函数= 外部函数(原有函数名)
+        调用装饰器函数()
+
+    方式2, 语法糖 @装饰器函数 修饰 定义函数
+        def 装饰器函数名(原有函数做参, 原有函数参数做参):
+            def 内部函数():
+                添加的一些功能
+                调用原有函数()
+            return 内部函数
+
+        @ 装饰器函数名<换行>
+        def 原有函数名(原有参数):
+            语句块
+        
+        调用原有函数()
+
+注意: 首先执行装饰器里面的语句块
+      return 的函数对象(变量)就是最后要执行的函数
+
+
+示例:
+def mydeco(fn):   # 此函数传入一个函数,返回一个函数,此函数可以作为装饰器函数
+    def myfn():
+        print("local myfun runned.")
+    return myfn
+
+@ mydeco
+def myfunc():
+    print("function myfunc runned.")
+
+myfunc()   # 执行
+
+# 加了@ mydeco装饰器后相当于在def myfunc之后交了一条语句
+myfunc = mydeco(myfunc)
+
+
+⬤ 装饰器装饰无参无返回值的函数
+示例:
+def deco(fun):
+    def inner_fun():
+        添加的一些功能
+        fun()   # 所定义的函数调用
+    return inner_fun
+
+@ deco
+def myfun():
+    pass
+
+myfun()  # 执行
+
+
+⬤ 装饰器装饰有参数无返回值的函数
+示例:
+def sent_mssg(fn):
+    def do_things(name, x):   # 将被装饰函数的参数传递给内部函数, 参数与所要替换的函数相同
+        print("welcome", name, ", please get you line number,")
+        fn(name, x)
+        print("sent the message.")
+    return do_things
+
+@ sent_mssg
+def save_money(name, x):
+    print(name, "saved", x, "$")
+
+@ sent_mssg
+def fetch_money(name, x):
+    print(name, "fetched", x, "$")
+
+save_money("Bob", 300)   # 执行
+fetch_money("Tom", 200)   # 执行
+
+
+⬤ 装饰器装饰无参数有返回值的函数
+示例:
+def deco(fun):
+    def inner_fun():
+        添加的一些功能
+        return fun()   # 将被装饰函数的返回值从内部函数中返回出去
+    return inner_fun
+
+@ deco
+def myfun()
+    return 28
+
+val = myfun()   # 执行
+
+
+⬤ 装饰器装饰有参数有返回值的函数
+def deco(fun):
+    def inner_fun(value):
+        添加的一些功能
+        ret = fun(value)
+        return ret
+    return inner_fun
+
+@ deco
+def myfun(val):
+    return val*2
+
+val = myfun(val)  # 执行, 获得返回值
+
+
+2. 多个装饰器装饰一个函数
+
+执行过程
+    多个装饰器的装饰过程是离被装饰函数最近的装饰器函数先执行, 然后外面的装饰器再将该内层装饰器返回的闭包进行装饰
+    即整个过程是由内到外的闭包传递
+
+示例
+def deco1(fun):
+    def inner_fun(val):
+        print("装饰器1")
+        fun(val)
+    return inner_fun
+
+def deco2(fun):
+    def inner_fun(val):
+        print("装饰器2")
+        fun(val)
+    return inner_fun
+
+@ deco2
+@ deco1
+def myfun(value):
+    pass
+
+myfun(3)   # 执行
+
+以上
+myfunc将会作为参数先传递给deco1, 即完成 闭包1 = deco1(myfun)
+然后将闭包传递给deco2, 即完成 闭包2 = deco2(闭包1)
+最后调用 闭包2(3)
+
+
+3. 带有参数的装饰器
+
+难点: 作为装饰器的函数, 只能带一个参数
+
+带有参数的装饰器, 其实是在装饰器外面又包裹了一个函数, 使用该函数接收参数, 返回装饰器
+
+如
+def deco(装饰器参数):
+    def inner_func1(被装饰函数):
+        def inner_func2(装饰函数的参数):
+            添加的一些功能
+            调用被装饰函数()
+        return inner_func2
+    return inner_func1
+
+@ deco(参数1)
+def myfun(val):
+    pass
+
+其调用顺序为 首先将装饰器参数传递给deco, 即 闭包1 = deco(参数)
+然后返回 inner_func1 的闭包, 即 闭包2 = inner_func1
+之后返回 inner_func2 的闭包, 即 闭包3 = inner_func2
+最后调用 闭包3(val)

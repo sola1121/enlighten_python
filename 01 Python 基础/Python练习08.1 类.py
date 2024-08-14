@@ -116,3 +116,23 @@ class Two(One):
 t = Two()
 t.set_one(321)
 print(t.get_one())
+
+
+# %%
+# 类中的一些变量
+class TheC():
+    """
+    一个类
+    """
+    def __init__(self):
+        self.value = None
+
+    def set_v(self, v):
+        self.value = v
+
+
+c = TheC()
+c.set_v(30)
+print("输出TheC类实例化对象的文档", c.__doc__)
+print("输出TheC类实例化对象的类", c.__class__)
+print("输出TheC类对实例化对象中的变量字典:", c.__dict__)
