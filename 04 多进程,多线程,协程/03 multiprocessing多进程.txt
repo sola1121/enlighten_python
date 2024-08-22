@@ -47,7 +47,7 @@ class ClockProcess(Process):
 
     def __init__(self, value):
         self.value = value
-        Process.__init__(self)   # super(ClockProcess, self).__init__();   super.__init__()
+        Process.__init__(self)   # super(ClockProcess, self).__init__();   super().__init__()
         
     def run(self):
         """在自定义的进程中 重写父类的这个方法"""

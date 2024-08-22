@@ -15,5 +15,5 @@ client.send(b'hello world.')
 data = client.recv(1024)
 print("服务器消息返回:", data.decode())
 
+# 关闭客户端套接字
 client.close()
-

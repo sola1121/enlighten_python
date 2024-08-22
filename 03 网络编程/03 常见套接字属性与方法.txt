@@ -1,51 +1,70 @@
-常见套接字属性
+class socket.socket(family=AF_INET, type=SOCK_STREAM, proto=0, fileno=None)
+ |  A subclass of _socket.socket adding the makefile() method.
 
-Data descriptors defined here:
-     |  
-     |  family
-     |      the socket family
-     |  
-     |  proto
-     |      the socket protocol
-     |  
-     |  timeout
-     |      the socket timeout
-     |  
-     |  type
-     |      the socket type
+
+常见的套接字属性与方法
 
 fileno() -- return underlying file descriptor
     返回文件描述符, 文件描述符是一个序列号, 每一个IO操作系统都会分配一个不同的整数与之对应, 该整数即为IO操作的描述符
-    能分配的一般从3开始, 0为 sys.stdin, 1为 sys.stdout
+    能分配的一般从3开始, 0为 sys.stdin, 1为 sys.stdout, 失败返回-1
+    配合 select.select() 使用很有用.
 
 getsockname() -> address info
     获取套接字绑定的地址, 即bind参数的值
 
-getpeername() -- return remote address [*]
+getpeername() -> return remote address [*]
     返回客户端的套接字地址
     使用前提是一个可以连接的套接字对象, 即bind, listen后, 对accept返回的用于维护用户连接的套接字才能使用
 
-getsockopt(level, optname[, buflen]) -- get socket options
+getsockopt(level, optname[, buflen]) -> get socket options
     功能: 获取套接字选项
     
-setsockopt(level, optname, value[, optlen]) -- set socket options
+setsockopt(level, optname, value[, optlen]) -> set socket options
     功能: 设置套接字选项
     参数: level, 要定义的选项类型, 常用选项 IPPROEO_TCP, IPPROTP_IP, SOL_SOCKET 
           optioname, 根据level确定的子选项, 
           value, 更具选项设置的值
     示例:
     # 设置断开后端口可以立刻使用
-    server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-server.setblocking(bool)
-        功能: 将套接字设置的阻塞状态
-        参数: bool类型, 默认为True, 即阻塞, 设置False为非阻塞
+setblocking(bool)
+    功能: 将套接字设置的阻塞状态
+    参数: bool类型, 默认为True, 即阻塞, 设置False为非阻塞
     
-server.settimeout(second)
+settimeout(second)
     功能: 设置套接字的超时检测
     参数: 超时时间
 超时等待即对原本阻塞的函数进行设置, 使其不在始终阻塞, 而是阻塞等待一定时间后自动返回. 
             在规定时间中如果正常结束阻塞则继续执行否则产生timeout异常
+
+makefile(mode='r', buffering=None, *, encoding=None, errors=None, newline=None)
+    返回一个与套接字相关联的 file object。 
+    返回对象的具体类型取决于传给 makefile() 的参数。 
+    这些参数的解读方式与内置的 open() 函数相同，区别在于 mode 值仅支持 'r' (默认), 'w', 'b' 或它们的组合。
+
+    套接字必须处于阻塞模式，它可以有超时，但是如果发生超时，文件对象的内部缓冲区可能会以不一致的状态结尾。
+
+    关闭 makefile() 返回的文件对象不会关闭原始套接字，除非所有其他文件对象都已关闭且在套接字对象上调用了 socket.close()。
+
+sendfile(file, offset=0, count=None)
+    使用高性能的 os.sendfile 发送文件，直到达到文件的 EOF 为止，返回已发送的字节总数。
+    file 必须是一个以二进制模式打开的常规文件对象。如果 os.sendfile 不可用（如 Windows）或 file 不是常规文件，将使用 send() 代替。
+    offset 指示从哪里开始读取文件。
+    如果指定了 count，它确定了要发送的字节总数，而不会持续发送直到达到文件的 EOF。返回时或发生错误时，文件位置将更新，在这种情况下，file.tell() 可用于确定已发送的字节数。
+    套接字必须为 SOCK_STREAM 类型。不支持非阻塞的套接字。
+
+
+---------------------------------------
+
+模块中常见函数
+
+socket.share(process_id)
+    复制套接字，并准备将其与目标进程共享。
+    目标进程必须以 process_id 形式提供。
+    然后可以利用某种形式的进程间通信，将返回的字节对象传递给目标进程，还可以使用 fromshare() 在新进程中重新创建套接字。
+    一旦本方法调用完毕，就可以安全地将套接字关闭，因为操作系统已经为目标进程复制了该套接字
+
 
 socket.gethostname()   # 'tedu'
 socket.gethostbyname('tedu')   # '127.0.0.1'
