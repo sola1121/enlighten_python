@@ -1,0 +1,81 @@
+1. 网络基础
+    1) IP地址
+        每一台联网的电脑都会有一个地址, 用于和其他计算机进行通讯.
+        IP地址主要有两个版本, IPV4和IPV6版本.
+
+        IPV4版本的地址格式是由四个十进制数字组成，每个数字的取值范围是0到255，数字之间用点（.）分隔.
+        共有255**4个ip地址, 不是很够用.
+        如
+            192.168.0.1
+
+        IPV6版本的地址格式是是128位的，通常表示为8组16位的十六进制数，每组之间用冒号（:）分隔.
+        共有2**128个ip地址, 够用了.
+        如
+            2001:0db8:85a3:0000:0000:8a2e:0370:7334
+
+        ifconfig 命令, 查看本机的ip地址, 若无法使用, 需要通过软件包管理器安装.
+
+    2) 主机名
+        每一台电脑除了对外联络地址(IP地址)外, 也可以有一个自己的名字, 称为主机名.
+
+        hostname 命令, 查看主机名
+
+        修改主机名
+            hostname set-hostname 新的主机名
+
+    3) 域名解析
+        IP地址对人不友好, 不易记忆, 便出现了域名, 当想要访问某个地址的时候, 可以通过一串好记忆的字符串, 经解析, 连接到对应IP地址.
+
+        如
+            浏览www.example.com, 若没有缓存其IP地址, 浏览器将会向公开的DNS服务器问询其地址, 若存在, 将该地址给予浏览器用于访问.
+
+        Linux中IP地址缓存文件 /etc/hosts
+        Windows中IP地址缓存文件 C:\Windows\System32\drivers\etc\hosts
+
+    4) DHCP
+        动态获取IP地址, 即每次重新启动设备后都会动态的分到一个IP地址
+
+        如果需要固定IP, 可修改 /etc/netplan/01-netcfg.yaml 文件
+        在使用 systemctl restart network 重启网络服务
+        注意
+            对于不同的Liunx发行版, IP地址所保存的文件不同.
+
+
+2. 网络传输
+
+    1) ping 检查指定网络服务器是否可联通
+        语法: ping 选项 ip或主机名
+        选项
+            -c 次数 : 指定检查的次数, 不指定-c选项, 将会一直执行 (Windows中默认有次数限制)
+        示例
+            域名www.example.com是否可以连通
+                ping -c 4 www.example.com
+
+    2) wget 非交互式文件下载器
+        wget命令可以再命令行内下载网络文件
+        语法: wget 选项 网络文件地址
+        选项
+            -b : 后台下载, 会将日志写入当前工作目录的wget-log文件, 通过tail命令可以监控后台下载进度, tail -f wget-log
+
+        注意
+            无论下载是否完成, 都会生成要下载的文件, 如果下载未完成, 需及时清理不可用文件
+
+    3) curl 数据传输工具
+        curl 是一个在命令行或脚本中向/从服务器传输数据的工具，支持许多协议，如 HTTP、HTTPS、FTP、FTPS、SCP 等.
+
+        语法: curl 选项 网络地址
+        选项
+            -O : 下载文件
+            -X : 指定请求方法
+            -d : 发送数据
+
+        示例
+            发送 GET 请求
+                curl http://example.com
+            发送带有头部的请求：
+                curl -H "Content-Type: application/json" -X POST -d '{"key1":"value1", "key2":"value2"}' http://example.com/resource
+            显示响应头信息
+                curl -I http://example.com
+
+        
+3. 端口

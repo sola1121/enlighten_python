@@ -1,0 +1,96 @@
+1. Linux中软件的安装
+
+    1) yum工具
+        yum为RPM包软件管理器, 用于自动化安装配置Linux软件, 并可以自动解决依赖问题.
+
+        语法
+            yum [-y] [install | remove | search] 软件名称
+        选项
+            -y : 自动确认, 无需手动确认安装或卸载过程
+        参数
+            install : 安装
+            remove : 卸载
+            search : 搜索
+
+        注意
+            安装软件需要root权限, 可以使用su切换到root, 或使用sudo临时提升权
+            yum命令需要联网
+        
+
+    2) apt工具
+        apt（Advanced Package Tool）是用于处理基于 Debian 的 Linux 发行版（如 Ubuntu）中的软件包的命令行工具。
+        它提供了一个用户友好的前端，用于与底层包管理工具如 dpkg 交互。
+
+        对比apt-get软件包管理器, apt更加的友好, 更加高层的包管理器.
+
+        更新软件列表
+            apt update
+        升级软件
+            apt upgrade 软件名 (不提供软件名将会将所有可升级软件升级)
+        安装软件
+            apt install 软件名
+        卸载软件
+            apt remove 软件名
+        清理不需要的软件包, 释放空间
+            apt autoremove
+        搜索软件
+            apt search 软件名
+        列出软件包
+            apt list
+        查看软件包历史
+            apt history
+
+        注意
+            安装软件需要root权限, 可以使用su切换到root, 或使用sudo临时提升权
+            apt命令需要联网
+
+    为什么使用包管理器
+        包管理器可以自动解决包间的依赖问题.
+
+
+2. systemctl 软件服务控制
+
+    systemctl命令用于管理系统服务和守护进程（daemons），它是 systemd 系统和服务管理器的组成部分。
+
+    注
+        能被systemctl管理的软件, 一般也被称为 服务
+        systemctl操作服务一般也需要root权限
+
+    Linux系统中很多软件(内置或第三方)均支持使用systemctl命令控制: 启动, 停止, 开机自启 等
+
+    语法
+        systemctl 参数 服务名
+    参数
+        start : 启动服务
+        stop : 关闭服务
+        reload : 重新加载服务
+        status : 查看服务状态
+        enable : 开启开机自启动
+        disable : 关闭开机自启动
+    
+    列出所有的服务
+        systemctl list-units --type=service
+
+    重载整个 systemd 管理器
+        sudo systemctl daemon-reload
+
+    查看服务日志
+        journalctl -u 服务名
+
+
+3. ln 创建软链接
+    在Linux系统中创建软链接, 可以将文件, 文件夹链接到其他位置.
+    软连接, 类似Windows中的 快捷方式.
+
+    ln命令 (Link)
+    语法
+        ln 选项 被链接的文件或文件夹 要链接去的目的地
+    选项
+        -s : 创建软连接
+
+    示例
+        ln -s /etc/v2ray.conf ~/.conf/v2ray.conf
+
+    在命令行中的显示为 v2ray.conf -> v2ray.conf
+
+
