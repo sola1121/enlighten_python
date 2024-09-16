@@ -1,0 +1,26 @@
+使用第三方协程包 greenlet
+
+对greenlet进行包装的协程第三方库 gevent
+    gevent.spawn(func, argv)
+        功能: 将func变为协程事件并启动
+        参数: func 事件函数
+              argv 多项, 为func的参数
+        返回值: 协程对象
+    
+    gevent.join()
+        功能: 回收协程
+        参数: 要回收的协程对象
+
+    gevent.joinall()
+        功能: 回收协程
+        参数: 列表, 里面可以有多个协程对象
+
+    gevent.sleep()
+        功能: 模拟IO阻塞的情况
+        参数: n 睡眠秒数
+
+    from gevent import monkey   库中的插件
+    monkey.path_all()
+        功能: 在导入socket模块前使用, 可以将socket模块IO设置为非阻塞
+
+

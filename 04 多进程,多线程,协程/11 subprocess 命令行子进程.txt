@@ -1,0 +1,65 @@
+subprocess 模块可以启动一个新进程，并连接到它们的输入/输出/错误管道，从而获取返回值。
+
+可以用创建不影响当前主进程的子进程来实现命令执行. 该模块有实现子进程形式的os.system, os.spawn*, os.popen
+
+1. 使用subprocess模块
+
+    1) run函数
+        subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, capture_output=False,
+                       shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None, text=None,
+                       env=None, universal_newlines=None, **other_popen_kwargs)
+        运行被 arg 描述的指令. 并阻塞等待指令完成, 然后返回一个 CompletedProcess 实例.
+
+        args：要执行的命令，可以是字符串形式或由命令及其参数组成的列表。例如，['ls', '-l'] 或 'ls -l'。
+        input：允许将字节或字符串传递给子进程的标准输入(stdin)。
+        stdin：子进程的标准输入。默认为None，可以是以下三个参数：
+                subprocess.PIPE 创建一个管道，允许与子进程进行通信
+                subprocess.DEVNULL 特殊的文件对象，可以将其用于丢弃子进程的输出
+                一个打开的文件对象，将内容写入文件
+        stdout: 同 stdin
+        stderr: 同 stdin
+        capture_output ：这个参数控制是否捕获外部命令的标准输出(stdout)和标准错误(stderr)。如果将其设置为True，run()函数将返回一个CompletedProcess对象，该对象具有stdout和stderr属性，分别存储了命令的标准输出和标准错误输出。如果设置为False，标准输出和标准错误将被发送到控制台。默认为False。
+        shell：指定是否通过shell来执行命令。如果为True，命令将在shell中执行；如果为False，则直接调用可执行文件。默认为False。
+        cwd：设置子进程的工作目录。默认为None，表示使用当前工作目录。
+        timeout：设置子进程的超时时间（秒）。如果子进程在指定的时间内没有运行完成，则会引发TimeoutExpired异常。
+        check：设置是否检查子进程的返回码。如果为True，并且子进程的返回码不为零，则会引发CalledProcessError异常。
+        encoding：该参数指定输出结果的字符编码。默认情况下，它是None，表示使用原始的字节数据。如果提供了有效的编码名称(如"utf-8"、"gbk"等)，run()函数将自动将输出解码为字符串。
+        errors：该参数定义在解码输出时如何处理编码错误。它与Python的str.decode()函数的相同参数含义相匹配。常用的值包括"strict" (默认值，抛出异常)、"ignore" (忽略错误字符) 和 "replace" (用替代字符代替错误字符)。
+        text：指定是否将输出结果以文本形式返回。如果为True，则结果以字符串形式返回，同时input或者stdin参数也需要输入String；如果为False，则返回字节流。默认为False。
+        env：该参数允许您为子进程指定环境变量。它可以接受一个字典类型的对象，其中键是环境变量的名称，值是环境变量的值。通过设置env参数，您可以在子进程中使用特定的环境变量。
+        universal_newlines： 该参数影响的是输入与输出的数据格式，比如它的值默认为False，此时stdout和stderr的输出是字节序列；当该参数的值设置为True时，stdout和stderr的输出是字符串。
+
+    2) Popen类
+        subprocess 模块的底层的进程创建与管理由 Popen 类处理。它提供了很大的灵活性，因此开发者能够处理未被便利函数覆盖的不常见用例。
+
+        class subprocess.Popen(args, bufsize=-1, executable=None, stdin=None, stdout=None, stderr=None, 
+                               preexec_fn=None, close_fds=True, shell=False, cwd=None, env=None, universal_newlines=None,
+                               startupinfo=None, creationflags=0, restore_signals=True, start_new_session=False, pass_fds=(), *, group=None, 
+                               extra_groups=None, user=None, umask=-1, encoding=None, errors=None, text=None, pipesize=-1, process_group=None)
+
+        在在一个新的进程中执行arg描述的命令, 不阻塞. 
+        在 POSIX 上，该类会使用类似于 os.execvpe() 的行为来执行子程序。 在 Windows 上，该类会使用 Windows CreateProcess() 函数。 
+
+        注意：因为run是popen的一个简化版本，所以run拥有的函数popen也拥有。
+
+        bufsize：定义了子进程的缓冲大小。可选参数，默认为-1，表示使用系统默认的缓冲大小。
+        executable：指定要执行的程序路径。如果未提供该值，则通过PATH环境变量来确定可执行文件的位置。
+        preexec_fn：指定在子进程启动之前将要执行的函数。该函数将在fork()调用成功，但exec()调用之前被调用。
+        close_fds：指定是否关闭所有文件描述符。默认为False。
+        start_new_session（仅 POSIX）：如果该参数设置为True，则在启动子进程时创建一个新的进程会话。默认为False。
+        pass_fds（仅 POSIX）：通过这个参数传递一个文件描述符集合，这些文件描述符将保持打开状态并传递给子进程。默认为None。
+        startupinfo：一个可选的subprocess.STARTUPINFO对象，用于指定子进程的启动信息，如窗口大小、窗口标题等。默认为None。
+        creationflags：用于指定子进程的创建标志，控制子进程的各种行为。可以使用subprocess.CREATE_NEW_CONSOLE、subprocess.CREATE_NEW_PROCESS_GROUP等常量进行设置。默认为0。
+        restore_signals（仅 POSIX）：用于确定是否在子进程中恢复信号处理程序的默认行为。默认为True。
+        group（仅 POSIX）: 如果 group 不为 None，则 setregid() 系统调用将于子进程执行之前在下级进程中进行。 如果所提供的值为一个字符串，将通过 grp.getgrnam() 来查找它，并将使用 gr_gid 中的值。 如果该值为一个整数，它将被原样传递。 （POSIX 专属）
+        extra_groups（仅 POSIX）: 如果 extra_groups 不为 None，则 setgroups() 系统调用将于子进程之前在下级进程中进行。 在 extra_groups 中提供的字符串将通过 grp.getgrnam() 来查找，并将使用 gr_gid 中的值。 整数值将被原样传递。
+        user（仅 POSIX）: 如果 user 不为 None，则 setreuid() 系统调用将于子进程执行之前在下级进程中进行。 如果所提供的值为一个字符串，将通过 pwd.getpwnam() 来查找它，并将使用 pw_uid 中的值。 如果该值为一个整数，它将被原样传递。 （POSIX 专属）
+    
+        (1) Popen 对象方法
+            poll(): 检查进程是否终止，如果终止返回 returncode，否则返回 None。
+            wait(timeout): 等待子进程终止。
+            communicate(input,timeout): 和子进程交互，发送和读取数据。
+            send_signal(singnal): 发送信号到子进程 。
+            terminate(): 停止子进程,也就是发送SIGTERM信号到子进程。
+            kill(): 杀死子进程。发送 SIGKILL 信号到子进程。
+

@@ -189,28 +189,42 @@ yield语句
     yield 用来生成数据,供迭代器的next(iteration)函数使用
 注: yield函数由Python提供
 示例:
-def myyeild():   # 生成器函数, function object
-    print("yield函数被调用")
+def go_yield():   # 生成器函数, 调用返回一个生成器
+    print("生成器函数被调用")   # 仅在第一次时执行
     yield 2
     yield 3
     yield 5
     yield 6
 
-myyeild()   # 调用, myyield函数将返回一个可迭代对象(生成器对象)
-gen = myyeild()   # gen绑定生成器对象
+def go_yield2():   # 生成器函数, 调用返回一个生成器
+    count = 0
+    print(f"{go_yield2.__name__}生成器被调用")
+    while True:       # 一个无限可生成计数的生成器
+        count += 1
+        yield count
+
+go_yield()   # 调用, go_yield函数将返回一个可迭代对象(生成器对象)
+gen = go_yield()   # 再次调用返回一个生成器对象, 用gen绑定该生成器对象
 it = iter(gen)   # it绑定迭代器对象
 print(next(it))   # 2
 print(next(it))   # 3
 print(next(it))   # 5
 print(next(it))   # 6
-print(next(it))   # StopIteration异常
+# print(next(it))   # StopIteration异常
 
-for x in myyeild():   # 用for访问生成器函数
+for x in go_yield():   # 用for访问生成器
+    print(x)
+
+gen2 = go_yield2()
+for x in gen2:
+    if x>10:
+        break
     print(x)
 
 生成器函数说明:
     生成器函数的调用将返回一个生成器对象,生成器对象是一个可迭代对象
     生成器函数调用return语句会触发一个StopIteration异常
+    每一次运行到yield语句的时候, 生成器将会中断且保留此次的数据
 
 生成器函数的应用示例:
 def myinteger(begin, end):
@@ -223,6 +237,8 @@ def myinteger(begin, end):
 for x in myinteger(10, 20):
     print(x)
 
+补充:
+    利用生成器在执行完yield时中断且保留此时数据的特点, Python以此扩展出了基于任务循环的协程
 
 生成器表达式
 语法:
