@@ -8,7 +8,7 @@ async def work():
 
 # 调用协程的闭包
 async def do_coro():
-    ret = await work()   # 等待协程对象, 并获取协程的返回值
+    ret = await work()   # 等待协程对象, 并获取协程的返回值, 如果当前任务是一个耗时任务则将会阻塞
     print("获得协程的返回值:", ret)
 
 
