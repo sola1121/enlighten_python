@@ -1,0 +1,128 @@
+1. Python中常用的数据处理工具
+
+    1) Numpy
+        
+        numpy, 即Numerical Python, 是一个开源的Python库，主要用于对多维数组执行计算。
+        他是Python科学计算的基础库之一，广泛应用于数据分析、机器学习、图像处理等领域。
+        
+        以下是numpy的一些主要特点：
+            (1) 多维数组(ndarray)
+                怒骂怕也提供了一个强大的N维数组对象，这是numpy的核心特性。
+                这些数组可以用来表示向量、矩阵甚至是更高维度的数据结构。
+            (2) 数组运算
+                numpy支持高效的数组运算，包括向量化运算，这可以显著提高计算速度。
+            (3) 数学函数
+                numpy提供了大量的数学函数，如三角函数、算术运算、统计函数等，这些函数都可以在数组上高效运行。
+            (4) 广播(Broadcasting)
+                numpy的广播功能允许不同形状的数组在计算时进行自动扩展，以匹配彼此的形状。
+            (5) 集成C/C++和Fortran代码
+                numpy允许开发者轻松地集成C/C++和Fortran代码，以提高性能。
+            (6) 线性代数、傅里叶变换等
+                numpy包含了线性代数模块和傅里叶变换模块，可以方便地进行矩阵运算和信号处理。
+
+    2) Pandas
+    
+        pandas是一个开源的Python数据分析库，提供高性能、易用的数据结构和数据分析工具。
+        pandas构建在numpy之上，让以Python进行数据分析变得更加容易。
+
+        主要特点：
+            (1) 数据结构
+                Pandas定义了两种主要的数据结构，分别是Series（一维数组）和DataFrame（二维表格），它们使得数据的操作和处理变得简单直观。
+            (2) 数据操作
+                Pandas提供了丰富的数据操作方法，包括但不限于过滤、组合、合并、重塑、选择和转换数据。
+            (3) 数据处理
+                Pandas支持丢失数据的处理、时间序列功能、频率转换等。
+            (4) 文件读写
+                Pandas支持多种文件格式的读写，包括CSV、Excel、SQL数据库、HDF5等。
+            (5) 聚合和分组
+                Pandas提供了强大的分组功能，可以轻松地对数据进行分组并应用聚合函数。
+
+        核心组件：
+            (1) Series
+                一维数组，可以存储任何数据类型。每个Series都有一个索引（默认为数字索引）。
+            (2) DataFrame
+                二维表格，包含多个Series，每个Series是一个列。DataFrame的每一列都有一个名称，且可以有不同的数据类型。
+            (3) Index
+                用于存储轴标签和其他元数据的对象。Pandas的Index对象是数据对齐和重新排列的核心。
+
+    3) Matplotlib
+
+        matplotlib是一个Python的2D绘图库.
+        其可以创建静态, 动态和交互式的图表.
+
+        Matplotlib是一个非常灵活和强大的绘图库，几乎可以满足任何2D绘图需求。虽然它的API相对复杂，但这也是因为它提供了极高的定制性。
+        对于更高级的数据可视化需求，还可以结合其他库如Seaborn（基于Matplotlib构建，专注于统计绘图）来使用。 
+
+    4) Sklearn
+
+        Scikit-learn（通常简称为sklearn）是一个开源的Python机器学习库。
+        他提供了简单有效的数据挖掘和数据分析工具，通过统一的接口来访问各种机器学习算法。
+        Scikit-learn建立在NumPy、SciPy和matplotlib之上，并与这些库紧密集成，是Python中用于机器学习和数据科学的重要工具之一。
+
+        sklearn支持的机器学习算法:
+            (1) 监督学习算法
+                1. 回归算法
+                    线性回归（Linear Regression）
+                    岭回归（Ridge Regression）
+                    Lasso回归（Lasso Regression）
+                    弹性网络（Elastic Net）
+                    最小角回归（Least Angle Regression）
+                    贝叶斯回归（Bayesian Regression）
+                    多项式回归（Polynomial Regression）
+                    支持向量回归（Support Vector Regression, SVR）
+                    决策树回归（Decision Tree Regression）
+                    随机森林回归（Random Forest Regression）
+                    AdaBoost回归（AdaBoost Regression）
+                    梯度提升回归树（Gradient Boosting Regression Trees）
+                2. 分类算法
+                    逻辑回归（Logistic Regression）
+                    支持向量机（Support Vector Machines, SVM）
+                    决策树分类（Decision Tree Classification）
+                    随机森林分类（Random Forest Classification）
+                    AdaBoost分类（AdaBoost Classification）
+                    梯度提升分类树（Gradient Boosting Classification Trees）
+                    多层感知器（Multilayer Perceptron, MLP）
+                    朴素贝叶斯（Naive Bayes）
+                    K最近邻（K-Nearest Neighbors, KNN）
+            (2) 无监督学习算法
+                1. 聚类算法
+                    K均值（K-Means）
+                    层次聚类（Hierarchical Clustering）
+                    密度聚类（DBSCAN）
+                    光谱聚类（Spectral Clustering）
+                2. 降维算法
+                    主成分分析（Principal Component Analysis, PCA）
+                    奇异值分解（Singular Value Decomposition, SVD）
+                    局部线性嵌入（Locally Linear Embedding, LLE）
+                    t-SNE（t-Distributed Stochastic Neighbor Embedding）
+                3. 关联规则学习
+                    Apriori算法
+                    Eclat算法
+            (3) 模型选择和评估
+                交叉验证（Cross-Validation）
+                模型选择（Model Selection）
+                性能评估（Performance Metrics）
+            (4) 数据预处理和特征工程
+                特征提取（Feature Extraction）
+                特征选择（Feature Selection）
+                数据归一化（Normalization）
+                数据编码（Encoding）
+
+
+2. 数据处理的开发环境
+
+    1) Project Jupyter
+
+        Project Jupyter是一个开源项目，旨在为科学计算提供支持，并推动多种编程语言的交互式计算和数据分析。
+        它起源于IPython项目，由Fernando Pérez在2001年启动，后来演变成一个更广泛的项目，即Project Jupyter。
+        
+        核心组件
+            (1) Jupyter Notebook
+                这是一个基于Web的应用程序，允许用户创建包含代码、文本、方程式、可视化和交互式元素的文档。
+            (2) JupyterLab
+                这是Jupyter项目的下一代用户界面，提供更加强大和灵活的工作环境。
+            (3) JupyterHub
+                这是一个多用户版本的Jupyter Notebook，适用于教育、研究和企业环境，允许多个用户在服务器上运行自己的Notebook。
+            (4) 交互式内核
+                Project Jupyter支持多种编程语言的交互式内核，这些内核允许用户在Notebook中运行不同的编程语言。
+

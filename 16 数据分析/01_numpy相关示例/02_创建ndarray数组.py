@@ -24,11 +24,11 @@ print("type f", type(f))
 print("f 0 0", type(f[0][0]))
 print("f.dtype", f.dtype)
 
-g = np.array(["one", "two", "three"], dtype=np.unicode)   # 指定类型
+g = np.array(["one", "two", "three"], dtype=np.str_)   # 指定类型
 print("g[0]", g[0])
 print("g data type", g.dtype)
 
-h = g.astype(np.str)   # 以字符的形式拷贝
+h = g.astype(np.str_)   # 以字符的形式拷贝
 print("h", h)
 
 i = np.array([

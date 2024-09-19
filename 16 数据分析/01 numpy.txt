@@ -1,35 +1,118 @@
-数据分析基础
-
-matlab语言
-python语言
-
-numpy
-1. numpy是什么
+1. numpy 介绍
     1) numerical python, 数值的python, 应用于数值分析领域的python工具
-    2) numpy是一个开源的科学计算库, 完全基于标准C
+    2) numpy是一个开源的科学计算库, 完全基于标准C开发, 运行速度快
     3) numpy弥补了作为通用编程语言的python在数值计算方面, 能力弱, 速度慢的不足
     4) numpy拥有丰富的数学函数, 强大的多维数组和优异的运算性能
-    5) numpy与scipy, scikit, matplotlib等其它科学计算库可以很好的协调工作
+    5) numpy与pandas, scipy, scikit, matplotlib等其它科学计算库可以很好的协调工作
     6) numpy可以取代matlab等工具, 允许用户进行快速开发的同时完成交互式的原型设计
 
----------------------------------------
 
-多维数组 numpy.ndarray对象
-    1) numpy中的多维数组是numpy.ndarray类类型的对象, 可用于表示数据接口中的任意位数的数组
-    2) 创建多维数组
-        numpy.arange(起始, 终止, 步长)  --> 返回一维数组, 首元素就是起始值, 尾元素在终止值之前一位, 步长为每次增长的公差. 缺省起始值为0, 缺省步长为1
-        numpy.array(任何可被解释为数组的容器)
-    3) 数组: 内存连续, 元素同质. 以牺牲灵活性换取性能优势.
-    4) ndarray.dtype属性表示元素的数据类型. 通过的type参数和astype()方法可以指定和修改元素的数据类型   dtype : data type
-    5) ndarray.shape属性表示数组的维度: (高维度数, ..., 低维度数)
-    6) 元素索引
-        数组[索引]
-        数组[行索引][列索引]
-        数组[页索引][行索引][列索引]
-        数组[页索引, 行索引, 列索引]
-    7) numpy的内置类型和自定义类型
+2. 多维数组 numpy.ndarray数组对象
+    numpy中的多维数组是numpy.ndarray类类型的对象, 可用于表示数据接口中的任意位数的数组
+    numpy.ndarray是一个通用的同构数据容器, 也就是其中的数据元素必须是相同的数据类型, 并且存储在连续的内存上. (C语言中的数组)
+
+    1) 生成numpy.ndarray数组对象
+
+        numpy.array(Python中任意的序列类型)
+            返回一个一维的ndarray对象, 如果是嵌套列表, 将会转换为多维的ndarray对象
+
+        numpy.asarray(Python中任意的序列类型)
+            类似numpy.array, 不同点是当数据源是ndarray对象,  array()函数仍然会复制出一个副本, 占用新的内存, 但asarray()函数不进行复制
+
+        numpy.arange(起始, 终止, 步长, dtype)
+            返回一个一维的ndarray对象, 首元素就是起始值, 尾元素在终止值之前一位, 步长为每次增长的公差. 缺省起始值为0, 缺省步长为1
+
+        numpy.zeros(shape, dtype, order), numpy.zeros_like()
+            zeros()函数根据指定的shape和dtype创建一个指定形状的数组，填充0。
+            zeros_like()函数是以一个数组为参数,根据shape和dtype生成全是0的数组.
+            参数
+                order : 表示素组在计算机内存中的存储元素的顺序, 有'C'和'F'两个选项, 分别代表行优先和列优先
+        
+        numpy.ones()
+        numpy.ones_like()
+            ones()函数根据指定的shape和dtype创建一个指定形状的数组，填充1。
+            ones_like()函数是以一个数组为参数,根据shape和dtype生成全是1的数组.
+
+        numpy.empty()
+        numpy.empty_like()
+            empty()函数根据指定的shape和dtype函数创建一个指定形状的未初始化数组。仅分配空间, 不填充数据.
+            empty_like()函数是以一个数组为参数,根据shape和dtype创建未填充数据的数组.
+
+        numpy.linspace(起始, 终止, num=50, endpoint=True, retstep=False, dtype=None)
+            创建一个在指定区间内均匀间隔的数组。
+            参数
+                num : 要生成的等步长的样本数量, 默认50
+                endpoint : 该值为True, 数列中包含终止值, 反之不包含, 默认True
+                base : 对数log的底数, 默认10
+            
+        numpy.logspace(起始, 终止, num=50, endpoint=True, base=10.0, dtype=None)
+            创建一个在指定区间内以对数间隔的数组。
+
+        numpy.eye()
+        numpy.identity()
+            创建一个N*N的单位矩阵。(对角线元素为1, 其他元素为0)
+
+        numpy.diag()
+            创建一个对角线数组或提取对角线。
+        
+        numpy.full()
+            创建一个指定形状的数组，填充指定的值。
+
+        numpy.frombuffer(buffer, dtype=float, count=-1, offset=0)
+        numpy.fromstring()
+        numpy.fromfile()
+            可以从字节流中创建数组对象
+            参数
+                buffer : 可以是任意对象, 会议流的形式读入
+                count : 读取数据数量, 默认-1, 表示读取所有数据
+                offset : 读取的起始位置, 默认0
+
+        numpy.fromiter(iterable, dtype, count=-1)
+            从可迭代对象中生成ndarray数组对象, 返回一个一维数组
+            参数
+                iterable : Python中的可迭代对象
+                count : 读取数据数量, 默认-1, 表示读取所有数据
+        
+        numpy.mershgrid()
+            numpy.mershgrid(ndarray, ndarray, ...)生成一个ndarray*ndarray*ndarray*...*ndarray的多维对象
+
+        numpy.where()
+            numpy.where(cond, ndarray1, ndarray2)根据条件cond, 选择ndarray1或ndarray2, 返回一个新的ndarray
+
+        numpy.in1d()
+            numpy.in1d(ndarray, [x, y, ...])检查ndarray中的元素是否等于[x, y, ...]中的一个, 返回bool数组
+
+        numpy.random.rand()
+            创建一个给定形状的数组，元素在[0,1)之间均匀分布。
+
+        numpy.random.randn()
+            创建一个给定形状的数组，元素来自标准正态分布。
+
+        numpy.random.randint()
+            创建一个给定形状的数组，元素来自指定的整数范围。
+
+    2) numpy.ndarray对象的常见的属性
+        ndarray.ndim : 数组的维度。
+        ndarray.shape : 数组的形状，即每个维度的大小。
+        ndarray.size : 元素数, len返回数组中的元素的个数, 但是只能体现矩阵的行数, 只有对以为数组二者才等价
+        ndarray.itemsize : 数组中每个元素的字节大小。
+        ndarray.nbytes : 总字节数 = size * itemsize
+        ndarray.dtype : 数组元素的数据类型。dtype参数或astype()方法可以修改.
+        ndarray.data : 包含数组实际元素的缓冲区，通常不直接使用这个属性。
+
+        ndarray.T : 转置视图(引用)
+        ndarray.flat : 扁平迭代器
+        ndarray.real : 实部数组
+        ndarray.imag : 虚部数组
+        ndarray.tolist()  将数组装换为列表对象
+    
+    3) numpy的内置类型
+
         (1) numpy的内置类型(都是固定长度, 基于C语言数据类型)
-            numpy.bool   # 1字节 True/False 1/0
+            numpy.bool_  # 1字节 True/False 1/0
+            numpy.int_   # 默认整数类型, 一般为long, int32或int64
+            numpy.intc   # 同C语言中的int类型, 一般为int32或int64
+            numpy.intp   # 用于索引的整数类型, 同C语言中的size_t
             numpy.int8   # 1字节, 有符号整型, -128~127
             numpy.int16  # 2字节, 有符号整型
             numpy.int32  # 4字节, 有符号整型
@@ -38,21 +121,44 @@ numpy
             numpy.uint16 # 2字节, 无符号整型
             numpy.uint32 # 4字节, 无符号整型
             numpy.uint64 # 8字节, 无符号整型
+            numpy.float_  # float64类型的简写 
             numpy.float16 # 2字节浮点型
             numpy.float32 # 4字节浮点型
             numpy.float64 # 8字节浮点型
+            numpy.complex_   # complex128类型的简写
             numpy.complex64  # 8字节复数型
             numpy.complex128 # 16字节复数型
-            numpy.str   # 字符串型
-        (2) 自定义类型: 通过dtype将多个相同或者不同的numpy内置类型组合成某种复合类型, 用于数组元素的数据类型
-            除了使用内置类型的全称以外还可以通过类型编码字符串简化类型的说明. 位数/8
-                numpy.int8 -> i1
-                numpy.int16 -> i2
-                numpy.uint32 -> u4
-                numpy.float64 -> f8
-                numpy.complex128 -> c16
-                numpy.str -> U字符数
-                numpy.bool -> b
+            numpy.str_   # 字符串型
+
+        (3) 使用字符串来表示元素的类型
+            除了使用内置类型的全称以外还可以通过类型编码字符串简化类型的说明.
+
+            格式为: 数据类型字符 + 比特数/8
+
+            数据类型字符
+                b : 表示布尔型
+                i : 表示有符号整型
+                u : 表示无符号整型
+                f ；表示浮点型
+                c : 复数浮点型
+                m : timedelta(时间间隔)
+                M : datetime(日期时间)
+                O : Python对象
+                S, a : byte-string字符串
+                U : unicode
+                V : 原始数据(void)
+
+            如
+                numpy.int8  : i1
+                numpy.int16 : i2
+                numpy.int32 : i4
+                numpy.int64 : i8
+                numpy.uint32 : u4
+                numpy.float64 : f8
+                numpy.complex128 : c16
+                numpy.str_ : U字符数
+                numpy.bool : b
+        
             对于多字节整数可以加上字节序前缀
                 <   小端字节序, 低数位低地址
                     L      H
@@ -62,52 +168,219 @@ numpy
                     L      H
                     0x34   0x12
 
-    8) 切片
-        数组[起始:终止:步长, 起始:终止:步长, ...]   # 可以多个维度的进行切片
-            缺省起始, 首(步长为正), 尾(步长为负)
-            缺省终止, 尾后(步长为正), 首前(步长为负)
-            缺省步长, 1
-            靠近端部的一个或几个连续的维度使用缺省切片, 可以用"..."表示
+    4) 索引和切片
 
-    9) 改变维度
-        视图变维: 针对一个数组对象获取不同维度的视图
-            数组.reshape(新维度)  --> 数组的新维度视图
-            数组.ravel()  --> 数组的一维视图
+        (1) 一维数组的索引和切片
+            与Python内置类型list相似, ndarray对象也可以进行索引和切片
+            如
+                data[i] : 获取数组中下标为i的元素
 
-        复制变维: 针对一个数组对象获取其不同维度的副本
-            数组.flatten()  --> 数组的一维副本
+                data[start:stop] : 获取下标从start到stop-1数组中的一部分, 包括data[start], 不包括data[stop]
+                data[start:] : 获取下标从start到最后一个元素
+                data[:stop] : 获取从第一个元素到下标stop-1的元素
 
-        就地变维
-            数组.shape = 新维度   # 元组类型参数
-            数组.resize(新维度)
+                data[start:stop:step] : 获取下标从start开始到下标stop停止(不包括stop), 间隔为step的子数组
+                data[::step] : 获取从下标0到最后一个元素, 步长为step
+                data[:-i] : 切片下标中使用负数, 表示从数组最后往前走, -i表示都属第i个元素
+
+        (2) 多维数组的索引和切片
+            多维数组有多个轴, 所以其需要多个值来表示.
+            numpy采用元组作为数组的下标, 如a[1,2]和a[(1,2)]相同, 每个轴(维度)一个索引值, 用逗号分隔.
+            也可以使用多个中括号(类似C语言对多维数组进行索引)获取某个值或切片, 如a[1][2]
+            数组[页索引, 行索引, 列索引]
+            数组[起始:终止:步长, 起始:终止:步长, ...]
+                缺省步长, 1
+                靠近端部的一个或几个连续的维度使用缺省切片, 可以用"..."表示
+            如
+               3*3矩阵A, 列行下标都从0开始
+               [[ 1  2  3]
+                [ 4  5  6]
+                [ 7  8  9]]
+                元素6为 A[2, 1] 或 A[2][1], 即列2, 行1
+                子矩阵
+                    [[5, 6]
+                     [8, 9]]
+                为 A[1:3, 1:3] 或 A[1:3][1:3], 即列1到2, 行1到2
+                也可以用负数, 表示从后向前 为 A[-1:-3:-1, -1:-3:-1] 或 A[-1:-3:-1][-1:-3:-1], 这里指出步长为-1
         
-        视图转置
-            数组.transpose()  --> 数组的转置视图
-            数组.T 转置视图属性, 直接改变矩阵数组
-    
-    10) 组合与拆分
-        (1) 垂直组合/拆分
-            numpy.vstack((上, 下))
-            numpy.vsplit(数组, 份数)  --> 子数组集合
-        (2) 水平组合/拆分
-            numpy.hstack((左, 右))
-            numpy.hsplit(数组, 份数)  --> 子数组集合
-        (3) 深度组合/拆分
-            numpy.dstack((前, 后))   # 每个元素中各对应行形成新矩阵并转置
-            numpy.dsplit(数组, 份数)   --> 子数组集合
-        (4) 行/列组合
-            numpy.row_stack((上, 下))    
-            numpy.column_stack((左, 右))
-    
-    11) ndarray类的属性
-        dtype : 元素类型
-        shape : 数组维度
-        T : 转置视图
-        ndim : 维度
-        size : 元素数, len返回数组中的元素的个数, 但是只能体现矩阵的行数, 只有对以为数组二者才等价
-        itemsize : 元素字节数
-        nbytes : 总字节数 = size * itemsize
-        flat : 扁平迭代器
-        real : 实部数组
-        imag : 虚部数组
-        数组.tolist()  --> 列表对象
+        (3) slice()对象和s_切片对象
+            使用Pytnon的内置类slice来创建切片对象, 用slice切片对象对数组进行切片
+            slice(start, stop[, step]), 三个参数表示起始值, 结束值, 步长, 当需要省略这些值的时候, 可以使用None
+            如
+                data[slice(None, None, 2), slice(2, None)]   # 同data[::2][2:]
+            在应用中, 因为多维的ndarray数组下标是一个元组, 所以可以将下标元组保存起来, 用同一个元组存取多个数组.
+
+            numpy.s_对象创建切片对象
+            s_是IndexExpression类的一个对象, s_[::2, 2:]与(slice(None, None, 2), slice(2, None))作用相同
+            如
+                data[numpy.s_[::2, 2:]]
+
+        (4) 花式索引
+            花式索引 fancy indexing, 指的是利用整数数组进行索引
+            这里的整数数组可以使numpy数组, 也可以是Python内置的list, tuple等可迭代类型
+
+            花式索引根据索引整型数组的值作为目标数组的某个轴(维度)的下标来去值.
+            既然是整数数组作为下标, 就要求如果设置多个整数数组来索引, 这些整数数组的元素个数需要相等, 这样才能将整数数组映射成下标.
+            如
+                data[[1,2,3], [0,1,2]]
+            将会获取到data[1][0], data[2, 1], data[3][2]的值所组成的列表
+
+            如果所给的中有一个整数数组仅有一个元素, 根据numpy中的广播机制, 该仅有一个元素的可以广播到与其他整数数组相同的元素个数.
+            如
+                [1, 2], [0] 两个整数数组
+                numpy广播将[0]变为[0, 0]
+                则
+                    data[[1, 2], [0]] 实际就是 data[[1, 2], [0, 0]], 将获得data[1][0], data[1,0]值组成的列表
+                
+        (5) 布尔索引
+            布尔索引通过布尔运算来获取符合指定条件的元素的返回数组.
+
+            如
+                data1 = data[data>30]
+
+                filter = numpy.array([1, 0, 1, 1], dtype=numpy.bool)
+
+                data1 = data[filter, 0:2]
+
+        注意
+            ndarray通过整数和切片索引获取的新的ndarray数组是原始ndarray数组的一个视图.
+            也就是说新数组与原数组在内存中占用同一内存地址, 当修改该视图, 原数组中的内容也会被修改.
+            就如同C语言中, 新建了一个指向原始数组某个位置的指针, 并记录该指针可遍历的长度.
+
+            花式索引, 布尔数组, 会将数据复制到新的数组中, 因此改变新数组是不会影响原数组的.
+
+    5) 结构体数组
+        类似于C语言中的结构体, numpy中的结构体类型使用dtype()函数定义, 其参数为字典
+        该字典的键为names, formats等, 表示成员名, 与类型, 值为列表, 详细指明成员名, 和对应的类型
+        如
+            # 定义一个student结构体
+            student = numpy.dtype({"name": ["id", "name"], "formats": ["i4", "S32"]})
+            同
+                struct student {
+                    int32 id,
+                    char name[32]
+                };
+            
+            stus = numpy.array([(202101, "Tom"), (202102, "Tina")], dtype=student)   # 指明使用结构类型
+        
+        另外, numpy.dtype()函数字典参数还可以指定其他可选的键
+            offsets: 字节偏移列表
+            itemsize: 字节总数
+            aligned : 是否自动便宜(布尔值)
+            titles : 标题列表
+
+        对于结构体数组, 使用整数来索引某个结构体, 使用字段名索引结构体中具体的成员
+        如
+            stus[0]["name"]   # Tom
+
+
+3. 多维数组 numpy.ndarray数组对象的方法
+
+    1) 数组重塑和转置
+
+        (1) 更改数组的shape属性
+            如
+                arr.shape = (3, 4)   # 将数组arr变为3*4的矩阵
+
+        (2) 使用reshape()方法, 返回一个原数组的更改形状后的视图(即形状变了的引用)
+            如
+                arr1 = arr.reshape(3, 4)   # arr1是arr的改形的视图
+
+        当为shape赋值或reshape()方法得重塑视图时候, 对于某一维可以给予-1, 意思为该维由解释器计算得出.
+        如
+            共15个元素的数组arr
+            arr.shape = (-1, 5)   # 则第一维将会为3
+
+        (3) 扁平化, flatten()方法, 得到多维数组的一维数组, 返回源数据的一个新的副本
+
+        (4) 散开, ravel()方法, 得到多维数组的一维数组, 返回源数据的视图(即引用)
+        
+        参数
+            对于reshape(), flatten(), ravel()方法, 其都有一个参数order
+            order参数表示数组存放数据元素是按照行优先还是列优先, 固定为'C'和'F'
+            因为在C语言中数组默认存放是行优先, 所以行优先为'C', 在Fortran语言中数组默认存放是列优先, 所以列优先为'F'
+
+    2) 数组元素重复
+
+        (1) repeat()函数
+            对数组中的元素进行连续重复复制
+            函数
+                numpy.repeat(arr, repeats, axis=None)
+            数组中的方法
+                arr.repeat(repeats, axis=None)
+            参数
+                repeats : 为重复次数
+                axis : 表示数组维度, 
+                       若为axis=None, 对于多维数组而言, 可以将多维数组变化为一维数组, 然后根据repats参数扩充数组元素
+                       若为axis=i, 表示数组在i维上扩充数组元素
+
+            如
+                若有ndarray数组arr=[1, 2]
+                arr.repeat(2)将会把arr变为[1, 1, 2, 2]
+                arr.repeat(2, 0)将会重复第1维的元素, arr会变为[[1, 2],[1, 2]]
+
+        (2) tile()函数
+            沿着指定轴的方向堆叠数组的副本
+            numpy.tile(arr, repeats)
+            参数
+                repeats : 为重复次数
+
+            如
+                若有ndarray数组arr=[[1, 2], 
+                                   [3, 4]]
+                numpy.tile(arr, 2)将会把arr变为
+                    [[1, 2, 1, 2],
+                     [3, 4, 3, 3]]
+
+    3) 复制和视图
+        当对数组进行操作的时候, 其数据有时候被复制到一个新的数组, 而有时候又不会复制, 仅生成一个视图(引用)
+
+        (1) 完全不复制
+            简单的赋值操作不会产生对象, 是完全不复制的. 完全不复制(直接赋值)其实就是对像的引用, 不会产生对象的复制操作.
+
+        (2) 浅复制(视图)
+            view操作会创建一个共享原数组数据的新的数组对象.
+            view操作有很多, 如常见的 view()函数, slice()函数, reshape()函数, ravel()函数等.
+
+            因为视图和原数组共享同一块内存, 所以修改视图也会修改原始数据.
+        
+        (3) 完全复制
+            对对象及其子对象都进行复制, 对新生成的对象进行修改, 删除操作不会影响原对象.
+            如常见的 copy()函数, flatten()函数等.
+
+    4) 数组连接与拆分
+        (1) 数组连接
+            numpy.concatenate([arr1, arr2, ...], axis=0) : 沿指定轴连接多个数组.
+                参数
+                    第一个参数为要连接的数组序列, 第二个参数axis指定沿着哪个轴(默认0, 即第一维)
+            numpy.vstack() : v, 表示vertical(垂直), 垂直堆叠数组（沿第一个轴）, 即上下堆叠. 实际上是concatenate(arr, axis=0)的快捷操作.
+            numpy.hstack() : h, 表示horizontal(水平), 水平堆叠数组（沿第二个轴）, 即左右堆叠。 实际长是concatente(arr, axis=1)的快捷操作. 
+            numpy.dstack() : d, 表示deep(深度), 深度堆叠数组（沿第三个轴）。实际上是concatenate(arr, axis=2)的快捷操作.
+            numpy.column_stack() : 与hstack类似, 都是沿着第一维进行连接, 但是当数组为一维时, 将其形状改为(N, 1)后在进行连接, 通常用于按列连接多个一维数组.
+
+            注意
+                在进行连接操作的时候, 连接的几个数组除了axis轴外, 其他维度的形状应该都相同.
+                如使用vstack()函数进行连接, 则被连接的数组除第一个轴外, 其他轴形状都相同.
+
+        (2) 数组拆分
+            numpy.split(arr, indices_or_sections, axis) : 沿指定轴将数组分割成多个子数组。
+                参数
+                    arr : 被分割的数组
+                    indices_or_sections : 如果是一个整数, 就用该数平均拆分; 如果是一个数组, 为沿轴拆分的位置.
+                    asix : 沿着哪个维度(轴向)进行拆分, 默认0, 即第一维, 横向切分(水平方向), 1表示第二维, 为垂直方向.
+            numpy.vsplit() : v, 表示vertical(垂直), 垂直拆分数组（沿第一个轴）。实际上是split(arr, axis=0)的快捷操作.
+            numpy.hsplit() : h, 表示horizontal(水平), 水平拆分数组（沿第二个轴）。实际上是split(arr, axis=1)的快捷操作.
+            numpy.dsplit() : v, 表示deep(深度), 深度拆分数组（沿第三个轴）。实际上是split(arr, axis=2)的快捷操作.
+
+    5) take()和put()方法
+        arr.take()函数和arr.put()函数有着与花式索引类似的作用, 但是take()和put()函数的性能通常要比花式索引好得多.
+
+        take()函数获取数组的子集
+        如
+            index = [4, 3, 2]
+            arr.take(index)   # 将依次获取索引为4, 3, 2位置的元素, 并作为列表返回
+
+        put()函数设置数组的子集
+        如
+            index = [4, 3, 2]
+            arr.put(index, 11)   # 将arr数组中索引为4, 3, 2的元素值设置为11
