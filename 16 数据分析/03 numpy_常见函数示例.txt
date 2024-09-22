@@ -1,0 +1,246 @@
+
+
+
+1. 读取文本文件
+    numpy.loadtxt(
+        文件名路径, 
+        delimiter=分隔符, 
+        usecols=选择列, 
+        unpack=是否解包, 
+        detype=目标类型, 
+        converters=转换器->二维数组(unpack=False)/列一维数组集(unpack=True)
+    )
+
+2. 保存文本文件
+    numpy.savetxt(
+        文件名路径,
+        二维数组,
+        delimiter=分隔符,
+        fmt=格式
+    )
+
+3. 算数平均值
+    样本: S = [s1, s2, ..., sn]
+    算数平均值: m = (s1 + s2 + ... + sn) / n
+    numpy.mean(样本数组) -> 算数平均值
+
+4. 加权平均值
+    样本: S = [s1, s2, ..., sn]
+    权重: W = [w1, w2, ..., wn]
+    加权平均值: a = (s1w1 + s2w2 + ... + snwn)/(w1 + w2 + ... + wn)
+    numpy.average(样本数组, weights=权重数组)
+    成交量加权平均价格(VWAP)
+    时间加权平均价格(TWAP)
+
+5. 最大值和最小值
+    1) max/min: 获取一个数组中的最大/最小元素
+      arr:
+        9 7 5
+        3 1 8
+        6 6 1
+    numpy.max(arr) = 9
+    numpy.min(arr) = 1
+    2) maximum/minimum: 在两个数组的对应元素之间构造最大/最小值数组
+      arr2:
+        6 1 0
+        7 1 7
+        4 4 5
+    numpy.maximum(arr, arr2)
+        9 7 5
+        7 1 8
+        6 6 5
+    
+    3)ptp: 极差, 一个数组最大值和最小值之差
+    numpy.ptp(数组) -> 数组.max()-数组.min()
+    价格波动幅度=某一种价格的极差
+
+6. 中位数
+    将多个样本按照大小顺序排列, 居于中间位置的元素即为中位数
+    M = (A[(L-1)/2]+A[L/2])/2   # A 数组,  L 数组长
+    numpy.median(数组) -> 中位数
+
+7. 标准差
+    样本: S = [s1, s2, ...,sn]
+    均值: m = (s1 + s2 + ... + sn) / n
+    离差: D = [s1-m, s2-m, ..., sn-m]
+    方差: v = ((s1-m)^2 + (s2-m)^2 + ... (sn-m)^2)/n   # 计算过程中要n-1, 下标从0开始
+    标准差: std = sqrt(v)
+    numpy.std(数组, ddof=非自由度) -> 标准差
+
+    总体方差和中体标准差: ../n     # n无穷大时
+    样本方差和样本标准差: ../(n-1)
+
+8. 针对日期的处理
+    1) 星期数据
+        数组[关系表达式] : 关系表达式的值是一个布尔型数组, 其中为True的元素对应于数组中满足关系表达式的元素
+        以上下标运算的值就是从数组中拣选与布尔数组中为True的元素相对应的元素
+
+        np.where(关系表达式) -> 数组中满足关系表达式的元素的下标数组
+        np.take(数组, 下标数组) -> 数组中由下标数组所标识的元素集合
+
+    2) 星期汇总
+        numpy.apply_along_axis(自定函数, 轴向, 高维数组)
+        在高维数组中, 沿着指定轴向, 提取低维子数组, 作为参数传递给特定的函数, 并将其返回值按照同样的轴向组成新的数组返回给调用者
+        轴向; 二维, 0-行方向, 1-列方向
+              三维, 0-页方向, 1-行方向, 2-列方向
+
+9. 一维卷积
+    a 被卷积数组
+    b 卷积核数组
+    numpy.convolve(a, b, 'full'/'same'/'valid')   # full: 完全卷积, same: 同维卷积, valid: 有效卷积
+
+    c = a (x) b = [6  19  40  61  82   67  40] - full
+                        [19  40  61  82   67] - same
+                        [40  61  82] - valid
+                6  19  40  61  82   67  40
+    0     0    1    2    3    4    5    0     0
+    8    7    6
+        8    7     6
+                8     7    6
+                    8    7    6
+                            8    7     6
+                                8     7    6
+                                        8    7    6
+    numpy.convolve(a, b, 'full'/'same'/'valid')
+    代码：conv.py
+
+    移动均线
+    代码：ma.py
+    [a b c d e] [A B C D E]
+    (aA+bB+cC+dD+eE)/(A+B+C+D+E)
+    (aA+bB+cC+dD+eE)/S
+    aA/S+bB/S+cC/S+dD/S+eE/S
+    [A/S B/S C/S D/S E/S]
+    布林带
+    中轨：移动均线
+    上轨：中轨 + 2x标准差
+    下轨：中轨 - 2x标准差
+    代码：bb.py
+
+
+10.线性模型
+    1   2   3    4
+    60 70 80 90
+    y = kx+b
+    1)线性预测
+    a b c d e f ? ?
+    d = aA+bB+cC \
+    e = bA+cB+dC   > A B C
+    f = cA+dB+eC  /
+    ? = dA+eB+fC
+    / a b c\     / A \     / d \
+    | b c d | X | B  | = |  e  |
+    \ c d e /    \ C /     \ f  /
+    ---------    -----     -----
+        a             x           b
+                        = numpy.linalg.lstsq(a, b)
+    bx=>?
+    代码：line.py
+    2)线性拟合
+        kx + b = y
+        kx1 + b = y1
+        kx2 + b = y2
+        ...
+        kxn +b = yn
+        / x1 1 \    / k \    / y1 \
+        | x2 1  | X | b | = | y2  |
+        | ...   |   \   /   | ... |
+        \ xn 1 /             \ yn /
+        --------     ----    ------
+            a         x         b
+                            = np.linalg.lstsq(a, b)
+    代码：trend.py
+
+
+11. 裁剪, 压缩和累乘
+    裁剪:
+        ndarray.clip(min=最小值, max=最大值)
+        将调用数组中小于min的元素设置为指定最小值, 大于max的元素设置为指定最大值
+    压缩:
+        ndarray.compress(条件)
+        返回调用数组中满足给定条件的元素
+    累乘:
+        ndarray.prod()
+        返回调用数组中各元素的乘积
+        ndarray.cumprod()
+        返回调用数组中各元素计算累乘的过程数组
+
+
+12. 相关性
+    样本
+      a = [a1, a2, ..., an]
+      b = [b1, b2, ..., bn]
+    均值
+      ave(a) = (a1 + a2 + ... + an)/n
+      ave(b) = (b1 + b2 + ... + bn)/n
+    离差
+      dev(a) = [a1, a2, ..., an] - ave(a)
+      dev(b) = [b1, b2, ..., bn] - ave(b)
+    方差
+      var(a) = ave(dev(a)dev(a))
+      var(b) = ave(dev(b)dev(b))
+    标准差
+      std(a) = sqrt(var(a))
+      std(b) = sqrt(var(b))
+    
+    协方差
+    cov(a, b) = ave(dev(a)dev(b))
+    cov(b, a) = ave(dev(b)dev(a))
+
+    相关性系数
+    cov(a,b)/std(a)std(b)
+    cov(b,a)/std(b)std(a)
+    [-1, 1]  正负表示了相关性的方向为正或反, 绝对值表示相关性的强弱, 越大越强, 越小越弱, 0表示不相关
+
+    相关性矩阵
+    /var(a)/std(a)std(a)=1   cov(a,b)/std(a)std(b)\
+    |                                             |
+    \cov(b,a)std(b)std(a)    var(b)/std(b)std(b)=1/
+    numpy.corrcoef(a, b) -> 相关性矩阵
+
+
+13. 多项式拟合
+    用一个无穷级数表示一个可微函数. 实际上任何可微的函数, 总可以用一个N次多项式函数来近似, 而比N次幂更高阶的部分可以作为无穷小量而被忽略不计.
+    f(x) = p0x^n + p1x^n-1 + p2x^n-2 + ... + pn
+
+    y0 = f(x0)
+    y1 = f(x1)
+    y2 = f(x2)
+    ...
+    yn = f(xn)
+
+    numpy.ployfit(自变量数组, 函数值数组, 最高次幂(n)) -> [p0, p1, ..., pn]    最小二乘多项式
+    numpy.polyval([p0, p1, ..., pn], 自变量数组) -> 函数值数组
+    numpy.roots([p0, p1, ..., pn]) -> 多项式方程的根
+
+    y = 3x^2+4x+1
+    y' = 6x+4
+    y''= 6
+    numpy.polyder([p0, p1, ..., pn])->导函数系数数组
+
+
+14. 符号数组
+    数组a [10 -20 30 40 -79 0 55]
+    numpy.sign(a) -> [1 -1 1 1 -1 0 1]   对应位置, 正数1 零为0 负数-1
+    净额成交量(OBV)
+    numpy.piecewise(被判断数组, [条件1, 条件2, ...], [标志1, 标志2, ...]) -> 满足每个条件的标志数组
+
+
+15. 矢量化
+    def 处理单个标量(*标量参数们):
+        ...
+        return 标量返回1, 标量返回2, ...
+    np.vectorize(变量函数) -> 矢量函数
+    矢量函数(矢量参数1, 矢量参数2, ...) -> 矢量返回值1, 矢量返回值2, ...
+
+
+16. 数据平滑与特征值
+    卷积降噪-->曲线拟合-->特征值
+    消除随机噪声的干扰-->获得数学模型-->反应业务特征
+
+    y = f(x) -> y1 = f(x1)
+    y = g(x) -> y1 = g(x1)
+    f(x1) = g(x1)
+    f(x1) - g(x1) = 0 的根就是x1
+    numpy.polysub(p1, p2) -> p3
+    numpy.roots(p3) -> 求根

@@ -1,0 +1,341 @@
+0. 知识体系
+    1) 通用函数
+    2) 聚合函数
+    3) 排序函数
+    4) 随机生成函数
+
+
+1. 通用函数
+
+    NumPy主要通过向量进行操作, 而这些操作主要依靠一些通用函数实现.
+
+    通用(ufunc)函数是一种对ndarray中的数据执行元素级运算的函数.
+
+    这些函数都是通过C语言来实现的, 因此其运算速度也比单纯使用循环或推导式来执行元素的批量处理来的快.
+
+    1) 常用一元通用函数
+
+        绝对值
+            numpy.abs(), numpy.fabs() : 计算每个元素的绝对值。
+
+        指数, 对数
+            numpy.square() : 计算每个元素的平方。
+            numpy.sqrt() : 计算每个元素的平方根。
+            numpy.exp() : 计算每个元素的自然指数值eˣ。
+            numpy.log(), numpy.log2(), numpy.log10(), log1p() : 计算每个元素的自然对数(e为底)、底为2的对数、底为10的对数、log(1+x)。
+
+        numpy.ceil() : 向上取整到最接近的整数。
+        numpy.floor() : 向下取整到最接近的整数。
+        numpy.rint() : 四舍五入到最接近的整数。
+
+        三角函数
+            numpy.cos(), numpy.sin(), numpy.tan() : 计算每个元素的正弦、余弦和正切。
+            numpy.arccos, numpy.arcsin, numpy.arctan() : 计算每个元素的逆余弦、逆正弦和逆正切。
+            numpy.hypot() : 计算直角三角形的斜边长度，即 sqrt(x^2 + y^2)。
+            numpy.radians() : 将角度转换为弧度。
+            numpy.degrees() : 将弧度转换为角度。
+        
+        numpy.modf() : 将每个元素的小数和整数部分分两个独立数组形式返回.
+        numpy.isnan() : 返回一个表示哪些元素是NaN（Not a Number, 不是数字）的布尔型数组, 不是数值型数据为1, 是数据型数据为0。
+        numpy.isfinite(), numpy.isinf() : 返回一个表示哪些元素是无穷大的布尔型数组。
+        numpy.sign() : 返回表示数组中每个元素正负号的指示器。1表示正数, 0表示0, -1表示负数.
+        numpy.heaviside() : 计算Heaviside阶跃函数。
+        numpy.nan_to_num() : 用指定的值替换数组中的NaN(Not a Number, 不是数字)值，也可以替换正负无穷大。
+
+        逻辑运算
+            numpy.logical_not() : 对每个元素按位取反. 
+
+    
+    2) 常用二元通用函数
+        numpy.add() : 元素级的加法。
+        numpy.subtract() : 元素级的减法。
+        numpy.multiply() : 元素级的乘法。
+        numpy.divide() : 元素级的除法。
+        numpy.floor_divide() : 元素级的向下取整除法。
+        numpy.power() : 元素级的幂运算, aᵇ。
+
+        最值
+            numpy.maximum() : 元素级的最大值。
+            numpy.minimum() : 元素级的最小值。
+            numpy.fmax() : 元素级的浮点数最大值，忽略NaN。
+            numpy.fmin() : 元素级的浮点数最小值，忽略NaN。
+        
+        numpy.mod() : 元素级的求模运算。
+        numpy.remainder() : 元素级的求余数运算。
+        numpy.divmod() : 同时计算元素级的商和余数。
+        numpy.copysign() : 将第二个数组中的值的符号复制给第一个数组中的值.
+
+        比较运算
+            numpy.greater() : 元素级的比较操作，返回一个布尔数组，表示第一个数组是否大于第二个数组。
+            numpy.greater_equal() : 元素级的比较操作，返回一个布尔数组，表示第一个数组是否大于或等于第二个数组。
+            numpy.less() : 元素级的比较操作，返回一个布尔数组，表示第一个数组是否小于第二个数组。
+            numpy.less_equal() : 元素级的比较操作，返回一个布尔数组，表示第一个数组是否小于或等于第二个数组。
+            numpy.equal() : 元素级的比较操作，返回一个布尔数组，表示两个数组是否相等。
+            numpy.not_equal() : 元素级的比较操作，返回一个布尔数组，表示两个数组是否不相等。
+
+        逻辑运算
+            numpy.logical_and(), numpy.locigal_or(), numpy.logical_xor() : 元素级的逻辑运算, 返回布尔值数组, 分别是逻辑&, 逻辑|, 逻辑^ 
+
+        注
+            以上函数都可接受第三个数组参数, 表示将所得的结果写入到该数组.
+            如果指定了结果的输出数组, 那么这些函数就不会再产生新的数组.
+
+        示例
+            a = np.arange(0, 5)   # 数组[0, 1, 2, 3, 4]
+            b = np.arange(10, 15)   # 数组[10, 11, 12, 13, 14]
+            c = np.adda(a, b)   # 数组对应位置元素相加得新数组c, 为[10 12 14 16 18]
+
+    3) 运算符重载
+        以上函数都是重载了所对应的运算符的, 即当使用ndarray数组直接用运算符运算, 调用的将是这些函数.
+
+        示例
+            c = a ** b   # a, b都是ndarray对象, 实际将会调用numpy.power()函数, 返回新的数组
+            ret = a == b   # a, b都是ndarray对象, 实际将会调用numpy.equal()函数, 返回新的数组
+
+
+2. 聚合函数
+    
+    当面对大量的数据时, 可以获取它们的一些描述性统计信息, 如中值, 中位数, 均值, 最值等.
+
+    NaN不安全的版本
+        numpy.sum() : 计算数组元素的总和。
+        numpy.prod() : 计算数组元素的乘积。
+        numpy.mean() : 计算数组元素的算术平均值。
+
+        numpy.std() : 计算数组元素的标准偏差。
+        numpy.var() : 计算数组元素的方差。
+
+        numpy.min() : 找出数组中的最小值。
+        numpy.max() : 找出数组中的最大值。
+        numpy.argmin() : 找出数组中最小元素的索引。
+        numpy.argmax() : 找出数组中最大元素的索引。
+
+        numpy.median() : 计算数组元素的中位数。
+        numpy.percentile() : 计算数组元素的第n百分位数。
+
+    忽略数组中NaN的安全版本
+        numpy.nansum() : 计算数组元素的总和，忽略NaN。
+        numpy.nanprod() : 计算数组元素的乘积，忽略NaN。
+        numpy.nanmean() : 计算数组元素的算术平均值，忽略NaN。
+
+        numpy.nanstd() : 计算数组元素的标准偏差，忽略NaN。
+        numpy.nanvar() : 计算数组元素的方差，忽略NaN。
+
+        numpy.nanmin() : 计算数组中的最小值，忽略NaN。
+        numpy.nanmax() : 计算数组中的最大值，忽略NaN。
+        numpy.nanargmin() : 找出数组中最小元素的索引, 忽略NaN.
+        numpy.nanargmax() : 找出数组中最大元素的索引, 忽略NaN.
+
+        numpy.nanmedian() : 计算数组元素的中位数, 忽略NaN。
+        numpy.nanpercentile() : 计算数组元素的第n百分位数, 忽略NaN。
+
+    numpy.unique() : 找出数组中的唯一元素及其索引。
+    numpy.histogram() : 计算一组数据的直方图。
+
+    numpy.any() : 验证数组中是否有一个元素.
+    numpy.all() : 验证所有元素是否为某个值.
+
+    1) 多维度聚合
+        参数axis
+
+        以上聚合函数都具有一个参数axis, 其用于指定沿着哪个方向进行聚合.
+
+        axis指定的事数组将会被折叠的维度, 因此axis=0表示第一个轴将要被折叠, 而对于二维数组, 这意味着每一列的值都将被聚合.
+        示例
+            matrix = array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])   # 二维数组, 即矩阵
+            ret = numpy.max(matrix, axis=1)   # 获取该矩阵中每行中的最大值
+
+
+3. 排序函数
+
+    numpy中的排序支持三种排序算法, 在函数调用的时候可以选择种类
+        1) 快速排序, quicksort, 时间复杂度: O(nlog₂n), 空间复杂度: O(log₂n) , 不稳定
+        2) 归并排序, mergesort, 时间复杂度: O(nlog₂n), 空间复杂度: O(n)     , 稳定 
+        3) 堆排序,   heapsort,  时间复杂度: O(nlog₂n), 空间复杂度: O(1)     , 不稳定 
+
+    1) sort函数和sort方法
+        (1) numpy.sort()函数
+            格式
+                numpy.sort(arr, axis=-1, kind="quicksort", order=None)
+            参数
+                arr : 要排序的数组
+                axis: 排序的方向, 默认-1, 表示沿着最后的轴排序, 当axis=None, 表示展开来排序.
+                      对于多维数组, 可以使用0, 1, ..., 表示按第一轴, 第二轴, ...
+                kind: 排序算法, 默认quicksort, 可以填quicksort, megesort, heapsort 
+                order: 一个字符串或列表, 如果数组包含字段, 则是要排序的字段.
+            返回
+                返回输入数组的排序后的副本.
+            
+            示例
+                # 使用归并排序, 将二维数组以第二轴(即行)排序, 返回新的排序后的数组
+                sorted_matrix = numpy.sort(matrix, axis=1, kind="mergesort")
+
+                # 对于结构体数组, 可以使用order参数指定排序的依据
+                struct_type = [("Name", "S32"), ("Height", float), ("Age", int)]
+                values = [("Li", 1.8, 20), ("Zhang", 1.7, 28), ("Pu", 1.74, 29)]
+                arr = np.array(values, dtype=struct_type)
+                # 使用快速排序, 将二维数组以第一轴(即列)排序, 先按照Age, 再按照Height排序
+                sorted_arr = np.sort(arr, axis=0, order=["Age", "Height"])
+        
+        (2) ndarray对象.sort()方法
+            ndarray数组中的内置sort()方法和numpy.sort()函数基本相同
+            不同之处在于numpy.sort()函数返回排序后的数组副本, 而ndarray.sort()方法不需要arr参数且无返回值
+            ndarray.sort()方法会直接改变原数组的排序.
+
+    2) argsort()函数
+        将原数组中的索引按照值的大小从小到大排列, 即返回的是原数组排好序的索引.
+
+        格式
+            numpy.argsort(arr, axis=-1, kind="quicksort", order=None)
+        参数
+            同numpy.sort()函数
+        返回
+            返回的是数组元素从小到大排序后所对应的索引值.
+        
+    3) lexsort()函数
+        用于对多个序列进行排序.
+
+        格式
+            numpy.lexsort(keys, axis=-1)
+        参数
+            keys : 一个包含排序键的元组或列表。每个键都是一个数组。排序时，会首先根据最后一个键排序，然后是倒数第二个，依此类推。
+            axis : 排序的方向, 默认-1, 表示沿着最后的轴排序, 当axis=None, 表示展开来排序.
+                   对于多维数组, 可以使用0, 1, ..., 表示按第一轴, 第二轴, ...
+        返回
+            返回的是数组元素从小到大排序后所对应的索引值.
+        
+        示例
+            names = np.array(["Nin", "Huang", "Qian", "Cheng"])
+            scores = np.array([80, 78, 91, 84])
+            index_arr = np.lexsort((names, scores))
+            print("排序后的下标:", index_arr)
+            print("对应的数组值\n", (np.vstack((names[index_arr], scores[index_arr])).T))
+
+    4) searchsorted()函数
+        在数组arr中搜索数组val, 返回一个下标列表, 这个列表指明了val中对应元素应该插入在a中的位置
+
+        格式
+            numpy.searchsorted(arr, val, side='left', sorter=None)
+        参数
+            arr : 已排序的数组，在这个数组中查找插入位置。当sorter为None, arr必须为升序数组；否则, sorter不能为空.
+                  sorter存放arr数组中元素的index, 用于反映arr数组的升序排列方式.
+            val : 要插入的值或值数组。这可以是单个值，也可以是数组。
+            side : 指定返回的索引。
+                   ‘left’ 表示返回第一个适合插入的位置（即不大于 val 的第一个元素的位置），默认值为 ‘left’。
+                   ‘right’ 表示返回最后一个适合插入的位置（即小于 val 的最后一个元素的位置）。
+                   当搜索一个数组arr中不存在的元素时, side模式不起作用. 如果这个元素比arr的最小值还小, 则返回0；如果比arr的最大值还大, 则返回arr的长度.
+            sorter: 是一个整数数组，将该整数数组作为arr的索引, 可以得到一个arr的升序排序. 通常是argsort()函数的结果. 
+        返回值
+            返回一个索引数组，其中包含每个 val 元素在数组 arr 中应该被插入的位置。
+
+
+4. 随机生成函数
+
+    在计算领域, 随机数生成函数是一种产生不包含任意模式的序列的算法.
+
+    numpy.random模块提供了大量的随机数生成函数.
+
+    1) 常用随机数生成函数
+
+        ‌numpy.random.rand(d0, d1, ..., dn)‌
+            创建一个给定形状的数组，数组元素是在半开区间 [0.0, 1.0) 上均匀分布的随机样本。
+            dn为n维数据的长度.
+
+        ‌numpy.random.randn(d0, d1, ..., dn)‌
+            返回一个或一组样本，具有标准正态分布（均值为0，方差为1）。
+            dn为n维数据的长度.
+
+        ‌numpy.random.randint(low, high=None, size=None, dtype='l')‌
+            返回随机整数，范围在 low 和 high 之间，包含 low，不包含 high。
+            low最小值, high最大值, size数据个数.
+
+        ‌numpy.random.random(size=None)‌
+            返回半开区间 [0.0, 1.0) 上的随机浮点数。
+            size: 随机数的shape, 可以为元组或列表. 如[2, 3]表示维度为(2, 3).
+
+        ‌numpy.random.random_sample(size=None)‌
+        numpy.random.ranf(size=None)
+        numpy.random.sample(size=None)
+            与 numpy.random.random() 相同。
+
+        ‌numpy.random.choice(a, size=None, replace=True, p=None)‌
+            从给定的一维数组a中抽取size个数据, 生成随机样本。
+
+        ‌numpy.random.bytes(length)‌
+            返回随机字节。
+            length为字节长度.
+
+        ‌numpy.random.seed(seed=None)‌
+            种子用于随机数生成器。如果提供了种子，则每次生成的随机数都会相同。
+
+        ‌numpy.random.shuffle(x)‌
+            对数组 x 进行就地随机排列。
+
+    2) 产生服从各类分布的随机数的函数
+        (1) 均匀分布（Uniform Distribution）‌
+            numpy.random.rand(d0, d1, ..., dn)：生成一个给定形状的数组，其元素在半开区间[0.0, 1.0)上均匀分布。
+            numpy.random.uniform(low=0.0, high=1.0, size=None)：生成在[low, high)区间上均匀分布的随机数。
+
+        (2) ‌正态分布（Normal Distribution）‌
+            numpy.random.randn(d0, d1, ..., dn)：生成一个给定形状的数组，其元素服从标准正态分布（均值为0，方差为1）。
+            numpy.random.normal(loc=0.0, scale=1.0, size=None)：生成具有指定均值（loc）和标准差（scale）的正态分布随机数。
+            numpy.random.standard_normal(size=None)：生成标准正态分布的随机数，与randn功能相同。
+
+        (3) ‌二项分布（Binomial Distribution）‌
+            numpy.random.binomial(n, p, size=None)：生成二项分布的随机数，n代表试验次数，p代表每次试验成功的概率。
+
+        ‌(4) 泊松分布（Poisson Distribution）‌
+            numpy.random.poisson(lam=1.0, size=None)：生成泊松分布的随机数，lam是泊松分布的参数，表示单位时间内的平均发生率。
+
+        ‌(5) 指数分布（Exponential Distribution）‌
+            numpy.random.exponential(scale=1.0, size=None)：生成指数分布的随机数，scale是尺度参数，表示分布的平均值。
+
+        (6) ‌伽马分布（Gamma Distribution）‌
+            numpy.random.gamma(shape, scale=1.0, size=None)：生成伽马分布的随机数，shape是形状参数，scale是尺度参数。
+
+        ‌(7) 贝塔分布（Beta Distribution）‌
+            numpy.random.beta(a, b, size=None)：生成贝塔分布的随机数，a和b是形状参数。
+
+        ‌(8) 离散均匀分布（Discrete Uniform Distribution）‌
+            numpy.random.randint(low, high=None, size=None, dtype='l')：生成在[low, high)区间上均匀分布的随机整数。
+            numpy.random.randint(low, high=None, size=None, dtype=int)：功能同上，显式指定dtype为int。
+
+        ‌(9) 几何分布（Geometric Distribution）‌
+            numpy.random.geometric(p, size=None)：生成几何分布的随机数，p是成功的概率。
+
+        ‌(10) 超几何分布（Hypergeometric Distribution）‌
+            numpy.random.hypergeometric(ngood, nbad, nsample, size=None)：生成超几何分布的随机数，ngood表示总体中好元素的数量，nbad表示总体中坏元素的数量，nsample表示样本大小。
+
+        ‌(11) 对数正态分布（Lognormal Distribution）‌
+            numpy.random.lognormal(mean=0.0, sigma=1.0, size=None)：生成对数正态分布的随机数，mean和sigma分别是对数正态分布的对数均值和对数标准差。
+
+        (12)‌ 多项分布（Multinomial Distribution）‌
+            numpy.random.multinomial(n, pvals, size=None)：生成多项分布的随机数，n表示试验次数，pvals是一个概率数组。
+
+        ‌(13) 多元正态分布（Multivariate Normal Distribution）‌
+            numpy.random.multivariate_normal(mean, cov, size=None, check_valid='warn', tol=1e-8)：生成多元正态分布的随机数，mean是均值向量，cov是协方差矩阵。
+
+        ‌(14) 负二项分布（Negative Binomial Distribution）‌
+            numpy.random.negative_binomial(n, p, size=None)：生成负二项分布的随机数，n表示失败次数达到固定次数之前的成功次数，p是每次试验成功的概率。
+
+        ‌(15) 非中心卡方分布（Noncentral Chi-square Distribution）‌
+            numpy.random.noncentral_chisquare(df, nonc, size=None)：生成非中心卡方分布的随机数，df是自由度，nonc是非中心参数。
+
+        (16) 非中心F分布（Noncentral F Distribution）‌
+            numpy.random.noncentral_f(dfnum, dfden, nonc, size=None)：生成非中心F分布的随机数，dfnum和dfden分别是分子和分母的自由度，nonc是非中心参数。
+
+        ‌(17) 标准T分布（Standard T Distribution）‌
+            numpy.random.standard_t(df, size=None)：生成标准T分布的随机数，df是自由度参数。
+
+        ‌(18) 三角分布（Triangular Distribution）‌
+            numpy.random.triangular(left, mode, right, size=None)：生成三角分布的随机数，left、mode和right分别是三角形分布的最小值、众数和最大值。
+
+        ‌(19) 瓦尔德分布（Wald Distribution）‌
+            numpy.random.wald(mean, scale, size=None)：生成瓦尔德分布的随机数，mean是均值，scale是尺度参数。
+
+        ‌(20) 威布尔分布（Weibull Distribution）‌
+            numpy.random.weibull(a, size=None)：生成威布尔分布的随机数，a是形状参数。
+
+        ‌(21) Zipf分布（Zipf Distribution）‌
+            numpy.random.zipf(a, size=None)：生成Zipf分布的随机数，a是分布的参数，表示元素出现的频率与其排名的倒数成正比。
+
