@@ -239,19 +239,19 @@
 
         ‌numpy.random.rand(d0, d1, ..., dn)‌
             创建一个给定形状的数组，数组元素是在半开区间 [0.0, 1.0) 上均匀分布的随机样本。
-            dn为n维数据的长度.
+            (d0, d1, ..., dn)‌代表维度信息, 即所生成的数组的shape.
 
         ‌numpy.random.randn(d0, d1, ..., dn)‌
             返回一个或一组样本，具有标准正态分布（均值为0，方差为1）。
-            dn为n维数据的长度.
+            (d0, d1, ..., dn)‌代表维度信息, 即所生成的数组的shape.
 
         ‌numpy.random.randint(low, high=None, size=None, dtype='l')‌
             返回随机整数，范围在 low 和 high 之间，包含 low，不包含 high。
-            low最小值, high最大值, size数据个数.
+            low最小值, high最大值, size为生成数组的维度, 即数组的shape, dtype指定元素的数据类型
 
         ‌numpy.random.random(size=None)‌
             返回半开区间 [0.0, 1.0) 上的随机浮点数。
-            size: 随机数的shape, 可以为元组或列表. 如[2, 3]表示维度为(2, 3).
+            size: 随机数生成数组的shape, 可以为元组或列表. 如[2, 3]表示维度为(2, 3).
 
         ‌numpy.random.random_sample(size=None)‌
         numpy.random.ranf(size=None)
@@ -260,6 +260,8 @@
 
         ‌numpy.random.choice(a, size=None, replace=True, p=None)‌
             从给定的一维数组a中抽取size个数据, 生成随机样本。
+            replace: 是否可以取相同的元素
+            p: 抽取的概率, 也是一个数组, 和a的形状必须相同, 表示在a中对应位置的元素的抽取概率
 
         ‌numpy.random.bytes(length)‌
             返回随机字节。
@@ -271,13 +273,16 @@
         ‌numpy.random.shuffle(x)‌
             对数组 x 进行就地随机排列。
 
+        numpy.random.permutation(x)
+            类似于shuffle()函数, 但是为根据数组 x 进行随机排序, 将结果返回. 
+
     2) 产生服从各类分布的随机数的函数
         (1) 均匀分布（Uniform Distribution）‌
             numpy.random.rand(d0, d1, ..., dn)：生成一个给定形状的数组，其元素在半开区间[0.0, 1.0)上均匀分布。
-            numpy.random.uniform(low=0.0, high=1.0, size=None)：生成在[low, high)区间上均匀分布的随机数。
+            numpy.random.uniform(low=0.0, high=1.0, size=None)：生成在[low, high)区间上均匀分布的随机数。size为整型数值或数组.
 
-        (2) ‌正态分布（Normal Distribution）‌
-            numpy.random.randn(d0, d1, ..., dn)：生成一个给定形状的数组，其元素服从标准正态分布（均值为0，方差为1）。
+        (2) ‌正态(高斯)分布（Normal Distribution）‌
+            numpy.random.randn(d0, d1, ..., dn)：生成一个给定形状的数组，其元素服从标准正态分布（均值为0，方差为1）。对应normal(loc=0, scale=1).
             numpy.random.normal(loc=0.0, scale=1.0, size=None)：生成具有指定均值（loc）和标准差（scale）的正态分布随机数。
             numpy.random.standard_normal(size=None)：生成标准正态分布的随机数，与randn功能相同。
 
@@ -339,3 +344,13 @@
         ‌(21) Zipf分布（Zipf Distribution）‌
             numpy.random.zipf(a, size=None)：生成Zipf分布的随机数，a是分布的参数，表示元素出现的频率与其排名的倒数成正比。
 
+        (22) 古贝尔随机数分布 (Gumbel Distribution)
+            numpy.random.gumbel(loc=0.0, scale=1.0, size=None): 古贝尔随机数分布(也称为极值类型 I 分布)。古贝尔分布是一种连续概率分布，通常用于描述最大值和最小值的分布。
+            numpy1.7后建议使用 numpy.random.Generator.gumbel()函数来生成古贝尔分布的随机数，它提供了更高级的随机数生成功能。
+
+        (23) 拉普拉斯分布（Laplace Distribution）
+            numpy.random.laplace(loc=0.0, scale=1.0, size=None) : 拉普拉斯分布是一种连续概率分布，也被称为双指数分布，它是对称的，并且具有重的尾部。
+            numpy1.7后建议使用 numpy.random.Generator.laplace()函数来生成拉普拉斯分布的随机数，它提供了更高级的随机数生成功能。
+
+        注
+            size参数指定生成数组的维度, 可以是一个整型值, 代表仅有一维, 也可以是数组, 如(2, 3), 代表二维矩阵A(2,3)
