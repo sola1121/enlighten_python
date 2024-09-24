@@ -1,4 +1,37 @@
-金融计算
+1. Numpy子模块
+
+    numpy.core：这是 NumPy 的核心，包含了最基本的功能，如数组创建、操作、数学函数等。
+    numpy.core.multiarray：提供了多维数组的核心功能。
+    numpy.core.umath：包含了数学函数和操作。
+    numpy.linalg：线性代数模块，提供了线性方程组求解、矩阵分解、行列式计算等功能。
+    numpy.fft：快速傅里叶变换模块，用于进行傅里叶变换及其逆变换。
+    numpy.random：随机数生成模块，提供了多种随机数生成器。
+    numpy.lib：包含了一些有用的函数和子模块，如：
+    numpy.lib.scimath：提供了科学计算中常用的数学函数。
+    numpy.lib.function_base：提供了一些基本的函数，如滑动平均、累积和等。
+    numpy.lib.stride_tricks：提供了对数组步长进行操作的函数，可以用于不复制数据的情况下进行数组操作。
+    numpy.polynomial：多项式模块，提供了多项式运算的功能。
+    numpy.ma：用于处理遮罩数组的模块，允许部分数组的数据被遮罩或忽略。
+    numpy.matrix：提供了一个矩阵类，它是对二维数组的封装，提供了更方便的矩阵操作接口。但需要注意的是，官方推荐使用 numpy.ndarray 而不是 numpy.matrix，因为 numpy.matrix 在未来可能会被弃用。
+    numpy.dtype：用于描述数组中元素的数据类型。
+    numpy.ctypeslib：提供了与 Ctypes 库的接口，允许 NumPy 数组与 C 语言库
+
+    1)线性代数模块 linalg
+        矩阵的逆: inv()
+        在线性代数中, 矩阵A与其逆举证A^-1的乘积是一个单位矩阵I.
+        使用numpu.linalg.inv()函数求举证的逆矩阵, 要求必须是方阵, 即行列数相等的矩阵.
+
+
+    2) 插值
+        import scipy.interpolate as sci
+        sci.interp1d(离散样本水平坐标, 离散样本垂直坐标) -> 一维插值器对象
+        一维插值器对象(一维插值水平坐标) -> 一维插值垂直坐标
+        使用插值可以让画出的线更加柔顺, 因为他补足了一些点的坐标
+        示例: inter.py
+
+
+
+2. 金融计算
 
     绘制K线图
         import mpl_finance as mf
